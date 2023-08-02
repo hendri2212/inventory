@@ -17,6 +17,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/antarmuka', function () {
-    return view('antarmuka');
-});
+Route::get('/'), function () {
+    return view()
+}
