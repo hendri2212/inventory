@@ -25,3 +25,7 @@ Route::get('/antarmuka', function () {
 Route::get('/ini_barang', function () {
     return view('ini_barang');
 });
+
+Route::get('/home', function () {
+    return view('home');
+});
