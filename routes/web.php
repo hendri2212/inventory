@@ -20,3 +20,7 @@ Route::get('/', function () {
 Route::get('/antarmuka', function () {
     return view('antarmuka');
 });
+
+Route::get('/ini_barang', function () {
+    return view('ini_barang');
+});
