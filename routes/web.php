@@ -29,3 +29,12 @@ Route::get('/ini_barang', function () {
 Route::get('/home', function () {
     return view('home');
 });
+
+Route::get('/data_barang', function () {
+    return view('data_barang');
+});
+
+Route::get('/login', function () {
+    return view('login');
+});
+

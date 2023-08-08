@@ -1,3 +1,10 @@
+<?php
+    session_start();
+    if (empty($_SESSION['status'])) {
+    header("Location: login.blade.php") ;
+    }
+?>
+
 
 <!doctype html>
 <html lang="en" data-bs-theme="auto">
@@ -200,7 +207,8 @@
         </a>
       </li>
       <li>
-        <a href="#" class="nav-link text-white">
+        
+        <a href="/data_barang" class="nav-link text-white">
           <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#speedometer2"/></svg>
           Data Barang
         </a>
