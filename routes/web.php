@@ -15,26 +15,32 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     // return view('welcome');
-    return view('dashboard');
-});
-
-Route::get('/antarmuka', function () {
-    return view('antarmuka');
-});
-
-Route::get('/ini_barang', function () {
-    return view('ini_barang');
-});
-
-Route::get('/home', function () {
-    return view('home');
-});
-
-Route::get('/data_barang', function () {
-    return view('data_barang');
+    return view('Halaman_Utama/Main');
 });
 
 Route::get('/login', function () {
-    return view('login');
+    return view('Login/login');
 });
+
+Route::get('/Dash', function () {
+    return view('Halaman_Utama/dashboard');
+});
+
+Route::get('/barang', function () {
+    return view('Halaman_Utama/Menu/barang');
+});
+
+Route::get('/supply', function () {
+    return view('Halaman_Utama/Menu/Supply');
+});
+
+Route::get('/rooms', function () {
+    return view('Halaman_Utama/Menu/Rooms');
+});
+
+Route::get('/transaksi', function () {
+    return view('Halaman_Utama/Menu/Transaksi');
+});
+
+
 
