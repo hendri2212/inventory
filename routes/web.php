@@ -44,6 +44,6 @@ Route::get('/transaksi', function () {
 });
 
 Route::resource('category', CategoryController::class);
-
-
-
+Route::get('/add', function () {
+    return view('category/add');
+});
