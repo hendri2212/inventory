@@ -10,10 +10,9 @@ class CategoryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
+    public function index() {
         $data = Category::all();
-        return view('category.index',['data'=>$data]);
+        return view( 'category.data', [ 'data'=>$data ] );
     }
 
     /**
@@ -27,8 +26,7 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
         $simpan = new Category();
         $simpan->name = $request->input('nama');
         $simpan->save();
@@ -37,9 +35,8 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Category $category)
-    {
-        //
+    public function show(Category $category) {
+        return Category::find($category->id);
     }
 
     /**
