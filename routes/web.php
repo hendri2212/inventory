@@ -67,6 +67,6 @@ Route::get('/formtr', function () {
 
 // ETC.
 Route::resource('category', CategoryController::class);
-
-
-
+Route::get('/add', function () {
+    return view('category/add');
+});

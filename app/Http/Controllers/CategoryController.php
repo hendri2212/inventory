@@ -29,7 +29,9 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $simpan = new Category();
+        $simpan->name = $request->input('nama');
+        $simpan->save();
     }
 
     /**
