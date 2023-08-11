@@ -28,13 +28,13 @@ Route::get('/Dash', function () {
     return view('Halaman_Utama/dashboard');
 });
 
-// BARANG
+// GOODS
 Route::get('/barang', function () {
-    return view('Menu/Barang/barang');
+    return view('Menu/Goods/Data');
 });
 
 Route::get('/formbrg', function () {
-    return view('Menu/Barang/Form');
+    return view('Menu/Goods/Add');
 });
 
 // SUPPLY
