@@ -17,51 +17,48 @@ use App\Http\Controllers\CategoryController;
 // HALAMAN
 Route::get('/', function () {
     // return view('welcome');
-    return view('Menu/Main');
+    return view('Main');
 });
 
 Route::get('/login', function () {
     return view('Login/login');
 });
 
-Route::get('/Dash', function () {
-    return view('Halaman_Utama/dashboard');
-});
 
 // GOODS
 Route::get('/barang', function () {
-    return view('Menu/Goods/Data');
+    return view('Goods/Data');
 });
 
 Route::get('/formbrg', function () {
-    return view('Menu/Goods/Add');
+    return view('Goods/Add');
 });
 
 // SUPPLY
 Route::get('/supply', function () {
-    return view('Menu/Supply/Supply');
+    return view('Supplier/Data');
 });
 
 Route::get('/formspl', function () {
-    return view('Menu/Supply/Form');
+    return view('Supplier/Add');
 });
 
 // ROOMS
 Route::get('/rooms', function () {
-    return view('Menu/Rooms/Rooms');
+    return view('Room/Data');
 });
 
 Route::get('/formr', function () {
-    return view('Menu/Rooms/Form');
+    return view('Room/Add');
 });
 
 // TRANSAKSI
 Route::get('/transaksi', function () {
-    return view('Menu/Transaksi/Transaksi');
+    return view('Transaction/Data');
 });
 
 Route::get('/formtr', function () {
-    return view('Menu/Transaksi/Form');
+    return view('Transaction/Add');
 });
 
 

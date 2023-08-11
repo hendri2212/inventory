@@ -1,4 +1,4 @@
-@extends('Menu.Main')
+@extends('Main')
 
 @section('konten')
     <h1>FORM</h1>
@@ -7,7 +7,13 @@
         <label for="">Nama Barang</label> <br>
         <input type="text">
 <br><br>
-
+        <label for="">Kualitas</label> <br>
+        <select name="Kualitas" id="">
+            <option value="Baik">Baik</option>
+            <option value="Buruk">Buruk</option>
+        </select>
+        
+<br><br>
         <label for="">Kualitas</label> <br>
         <select name="Kualitas" id="">
             <option value="Baik">Baik</option>

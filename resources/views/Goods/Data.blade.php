@@ -1,4 +1,4 @@
-@extends('Menu.Main')
+@extends('Main')
 
 @section('konten')
 <body>
