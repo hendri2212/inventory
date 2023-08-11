@@ -1,4 +1,4 @@
-@extends('')
+@extends('Menu.Main')
 
 @section('konten')
     <table border="1" cellspacing="0">
@@ -13,4 +13,5 @@
         </tr>
         @endforeach
     </table>
+    <a href="/add">tambahkan data</a>
 @endsection
