@@ -64,10 +64,9 @@ Route::get('/formtr', function () {
     return view('Menu/Transaksi/Form');
 });
 
-
-// ETC.
-Route::resource('category', CategoryController::class);
-
-Route::get('/category/add', function () {
-    return view('Category/Add');
+Route::prefix('category')->group(function () {
+    Route::get('/add', function () {
+        return view('Category/Add');
+    });
 });
+Route::resource('category', CategoryController::class);

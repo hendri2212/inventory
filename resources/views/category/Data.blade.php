@@ -13,5 +13,5 @@
         </tr>
         @endforeach
     </table>
-    <a href="/add">tambahkan data</a>
+    <a href="{{ url('category/add') }}">tambahkan data</a>
 @endsection
