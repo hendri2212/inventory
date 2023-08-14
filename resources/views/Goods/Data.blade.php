@@ -3,7 +3,7 @@
 @section('konten')
 <body>
     
-<style>
+<!-- <style>
     button {
         border: none;
         outline: none;
@@ -20,31 +20,18 @@
         background: gray;
     }
 
-</style>
-
-    <h1>TABLE BARANG</h1>
-
-    <table border="1" cellspacing="0" cellpadding="0">
-        <Tr align="center" bgcolor="lightgray">
-            <td width="50" >No</td>
-            <td width="250">Nama Barang</td>
-            <td width="250">Kualitas</td>
-            <td width="250">Kategori</td>
-        </Tr>
-        
-        <tr align="center">
-            <th>1</th>
-            <th>----</th>
-            <th>----</th>
-            <th>----</th>
+</style> -->
+<table border="1" cellspacing="0">
+        <tr>
+            <th>ID.</th>
+            <th>ID Category</th>
         </tr>
-
+        @foreach ($data as $goods)
+        <tr>
+            <td align="center">{{$goods['id']}}</td>
+            <td>{{$goods['category_id']}}</td>
+        </tr>
+        @endforeach
     </table>
-
-    <a href="/formbrg">
-        <button>Tambah Data</button>
-    </a>
-
-    <br>
-</body>
+    <a href="{{ url('category/add') }}">tambahkan data</a>
 @endsection

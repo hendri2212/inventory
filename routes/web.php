@@ -1,7 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\RoomController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\GoodsController;
+use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\TransactionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -67,3 +72,9 @@ Route::prefix('category')->group(function () {
     });
 });
 Route::resource('category', CategoryController::class);
+Route::resource('company', CompanyController::class);
+Route::resource('goods', GoodsController::class);
+Route::resource('room', RoomController::class);
+Route::resource('supplier', SupplierController::class);
+Route::resource('transaction', TransactionController::class);
+Route::resource('user', UserController::class);

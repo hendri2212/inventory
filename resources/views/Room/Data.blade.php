@@ -2,7 +2,7 @@
 
 @section('konten')
 
-<style>
+<!-- <style>
     button {
         border: none;
         outline: none;
@@ -19,11 +19,21 @@
         background: gray;
     }
 
-</style>
+</style> -->
 
-    <h1>Rooms</h1>
-
-    <a href="/formr">
-        <button>Tambah Data</button>
-    </a>
+<table border="1" cellspacing="0">
+        <tr>
+            <th>ID.</th>
+            <th>Nama</th>
+            <th>ID Company</th>
+        </tr>
+        @foreach ($data as $room)
+        <tr>
+            <td align="center">{{$room['id']}}</td>
+            <td>{{$room['name']}}</td>
+            <td>{{$room['company_id']}}</td>
+        </tr>
+        @endforeach
+    </table>
+    <a href="{{ url('category/add') }}">tambahkan data</a>
 @endsection
