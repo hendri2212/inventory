@@ -21,17 +21,21 @@
     }
 
 </style> -->
-<table border="1" cellspacing="0">
-        <tr>
-            <th>ID.</th>
-            <th>ID Category</th>
-        </tr>
-        @foreach ($data as $goods)
-        <tr>
-            <td align="center">{{$goods['id']}}</td>
-            <td>{{$goods['category_id']}}</td>
-        </tr>
-        @endforeach
-    </table>
-    <a href="{{ url('category/add') }}">tambahkan data</a>
+<body>
+    
+<table height="100" align="center" border="1" cellspacing="0" cellpadding="0">
+    <tr align="center" height="25">
+        <th width="50" align="center">ID</th>
+        <th width="100">ID Category</th>
+        <th width="100">Anjayani</th>
+    </tr>
+    @foreach ($data as $goods)
+    <tr align="center">
+        <td>{{$goods['id']}}</td>
+        <td>{{$goods['category_id']}}</td>
+    </tr>
+    @endforeach
+</table>
+<a href="{{ url('category/add') }}">tambahkan data</a>
+</body>
 @endsection

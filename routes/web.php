@@ -31,7 +31,7 @@ Route::get('/login', function () {
 
 
 // GOODS
-Route::get('/barang', function () {
+Route::get('/goods', function () {
     return view('Goods/Data');
 });
 

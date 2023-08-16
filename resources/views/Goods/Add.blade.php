@@ -1,8 +1,9 @@
 @extends('Main')
 
 @section('konten')
+<body>
     <h1>FORM</h1>
-
+    
     <form action="" Method="POST">
         <label for="">Nama Barang</label> <br>
         <input type="text">
@@ -21,4 +22,5 @@
         </select>
 
     </form>
+    </body>
 @endsection
