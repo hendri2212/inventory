@@ -2,7 +2,7 @@
 
 @section('konten')
 
-<!-- <style>
+<style>
     button {
         border: none;
         outline: none;
@@ -19,7 +19,7 @@
         background: gray;
     }
 
-</style> -->
+</style>
 
 <table border="1" cellspacing="0">
         <tr>
@@ -32,8 +32,10 @@
             <td align="center">{{$room['id']}}</td>
             <td>{{$room['name']}}</td>
             <td>{{$room['company_id']}}</td>
+            <td>----</td>
         </tr>
         @endforeach
     </table>
-    <a href="{{ url('category/add') }}">tambahkan data</a>
+
+    <button><a href="{{ url('category/add') }}"></a></button>
 @endsection

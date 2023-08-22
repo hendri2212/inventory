@@ -92,7 +92,7 @@
                 </li>
 
                 <li>
-                    <a href="/barang" class="nav-link text-white">
+                    <a href="/goods" class="nav-link text-white">
                     <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#speedometer2"/></svg>
                     Data Barang
                     </a>
