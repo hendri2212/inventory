@@ -27,9 +27,9 @@ class CategoryController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request) {
-        $simpan = new Category();
-        $simpan->name = $request->input('nama');
-        $simpan->save();
+        $store = new Category();
+        $store->name = $request->input('nama');
+        $store->save();
     }
 
     /**
@@ -58,8 +58,8 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Category $category)
-    {
-        //
+    public function destroy(Category $category){
+        Category::destroy($category->id);
+        return redirect('/category')->with('Data berhasil dihapus');
     }
 }

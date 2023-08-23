@@ -7,6 +7,7 @@
             <th>Nama</th>
             <th>Addres</th>
             <th>Telephone</th>
+            <th>Aksi</th>
         </tr>
         @foreach ($data as $company)
         <tr>
@@ -14,6 +15,11 @@
             <td>{{$company['name']}}</td>
             <td>{{$company['addres']}}</td>
             <td>{{$company['telephone']}}</td>
+            <form action="{{url('company', ['id'=>$company->id])}}" method="POST">
+                @method('delete')
+                @csrf
+                <td><button onclick="return confirm('Apakah anda yakin?')">delete</button></td>
+            </form>
         </tr>
         @endforeach
     </table>

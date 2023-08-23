@@ -1,40 +1,43 @@
 @extends('index')
 
 @section('konten')
-
-<style>
+<body>
+    
+<!-- <style>
     button {
         border: none;
         outline: none;
-        width: 30px;
+        padding: 8px;
+        width: 252px;
         color: black;
         font-size: 16;
+        cursor: pointer;
+        margin-top: 20px;
+        border-radius: 5px;
     }
-</style>
 
+    button:hover {
+        background: gray;
+    }
 
-<table border="4px" id="example" class="table table-striped" style="width:100%" height="100px">
-        <thead align="center">
-            <tr>
-                <th>ID</th>
-                <th>ID Category</th>
-                <th>Kosong</th>
-            </tr>
-        </thead>
-
+</style> -->
+<table border="1" cellspacing="0">
+        <tr>
+            <th>ID.</th>
+            <th>ID Category</th>
+            <th>Aksi</th>
+        </tr>
         @foreach ($data as $goods)
-        <tbody align="center">
-             <tr align="center">
-        <td>{{$goods['id']}}</td>
-        <td>{{$goods['category_id']}}</td>
-        <td>----</td>
-    	</tr>
-        </tfoot>
+        <tr>
+            <td align="center">{{$goods['id']}}</td>
+            <td>{{$goods['category_id']}}</td>
+            <form action="{{url('goods', ['id'=>$goods->id])}}" method="POST">
+                @method('delete')
+                @csrf
+                <td><button onclick="return confirm('Apakah anda yakin?')">delete</button></td>
+            </form>
+        </tr>
         @endforeach
     </table>
-<br>
-<button><a href="{{ url('category/add') }}"></a></button>
-</body>
-
-
-    @endsection
+    <a href="{{ url('goods/add') }}">tambahkan data</a>
+@endsection

@@ -38,6 +38,7 @@
             <th>ID barang</th>
             <th>ID Toko</th>
             <th>ID Ruangan</th>
+            <th>Aksi</th>
         </tr>
         @foreach ($data as $transaction)
         <tr>
@@ -50,8 +51,13 @@
             <td>{{$transaction['goods_id']}}</td>
             <td>{{$transaction['shop_id']}}</td>
             <td>{{$transaction['room_id']}}</td>
+            <form action="{{url('transaction', ['id'=>$transaction->id])}}" method="POST">
+                @method('delete')
+                @csrf
+                <td><button onclick="return confirm('Apakah anda yakin?')">delete</button></td>
+            </form>
         </tr>
         @endforeach
     </table>
-    <a href="{{ url('category/add') }}">tambahkan data</a>
+    <a href="{{ url('transaction/add') }}">tambahkan data</a>
 @endsection

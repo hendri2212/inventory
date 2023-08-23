@@ -26,9 +26,12 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        //
+    public function store(Request $request){
+        $store = new User();
+        $store->name = $request->input('nama');
+        $store->username = $request->input('username');
+        $store->password = $request->input('password');
+        $store->save();
     }
 
     /**
@@ -58,8 +61,8 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user)
-    {
-        //
+    public function destroy(User $user){
+        User::destroy($user->id);
+        return redirect('/user')->with('Data berhasil dihapus');
     }
 }
