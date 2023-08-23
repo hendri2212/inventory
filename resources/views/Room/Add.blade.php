@@ -1,9 +1,11 @@
 @extends('Main')
 
 @section('konten')
-    <h1>FORM ROOMS</h1>
-
-    <form action="">
-
+    <form action="{{url('room')}}" method="POST">
+        @csrf
+        <label for="nama">Nama :</label>
+        <input type="text" name="nama">
+        <br>
+        <input type="submit" value="Simpan">
     </form>
 @endsection

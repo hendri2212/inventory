@@ -26,9 +26,13 @@ class SupplierController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        //
+    public function store(Request $request){
+        $store = new Supplier();
+        $store->name = $request->input('nama');
+        $store->owner = $request->input('pemilik');
+        $store->telephone = $request->input('telepon');
+        $store->addres = $request->input('alamat');
+        $store->save();
     }
 
     /**
@@ -58,8 +62,8 @@ class SupplierController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Supplier $supplier)
-    {
-        //
+    public function destroy(Supplier $supplier){
+        Supplier::destroy($supplier->id);
+        return redirect('/supplier')->with('Data berhasil dihapus');
     }
 }

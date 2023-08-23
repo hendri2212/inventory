@@ -8,6 +8,7 @@
             <th>Username</th>
             <th>Password</th>
             <th>ID Company</th>
+            <th>Aksi</th>
         </tr>
         @foreach ($data as $user)
         <tr>
@@ -16,8 +17,13 @@
             <td>{{$user['username']}}</td>
             <td>{{$user['password']}}</td>
             <td>{{$user['company_id']}}</td>
+            <form action="{{url('user', ['id'=>$user->id])}}" method="POST">
+                @method('delete')
+                @csrf
+                <td><button onclick="return confirm('Apakah anda yakin?')">delete</button></td>
+            </form>
         </tr>
         @endforeach
     </table>
-    <a href="{{ url('category/add') }}">tambahkan data</a>
+    <a href="{{ url('user/add') }}">tambahkan data</a>
 @endsection

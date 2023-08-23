@@ -26,9 +26,11 @@ class GoodsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        //
+    public function store(Request $request){
+        $store = new Goods();
+        $store->name = $request->input('nama');
+        $store->save();
+        
     }
 
     /**
@@ -58,8 +60,8 @@ class GoodsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Goods $goods)
-    {
-        //
+    public function destroy(Goods $goods){
+        Goods::destroy($goods->id);
+        return redirect('/goods')->with('Data berhasil dihapus');
     }
 }

@@ -26,9 +26,14 @@ class TransactionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        //
+    public function store(Request $request){
+        $store = new Transaction();
+        $store->information = $request->input('informasi');
+        $store->image = $request->input('gambar');
+        $store->price = $request->input('harga');
+        $store->date = $request->input('tanggal');
+        $store->condition = $request->input('kondisi');
+        $store->save();
     }
 
     /**
@@ -58,8 +63,8 @@ class TransactionController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Transaction $transaction)
-    {
-        //
+    public function destroy(Transaction $transaction){
+        Transaction::destroy($transaction->id);
+        return redirect('/transaction')->with('Data berhasil dihapus');
     }
 }

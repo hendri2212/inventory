@@ -26,9 +26,12 @@ class CompanyController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        //
+    public function store(Request $request){
+        $store = new Company();
+        $store->name = $request->input('nama');
+        $store->addres = $request->input('alamat');
+        $store->telephone = $request->input('telepon');
+        $store->save();
     }
 
     /**
@@ -58,8 +61,8 @@ class CompanyController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Company $company)
-    {
-        //
+    public function destroy(Company $company){
+        Company::destroy($company->id);
+        return redirect('/company')->with('Data berhasil dihapus');
     }
 }

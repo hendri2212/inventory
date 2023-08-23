@@ -26,9 +26,10 @@ class RoomController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        //
+    public function store(Request $request){
+        $store = new Room();
+        $store->name = $request->input('nama');
+        $store->save();
     }
 
     /**
@@ -58,8 +59,8 @@ class RoomController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Room $room)
-    {
-        //
+    public function destroy(Room $room){
+        Room::destroy($room->id);
+        return redirect('/room')->with('Data berhasil dihapus');
     }
 }
