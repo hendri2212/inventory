@@ -1,11 +1,17 @@
-@extends('Main')
+@extends('index')
 
 @section('konten')
 
 <style>
-   
-
+    button {
+        border: none;
+        outline: none;
+        width: 30px;
+        color: black;
+        font-size: 16;
+    }
 </style>
+
 
 <table border="4px" id="example" class="table table-striped" style="width:100%" height="100px">
         <thead align="center">

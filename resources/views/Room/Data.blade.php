@@ -2,7 +2,7 @@
 
 @section('konten')
 
-<style>
+<!-- <style>
     button {
         border: none;
         outline: none;
@@ -19,7 +19,7 @@
         background: gray;
     }
 
-</style>
+</style> -->
 
 <table border="1" cellspacing="0">
         <tr>
@@ -37,5 +37,5 @@
         @endforeach
     </table>
 
-    <button><a href="{{ url('category/add') }}"></a></button>
+    <button><a href="{{ url('category/add') }}">tambahkan data</a>
 @endsection

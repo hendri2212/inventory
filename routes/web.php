@@ -29,6 +29,9 @@ Route::get('/login', function () {
     return view('Login/login');
 });
 
+Route::get('/awok', function () {
+    return view('index');
+});
 
 // GOODS
 Route::get('/goods', function () {

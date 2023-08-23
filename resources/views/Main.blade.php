@@ -135,6 +135,8 @@
             </div>
         </div>
         <div class="b-example-divider b-example-vr"></div>
+        @yield('tittle')
+
         @yield('konten')
     </main>
 </body>

@@ -1,6 +1,4 @@
-@extends('Main')
 
-@section('konten')
 <body>
     <h1>FORM</h1>
     
@@ -23,4 +21,3 @@
 
     </form>
     </body>
-@endsection
