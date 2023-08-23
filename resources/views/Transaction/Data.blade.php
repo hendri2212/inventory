@@ -1,4 +1,4 @@
-@extends('Main')
+@extends('index')
 
 @section('konten')
 
@@ -62,9 +62,9 @@
     <a href="{{ url('transaction/add') }}">tambahkan data</a>
 @endsection
 
-<!-- NAVBAR -->
-@extends('index')
 
+
+<!-- NAVBAR -->
 @section('tittle')
 
 <div class="content-wrapper">

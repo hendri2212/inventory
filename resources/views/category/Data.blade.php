@@ -1,20 +1,20 @@
-@extends('Main')
+@extends('index')
 
 @section('konten')
     <table border="2px" align="center" id="example" class="table table-striped" style="width:97%" height="100px">
-        <tr>
-            <th>ID.</th>
+        <tr align="center">
+            <th>ID</th>
             <th>Nama</th>
             <th>Aksi</th>
         </tr>
         @foreach ($data as $category)
         <tr>
-            <td align="center">{{$category['id']}}</td>
+            <td align="center" width="5%">{{$category['id']}}</td>
             <td>{{$category['name']}}</td>
             <form action="{{url('category', ['id'=>$category->id])}}" method="POST">
                 @method('delete')
                 @csrf
-                <td><button onclick="return confirm('Apakah anda yakin?')">delete</button></td>
+                <td align="center"><button onclick="return confirm('Apakah anda yakin?')">delete</button></td>
             </form>
         </tr>
         @endforeach
@@ -24,8 +24,6 @@
 
 
 <!-- NAVBAR -->
-@extends('index')
-
 @section('tittle')
 
 <div class="content-wrapper">

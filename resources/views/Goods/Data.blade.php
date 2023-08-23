@@ -4,22 +4,22 @@
 @section('konten')
 <body>
     
-<table align="center" id="example" class="table table-striped" style="width:97%" height="100px">
-        <tr>
+<table border="2" align="center" id="example" class="table table-striped" style="width:97%" height="100px">
+        <tr align="center">
             <th>ID.</th>
             <th>Nama</th>
             <th>ID Category</th>
             <th>Aksi</th>
         </tr>
         @foreach ($data as $goods)
-        <tr>
-            <td>{{$goods['id']}}</td>
+        <tr >
+            <td align="center" width="5%">{{$goods['id']}}</td>
             <td>{{$goods['name']}}</td>
-            <td>{{$goods['category_id']}}</td>
+            <td align="center">{{$goods['category_id']}}</td>
             <form action="{{url('goods', ['id'=>$goods->id])}}" method="POST">
                 @method('delete')
                 @csrf
-                <td><button onclick="return confirm('Apakah anda yakin?')">delete</button></td>
+                <td align="center"><button onclick="return confirm('Apakah anda yakin?')">delete</button></td>
             </form>
         </tr>
         @endforeach
@@ -30,7 +30,6 @@
 
 
 <!-- NAVBAR -->
-@extends('index')
 
 @section('tittle')
 
