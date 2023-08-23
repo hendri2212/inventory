@@ -1,6 +1,7 @@
 @extends('Main')
 
 @section('konten')
+
     <table border="1" cellspacing="0">
         <tr>
             <th>ID.</th>
@@ -23,5 +24,5 @@
         </tr>
         @endforeach
     </table>
-    <a href="{{ url('company/add') }}">tambahkan data</a>
+   <button> <a href="{{ url('company/add') }}">tambahkan data</a> </button>
 @endsection

@@ -24,7 +24,7 @@
         </tr>
         @endforeach
     </table>
-    <a href="{{ url('goods/add') }}">tambahkan data</a>
+   <button> <a href="{{ url('goods/add') }}">tambahkan data</a></button>
 @endsection
 
 
@@ -40,7 +40,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">DATA BARANG</h1>
+            <h1 class="m-0">Data Barang</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
