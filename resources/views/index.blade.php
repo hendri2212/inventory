@@ -218,7 +218,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="/goods" class="nav-link">
+            <a href="/goods" href="/tlb" class="nav-link">
               <i class="nav-icon fas fa-th"></i>
               <p>
                 Data Barang
@@ -249,6 +249,14 @@
               </p>
             </a>
           </li>
+          <li class="nav-item">
+            <a href="/category" href="/tlb" class="nav-link">
+              <i class="nav-icon fas fa-th"></i>
+              <p>
+                Kategory
+              </p>
+            </a>
+          </li>
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
@@ -257,7 +265,7 @@
   </aside>
 
   <!-- Content Wrapper. Contains page content -->
-    @yield('tittle')
+  @yield('tittle')
     <!-- /.content-header -->
 
     <!-- Main content -->
