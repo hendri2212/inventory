@@ -3,3 +3,11 @@ table {
     height: 100px;
     align-items: center;
 }
+
+.container {
+    align-items: center;
+    position: relative;
+    display: flex;
+    color: aliceblue;
+
+}

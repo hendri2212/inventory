@@ -23,15 +23,15 @@ use App\Http\Controllers\TransactionController;
 // HALAMAN
 Route::get('/', function () {
     // return view('welcome');
-    return view('Main');
+    return view('/index');
 });
 
 Route::get('/login', function () {
     return view('Login/login');
 });
 
-Route::get('/awok', function () {
-    return view('index');
+Route::get('/beranda', function () {
+    return view('Beranda');
 });
 
 // GOODS

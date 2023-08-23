@@ -177,7 +177,7 @@
     <!-- Brand Logo -->
     <a href="index3.html" class="brand-link">
       <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-      <span class="brand-text font-weight-light">AdminLTE 3</span>
+      <span class="brand-text font-weight-light"><b>INVENTORY</b></span>
     </a>
 
     <!-- Sidebar -->
@@ -185,10 +185,10 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+          <img src="Avatar/Ryo.jpeg" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">Alexander Pierce</a>
+          <a href="#" class="d-block">Ryooooo</a>
         </div>
       </div>
 
@@ -210,7 +210,7 @@
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
                <li class="nav-item">
-            <a href="/awok" class="nav-link active">
+            <a href="/beranda" class="nav-link active">
               <i class="nav-icon far fa-image"></i>
               <p>
                 Beranda
@@ -243,7 +243,7 @@
           </li>
           <li class="nav-item">
             <a href="/rooms" class="nav-link">
-              <i class="nav-icon far fa-colums"></i>
+              <i class="nav-icon fas fa-columns"></i>
               <p>
                 Rooms
               </p>
@@ -276,13 +276,7 @@
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
-  <footer class="main-footer">
-    <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
-    All rights reserved.
-    <div class="float-right d-none d-sm-inline-block">
-      <b>Version</b> 3.2.0
-    </div>
-  </footer>
+ 
 
   <!-- Control Sidebar -->
   <aside class="control-sidebar control-sidebar-dark">
