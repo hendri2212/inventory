@@ -4,8 +4,8 @@
 @section('konten')
 <body>
     
-<table align="center" id="example" class="table table-striped" style="width:97%" height="100px">
-        <tr>
+<table border="2" align="center" id="example" class="table table-striped" style="width:97%" height="100px">
+        <tr align="center">
             <th>ID.</th>
             <th>Nama</th>
             <th>ID Category</th>
@@ -20,7 +20,7 @@
             <form action="{{ url('/good', ['id'=>$good->id]) }}" method="POST">
                 @method('delete')
                 @csrf
-                <td><button onclick="return confirm('Apakah anda yakin?')">delete</button></td>
+                <td align="center"><button onclick="return confirm('Apakah anda yakin?')">delete</button></td>
             </form>
         </tr>
         @endforeach
@@ -31,7 +31,6 @@
 
 
 <!-- NAVBAR -->
-@extends('index')
 
 @section('tittle')
 
@@ -41,7 +40,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">DATA BARANG</h1>
+            <h1 class="m-0">Data Barang</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
