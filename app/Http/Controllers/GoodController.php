@@ -30,6 +30,7 @@ class GoodController extends Controller
         $store = new Good();
         $store->name = $request->input('nama');
         $store->save();
+        return redirect('/good');
         
     }
 

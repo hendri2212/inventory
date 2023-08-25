@@ -32,6 +32,7 @@ class UserController extends Controller
         $store->username = $request->input('username');
         $store->password = $request->input('password');
         $store->save();
+        return redirect('/user');
     }
 
     /**

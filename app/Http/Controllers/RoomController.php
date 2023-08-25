@@ -30,6 +30,7 @@ class RoomController extends Controller
         $store = new Room();
         $store->name = $request->input('nama');
         $store->save();
+        return redirect('/room');
     }
 
     /**

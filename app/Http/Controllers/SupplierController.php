@@ -33,6 +33,7 @@ class SupplierController extends Controller
         $store->telephone = $request->input('telepon');
         $store->addres = $request->input('alamat');
         $store->save();
+        return redirect('/supplier');
     }
 
     /**

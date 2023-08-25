@@ -32,6 +32,7 @@ class CompanyController extends Controller
         $store->addres = $request->input('alamat');
         $store->telephone = $request->input('telepon');
         $store->save();
+        return redirect('/company');
     }
 
     /**

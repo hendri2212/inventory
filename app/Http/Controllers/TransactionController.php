@@ -34,6 +34,7 @@ class TransactionController extends Controller
         $store->date = $request->input('tanggal');
         $store->condition = $request->input('kondisi');
         $store->save();
+        return redirect('/transaction');
     }
 
     /**
