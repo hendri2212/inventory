@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Goods;
+use App\Models\Good;
 use Illuminate\Http\Request;
 
-class GoodsController extends Controller
+class GoodController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index(){
-        $data = Goods::all();
-        return view( 'goods.data', [ 'data'=>$data ] );
+        $data = Good::all();
+        return view( 'good.data', [ 'data'=>$data ] );
     }
 
     /**
@@ -27,7 +27,7 @@ class GoodsController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request){
-        $store = new Goods();
+        $store = new Good();
         $store->name = $request->input('nama');
         $store->save();
         
@@ -36,15 +36,14 @@ class GoodsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Goods $goods)
-    {
-        //
+    public function show(Good $good){
+        return Category::find($good->id);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Goods $goods)
+    public function edit(Good $good)
     {
         //
     }
@@ -52,7 +51,7 @@ class GoodsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Goods $goods)
+    public function update(Request $request, Good $good)
     {
         //
     }
@@ -60,8 +59,8 @@ class GoodsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Goods $goods){
-        Goods::destroy($goods->id);
-        return redirect('/goods')->with('Data berhasil dihapus');
+    public function destroy(Good $good){
+        Good::destroy($good->id);
+        return redirect('/good')->with('Data berhasil dihapus');
     }
 }

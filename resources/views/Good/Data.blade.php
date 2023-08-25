@@ -11,12 +11,13 @@
             <th>ID Category</th>
             <th>Aksi</th>
         </tr>
-        @foreach ($data as $goods)
+        
+        @foreach ($data as $good)
         <tr>
-            <td>{{$goods['id']}}</td>
-            <td>{{$goods['name']}}</td>
-            <td>{{$goods['category_id']}}</td>
-            <form action="{{url('goods', ['id'=>$goods->id])}}" method="POST">
+            <td>{{$good['id']}}</td>
+            <td>{{$good['name']}}</td>
+            <td>{{$good['category_id']}}</td>
+            <form action="{{ url('/good', ['id'=>$good->id]) }}" method="POST">
                 @method('delete')
                 @csrf
                 <td><button onclick="return confirm('Apakah anda yakin?')">delete</button></td>
@@ -24,7 +25,7 @@
         </tr>
         @endforeach
     </table>
-    <a href="{{ url('goods/add') }}">tambahkan data</a>
+    <a href="{{ url('good/add') }}">tambahkan data</a>
 @endsection
 
 

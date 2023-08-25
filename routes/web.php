@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\GoodsController;
+use App\Http\Controllers\GoodController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SupplierController;
@@ -88,12 +88,12 @@ Route::prefix('company')->group(function () {
 Route::resource('company', CompanyController::class);
 
 
-Route::prefix('goods')->group(function () {
+Route::prefix('good')->group(function () {
     Route::get('/add', function () {
-        return view('Goods/Add');
+        return view('Good/Add');
     });
 });
-Route::resource('goods', GoodsController::class);
+Route::resource('good', GoodController::class);
 
 
 Route::prefix('room')->group(function () {
