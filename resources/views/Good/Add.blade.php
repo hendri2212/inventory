@@ -25,8 +25,8 @@
 
     <form action="{{url('good')}}" method="POST">
         @csrf
-        <label for="nama">Nama :</label>
-        <input type="text" name="nama">
+        <label for="name">Nama :</label>
+        <input type="text" name="name">
         <br>
         <select name="category_id" id="">
         @foreach ($data as $category)

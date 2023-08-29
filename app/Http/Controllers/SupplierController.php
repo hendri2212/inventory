@@ -28,10 +28,10 @@ class SupplierController extends Controller
      */
     public function store(Request $request){
         $store = new Supplier();
-        $store->name = $request->input('nama');
-        $store->owner = $request->input('pemilik');
-        $store->telephone = $request->input('telepon');
-        $store->addres = $request->input('alamat');
+        $store->name = $request->input('name');
+        $store->owner = $request->input('owner');
+        $store->telephone = $request->input('telephone');
+        $store->addres = $request->input('addres');
         $store->save();
         return redirect('/supplier');
     }

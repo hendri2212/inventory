@@ -3,20 +3,20 @@
 @section('konten')
     <form action="{{url('transaction')}}" method="POST">
         @csrf
-        <label for="informasi">Informasi :</label>
-        <input type="text" name="informasi">
+        <label for="information">Informasi :</label>
+        <input type="text" name="information">
         <br>
-        <label for="gambar">Gambar :</label>
-        <input type="image" name="gambar">
+        <label for="image">Gambar :</label>
+        <input type="image" name="image">
         <br>
-        <label for="harga">Harga :</label>
-        <input type="text" name="harga">
+        <label for="price">Harga :</label>
+        <input type="text" name="price">
         <br>
-        <label for="tanggal">Tanggal :</label>
-        <input type="date" name="tanggal">
+        <label for="date">Tanggal :</label>
+        <input type="date" name="date">
         <br>
-        <label for="kondisi">Kondisi :</label>
-        <select name="kondisi" id="">
+        <label for="condition">Kondisi :</label>
+        <select name="condition" id="">
             <option value="sangat_baik">Sangat Baik</option>
             <option value="kurang_baik">Kurang Baik</option>
             <option value="rusak">Rusak</option>

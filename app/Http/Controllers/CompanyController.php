@@ -29,8 +29,8 @@ class CompanyController extends Controller
     public function store(Request $request){
         $store = new Company();
         $store->name = $request->input('nama');
-        $store->addres = $request->input('alamat');
-        $store->telephone = $request->input('telepon');
+        $store->addres = $request->input('addres');
+        $store->telephone = $request->input('telephone');
         $store->save();
         return redirect('/company');
     }

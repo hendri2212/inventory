@@ -28,11 +28,11 @@ class TransactionController extends Controller
      */
     public function store(Request $request){
         $store = new Transaction();
-        $store->information = $request->input('informasi');
-        $store->image = $request->input('gambar');
-        $store->price = $request->input('harga');
-        $store->date = $request->input('tanggal');
-        $store->condition = $request->input('kondisi');
+        $store->information = $request->input('information');
+        $store->image = $request->input('image');
+        $store->price = $request->input('price');
+        $store->date = $request->input('date');
+        $store->condition = $request->input('condition');
         $store->save();
         return redirect('/transaction');
     }

@@ -29,7 +29,7 @@ class GoodController extends Controller
      */
     public function store(Request $request){
         $store = new Good();
-        $store->name = $request->input('nama');
+        $store->name = $request->input('name');
         $store->category_id = $request->input('category_id');
         $store->save();
         return redirect('/good');

@@ -9,8 +9,8 @@ tes tes tes
     Dolores est eveniet nihil, dicta excepturi enim repellendus saepe iure maiores quia et, nam eius quidem sapiente tempore optio rerum. Dignissimos atque alias, sapiente nisi blanditiis earum neque repellat aliquid?
     <!-- <form action="{{url('category')}}" method="POST">
         @csrf
-        <label for="nama">Nama :</label>
-        <input type="text" name="nama">
+        <label for="name">Nama :</label>
+        <input type="text" name="name">
         <br>
         <input type="submit" value="Simpan">
     </form> -->
