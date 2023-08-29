@@ -1,4 +1,4 @@
-@extends('Main')
+@extends('index')
 
 @section('konten')
 <table border="1" cellspacing="0">

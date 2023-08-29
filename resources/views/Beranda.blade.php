@@ -20,7 +20,6 @@
 
 
 <!-- NAVBAR -->
-@extends('index')
 
 @section('tittle')
 

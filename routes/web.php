@@ -72,9 +72,9 @@ Route::get('/index', function () {
 
 
 
-Route::prefix('category')->group(function () {
-    Route::get('/add', [CategoryController::class, 'create']);
-});
+Route::get('/add', [CategoryController::class, 'create']);
+// Route::prefix('category')->group(function () {
+// });
 Route::resource('category', CategoryController::class);
 
 
