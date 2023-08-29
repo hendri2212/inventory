@@ -18,9 +18,9 @@ class CategoryController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        //
+    public function create(){    
+        $data = Category::all();
+        return view( 'Category.Add', [ 'data'=>$data ] );
     }
 
     /**
@@ -43,17 +43,19 @@ class CategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Category $category)
-    {
-        //
+    public function edit(Category $category){
+        return view( 'Category.Edit', [ 
+            'category' => $category,
+            $data = Category::all()
+        ]);
+        return redirect('/category');
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Category $category)
-    {
-        //
+    public function update(Request $request, Category $category){
+        return redirect('/category');
     }
 
     /**

@@ -44,9 +44,9 @@ Route::get('/formbrg', function () {
 });
 
 // SUPPLY
-Route::get('/supply', function () {
-    return view('Supplier/Data');
-});
+// Route::get('/supply', function () {
+//     return view('Supplier/Data');
+// });
 
 Route::get('/formspl', function () {
     return view('Supplier/Add');
@@ -71,11 +71,9 @@ Route::get('/index', function () {
 });
 
 
-// INI APA
+
 Route::prefix('category')->group(function () {
-    Route::get('/add', function () {
-        return view('Category/Add');
-    });
+    Route::get('/add', [CategoryController::class, 'create']);
 });
 Route::resource('category', CategoryController::class);
 
@@ -89,10 +87,9 @@ Route::resource('company', CompanyController::class);
 
 
 Route::prefix('good')->group(function () {
-    Route::get('/add', function () {
-        return view('Good/Add');
-    });
+    Route::get('/add', [GoodController::class, 'create']);
 });
+
 Route::resource('good', GoodController::class);
 
 

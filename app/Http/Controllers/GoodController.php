@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Good;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class GoodController extends Controller
@@ -18,9 +19,9 @@ class GoodController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        //
+    public function create(){
+        $data = Category::all();
+        return view( 'Good.Add', [ 'data'=>$data ] );
     }
 
     /**
@@ -29,6 +30,7 @@ class GoodController extends Controller
     public function store(Request $request){
         $store = new Good();
         $store->name = $request->input('nama');
+        $store->category_id = $request->input('category_id');
         $store->save();
         return redirect('/good');
         
@@ -38,7 +40,7 @@ class GoodController extends Controller
      * Display the specified resource.
      */
     public function show(Good $good){
-        return Category::find($good->id);
+        return Good::find($good->id);
     }
 
     /**
@@ -48,6 +50,7 @@ class GoodController extends Controller
     {
         //
     }
+
 
     /**
      * Update the specified resource in storage.
