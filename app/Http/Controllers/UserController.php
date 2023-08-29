@@ -28,7 +28,7 @@ class UserController extends Controller
      */
     public function store(Request $request){
         $store = new User();
-        $store->name = $request->input('nama');
+        $store->name = $request->input('name');
         $store->username = $request->input('username');
         $store->password = $request->input('password');
         $store->save();

@@ -3,8 +3,8 @@
 @section('konten')
     <form action="{{url('category')}}" method="POST">
         @csrf
-        <label for="nama">Nama :</label>
-        <input type="text" name="nama">
+        <label for="name">Nama :</label>
+        <input type="text" name="name">
         <br>
         <input type="submit" value="Simpan">
     </form>

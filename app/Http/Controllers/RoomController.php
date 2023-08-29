@@ -28,7 +28,7 @@ class RoomController extends Controller
      */
     public function store(Request $request){
         $store = new Room();
-        $store->name = $request->input('nama');
+        $store->name = $request->input('name');
         $store->save();
         return redirect('/room');
     }

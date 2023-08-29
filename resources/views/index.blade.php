@@ -147,7 +147,7 @@
         </li>
 
         <li class="nav-item">
-            <a href="/supply" class="nav-link">
+            <a href="/supplier" class="nav-link">
                 <i class="nav-icon fas fa-edit"></i>
                 <p>
                     Supply
