@@ -1,4 +1,4 @@
-@extends('Main')
+@extends('index')
 
 @section('konten')
     <form action="{{url('category', ['id'=>$category->id])}}" method="POST">

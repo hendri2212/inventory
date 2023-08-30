@@ -27,7 +27,7 @@
   <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
 
   <!-- @vite(['resources/css/app.css', 'resources/js/app.js']) -->
-  @vite(['resources/js/app.js'])
+  @vite(['resources/js/app.js','dist/css/adminlte.min.css','plugins/icheck-bootstrap/icheck-bootstrap.min.css'])
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -92,26 +92,26 @@
     <!-- Sidebar -->
     <div class="sidebar">
       <!-- Sidebar user panel (optional) -->
-      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="Avatar/Ryo.jpeg" class="img-circle elevation-2" alt="User Image">
+          		<img src="Avatar/Ryo.jpeg" class="img-circle elevation-2" alt="User Image">
+        	</div>
+        	<div class="info">
+          		<a href="#" class="d-block">Ryooooo</a>
         </div>
-        <div class="info">
-          <a href="#" class="d-block">Ryooooo</a>
-        </div>
-      </div>
+    </div>
 
       <!-- SidebarSearch Form -->
-      <div class="form-inline">
+    <div class="form-inline">
         <div class="input-group" data-widget="sidebar-search">
-          <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
-          <div class="input-group-append">
-            <button class="btn btn-sidebar">
-              <i class="fas fa-search fa-fw"></i>
-            </button>
-          </div>
+            <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
+          		<div class="input-group-append">
+            		<button class="btn btn-sidebar">
+              			<i class="fas fa-search fa-fw"></i>
+            		</button>
+            	</div>
         </div>
-      </div>
+    </div>
 
       <!-- Sidebar Menu -->
       <nav class="mt-2">
@@ -120,7 +120,7 @@
                with font-awesome or any other icon font library -->
 
         <li class="nav-item">
-            <a href="/beranda" class="nav-link active">
+            <a href="/beranda" class="nav-link">
                 <i class="nav-icon far fa-image"></i>
                 <p>
                     Beranda
@@ -165,7 +165,7 @@
         </li>
 
         <li class="nav-item">
-            <a href="/category" href="/tlb" class="nav-link">
+            <a href="/category" class="nav-link">
                 <i class="nav-icon fas fa-th"></i>
                 <p>
                     Kategory
