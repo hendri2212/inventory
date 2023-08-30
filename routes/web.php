@@ -79,47 +79,37 @@ Route::resource('category', CategoryController::class);
 
 
 Route::prefix('company')->group(function () {
-    Route::get('/add', function () {
-        return view('Company/Add');
-    });
+    Route::get('/add', [CompanyController::class, 'create']);
 });
 Route::resource('company', CompanyController::class);
 
 
 Route::prefix('good')->group(function () {
     Route::get('/add', [GoodController::class, 'create']);
+        Route::get('/edit', [GoodController::class, 'edit']);
 });
-
 Route::resource('good', GoodController::class);
 
 
 Route::prefix('room')->group(function () {
-    Route::get('/add', function () {
-        return view('Room/Add');
-    });
+    Route::get('/add', [RoomController::class, 'create']);
 });
 Route::resource('room', RoomController::class);
 
 
 Route::prefix('supplier')->group(function () {
-    Route::get('/add', function () {
-        return view('Supplier/Add');
-    });
+    Route::get('/add', [SupplierController::class, 'create']);
 });
 Route::resource('supplier', SupplierController::class);
 
 
 Route::prefix('transaction')->group(function () {
-    Route::get('/add', function () {
-        return view('Transaction/Add');
-    });
+    Route::get('/add', [TransactionController::class, 'create']);
 });
 Route::resource('transaction', TransactionController::class);
 
 
 Route::prefix('user')->group(function () {
-    Route::get('/add', function () {
-        return view('User/Add');
-    });
+    Route::get('/add', [UserController::class, 'create']);
 });
 Route::resource('user', UserController::class);

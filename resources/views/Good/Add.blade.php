@@ -7,6 +7,7 @@
         <input type="text" name="name">
         <br>
         <select name="category_id" id="">
+            <option value=""></option>
         @foreach ($data as $category)
             <option value="{{$category['id']}}">{{$category['name']}}</option>
         @endforeach

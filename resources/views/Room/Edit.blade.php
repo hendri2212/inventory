@@ -1,20 +1,14 @@
 @extends('Main')
 
 @section('konten')
-    <form action="{{url('user')}}" method="POST">
+    <form action="{{url('room', ['id'=>$room->id])}}" method="POST">
+        @method('put')
         @csrf
         <label for="name">Nama :</label>
-        <input type="text" name="name">
-        <br>
-        <label for="username">Username :</label>
-        <input type="text" name="username">
-        <br>
-        <label for="password">Password :</label>
-        <input type="password" name="password">
+        <input type="text" name="name" value="{{$room->name}}">
         <br>
         <label for="company_id">Nama Company :</label>
         <select name="company_id" id="">
-            <option value=""></option>
             @foreach ($data as $company)
                 <option value="{{$company['id']}}">{{$company['name']}}</option>
             @endforeach
