@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Transaction;
+use App\Models\Good;
+use App\Models\Supplier;
+use App\Models\Room;
 use Illuminate\Http\Request;
 
 class TransactionController extends Controller
@@ -12,15 +15,17 @@ class TransactionController extends Controller
      */
     public function index(){
         $data = Transaction::all();
-        return view( 'transaction.data', [ 'data'=>$data ] );
+        return view( 'Transaction.Data', [ 'data'=>$data ] );
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        //
+    public function create(){
+        $good = Good::all();
+        $supplier = Supplier::all();
+        $room = Room::all();
+        return view( 'Transaction.Add', [ 'good'=>$good, 'supplier'=>$supplier, 'room'=>$room ] );
     }
 
     /**
@@ -33,6 +38,9 @@ class TransactionController extends Controller
         $store->price = $request->input('price');
         $store->date = $request->input('date');
         $store->condition = $request->input('condition');
+        $store->goods_id = $request->input('goods_id');
+        $store->shop_id = $request->input('shop_id');
+        $store->room_id = $request->input('room_id');
         $store->save();
         return redirect('/transaction');
     }
@@ -48,9 +56,12 @@ class TransactionController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Transaction $transaction)
-    {
-        //
+    public function edit(Transaction $transaction){
+        return view( 'transaction.Edit', [ 
+            'transaction' => $transaction,
+            $data = transaction::all()
+        ]);
+        return redirect('/transaction');
     }
 
     /**

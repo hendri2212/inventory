@@ -12,15 +12,15 @@ class CompanyController extends Controller
      */
     public function index(){
         $data = Company::all();
-        return view( 'company.data', [ 'data'=>$data ] );
+        return view( 'Company.Data', [ 'data'=>$data ] );
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        //
+    public function create(){
+        $data = Company::all();
+        return view( 'Company.Add', [ 'data'=>$data ] );
     }
 
     /**
@@ -28,7 +28,7 @@ class CompanyController extends Controller
      */
     public function store(Request $request){
         $store = new Company();
-        $store->name = $request->input('nama');
+        $store->name = $request->input('name');
         $store->addres = $request->input('addres');
         $store->telephone = $request->input('telephone');
         $store->save();

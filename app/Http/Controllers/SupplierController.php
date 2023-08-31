@@ -12,15 +12,15 @@ class SupplierController extends Controller
      */
     public function index(){
         $data = Supplier::all();
-        return view( 'supplier.data', [ 'data'=>$data ] );
+        return view( 'Supplier.Data', [ 'data'=>$data ] );
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        //
+    public function create(){
+        $data = Supplier::all();
+        return view( 'Supplier.Add', [ 'data'=>$data ] );
     }
 
     /**
@@ -47,9 +47,12 @@ class SupplierController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Supplier $supplier)
-    {
-        //
+    public function edit(Supplier $supplier){
+        return view( 'supplier.Edit', [ 
+            'supplier' => $supplier,
+            $data = supplier::all()
+        ]);
+        return redirect('/supplier');
     }
 
     /**

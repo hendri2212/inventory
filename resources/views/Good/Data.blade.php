@@ -17,10 +17,11 @@
             <td>{{$good['id']}}</td>
             <td>{{$good['name']}}</td>
             <td>{{$good['category_id']}}</td>
-            <form action="{{ url('/good', ['id'=>$good->id]) }}" method="POST">
+            <form action="{{ url('good', ['id'=>$good->id]) }}" method="POST">
                 @method('delete')
                 @csrf
-                <td align="center"><button onclick="return confirm('Apakah anda yakin?')">delete</button></td>
+                <td align="center"><button><a href="{{url('good/' . $good->id . '/edit')}}">Edit</a></button> | 
+                <button onclick="return confirm('Apakah anda yakin?')">delete</button></td>
             </form>
         </tr>
         @endforeach

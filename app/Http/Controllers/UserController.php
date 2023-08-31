@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Company;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -12,15 +13,15 @@ class UserController extends Controller
      */
     public function index(){
         $data = User::all();
-        return view( 'user.data', [ 'data'=>$data ] );
+        return view( 'User.Data', [ 'data'=>$data ] );
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        //
+    public function create(){
+        $data = Company::all();
+        return view( 'User.Add', [ 'data'=>$data ] );
     }
 
     /**
@@ -31,6 +32,7 @@ class UserController extends Controller
         $store->name = $request->input('name');
         $store->username = $request->input('username');
         $store->password = $request->input('password');
+        $store->company_id = $request->input('company_id');
         $store->save();
         return redirect('/user');
     }
@@ -46,9 +48,12 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(User $user)
-    {
-        //
+    public function edit(User $user){
+        return view( 'user.Edit', [ 
+            'user' => $user,
+            $data = user::all()
+        ]);
+        return redirect('/user');
     }
 
     /**

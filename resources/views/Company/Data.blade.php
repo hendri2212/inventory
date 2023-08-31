@@ -2,7 +2,7 @@
 
 @section('konten')
 
-    <table border="1" cellspacing="0">
+    <table border="2px" align="center" id="example" class="table table-striped" style="width:97%" height="100px">
         <tr>
             <th>ID.</th>
             <th>Nama</th>
@@ -19,7 +19,8 @@
             <form action="{{url('company', ['id'=>$company->id])}}" method="POST">
                 @method('delete')
                 @csrf
-                <td><button onclick="return confirm('Apakah anda yakin?')">delete</button></td>
+                    <td align="center"><button><a href="{{url('company/' . $company->id . '/edit')}}">Edit</a></button> | 
+                    <button onclick="return confirm('Apakah anda yakin?')">delete</button></td>
             </form>
         </tr>
         @endforeach
