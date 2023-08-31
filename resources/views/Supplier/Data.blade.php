@@ -1,7 +1,7 @@
 @extends('index')
 
 @section('konten')
-<table border="1" cellspacing="0">
+<table border="1" align="center" id="example" class="table table-striped" style="width:97%" height="100px">
         <tr>
             <th>ID.</th>
             <th>Nama</th>
