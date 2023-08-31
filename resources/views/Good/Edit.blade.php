@@ -8,10 +8,10 @@
         <input type="text" name="name" value="{{$good->name}}">
         <br>
         <select name="category_id" id="" value="{{$good->name}}">
-            {{-- <option value="{{$good->id}}">{{$good->name}}</option> --}}
-        @foreach ($category as $category)
-            <option value="{{$category['id']}}">{{$category['name']}}</option>
-        @endforeach
+            <option value="{{$good->category_id}}">{{$good->category->name}}</option>
+            @foreach ($category as $category)
+                <option value="{{$category['id']}}">{{$category['name']}}</option>
+            @endforeach
         </select>
         <input type="submit" value="Simpan">
     </form>

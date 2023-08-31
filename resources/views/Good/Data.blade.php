@@ -16,7 +16,7 @@
         <tr>
             <td>{{$good['id']}}</td>
             <td>{{$good['name']}}</td>
-            <td>{{$good['category_id']}}</td>
+            <td>{{$good['category']['name']}}</td>
             <form action="{{ url('good', ['id'=>$good->id]) }}" method="POST">
                 @method('delete')
                 @csrf
