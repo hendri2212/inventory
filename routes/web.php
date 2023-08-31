@@ -35,31 +35,13 @@ Route::get('/beranda', function () {
 });
 
 // GOODS
-Route::get('/barang', function () {
-    return view('Goods/Data');
-});
 
-Route::get('/formbrg', function () {
-    return view('Goods/Add');
-});
 
 // SUPPLY
-// Route::get('/supply', function () {
-//     return view('Supplier/Data');
-// });
 
-Route::get('/formspl', function () {
-    return view('Supplier/Add');
-});
 
 // ROOMS
-Route::get('/rooms', function () {
-    return view('Room/Data');
-});
 
-Route::get('/index3', function () {
-    return view('index3');
-});
 
 // TRANSAKSI
 Route::get('/index2', function () {
@@ -73,8 +55,8 @@ Route::get('/index', function () {
 
 
 Route::get('/add', [CategoryController::class, 'create']);
-// Route::prefix('category')->group(function () {
-// });
+    Route::prefix('category')->group(function () {
+});
 Route::resource('category', CategoryController::class);
 
 

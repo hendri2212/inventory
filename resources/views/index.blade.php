@@ -156,7 +156,7 @@
         </li>
 
         <li class="nav-item">
-            <a href="/rooms" class="nav-link">
+            <a href="{{url('room')}}" class="nav-link">
                 <i class="nav-icon fas fa-columns"></i>
                 <p>
                     Rooms
