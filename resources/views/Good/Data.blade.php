@@ -16,12 +16,17 @@
         <tr>
             <td>{{$good['id']}}</td>
             <td>{{$good['name']}}</td>
-            <td>{{$good['category_id']}}</td>
-            <form action="{{ url('/good', ['id'=>$good->id]) }}" method="POST">
+            <td>{{$good['category']['name']}}</td>
+            <form action="{{ url('good', ['id'=>$good->id]) }}" method="POST">
                 @method('delete')
                 @csrf
+<<<<<<< HEAD
                 <td align="center"><button onclick="return confirm('Apakah anda yakin?')">delete</button>| 
                 <button><a href="{{url('good/' . $good->id . '/edit')}}">Edit</a></td></button></td>
+=======
+                <td align="center"><button><a href="{{url('good/' . $good->id . '/edit')}}">Edit</a></button> | 
+                <button onclick="return confirm('Apakah anda yakin?')">delete</button></td>
+>>>>>>> 37f03ab1bdc11d778905576c35253de6315634b5
             </form>
         </tr>
         @endforeach
@@ -45,7 +50,7 @@
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item"><a href="/beranda">Home</a></li>
               <li class="breadcrumb-item active">Dashboard v1</li>
             </ol>
           </div><!-- /.col -->

@@ -14,8 +14,8 @@
             <form action="{{url('category', ['id'=>$category->id])}}" method="POST">
                 @method('delete')
                 @csrf
-                <td align="center"><button onclick="return confirm('Apakah anda yakin?')">delete</button> | 
-                <button><a href="{{url('category/' . $category->id . '/edit')}}">Edit</a></td></button></td>
+                <td align="center"><button><a href="{{url('category/' . $category->id . '/edit')}}">Edit</a></button> | 
+                <button onclick="return confirm('Apakah anda yakin?')">delete</button></td>
             </form>
             <!-- <td><a href="{{url('category/' . $category->id . '/edit')}}">tes</a></td> -->
         </tr>
@@ -38,7 +38,7 @@
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item"><a href="/beranda">Home</a></li>
               <li class="breadcrumb-item active">Dashboard v1</li>
             </ol>
           </div><!-- /.col -->

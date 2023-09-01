@@ -12,8 +12,8 @@ class GoodController extends Controller
      * Display a listing of the resource.
      */
     public function index(){
-        $data = Good::all();
-        return view( 'good.data', [ 'data'=>$data ] );
+        $data = Good::with('Category')->get();
+        return view( 'Good.Data', [ 'data'=>$data ] );
     }
 
     /**
@@ -46,13 +46,16 @@ class GoodController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Good $good)
-    {
-        return view( 'Good.Edit', [ 
-            'good' => $good,
-            $data = Good::all()
-        ]);
-        return redirect('/good');
+    public function edit(Good $good){
+        $good = Good::with('Category')->find($good->id);
+        $category = Category::all();
+        return view( 'Good.Edit', [ 'category'=>$category, 'good' => $good] );
+        // return [ 'category'=>$category, 'good' => $good];
+        // return view( 'Good.Edit', [ 
+        //     'good' => $good,
+        //     $data = Good::all()
+        // ]);
+        // return redirect('/good');
     }
 
 
