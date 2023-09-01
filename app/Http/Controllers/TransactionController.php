@@ -25,7 +25,8 @@ class TransactionController extends Controller
         $good = Good::all();
         $supplier = Supplier::all();
         $room = Room::all();
-        return view( 'Transaction.Add', [ 'good'=>$good, 'supplier'=>$supplier, 'room'=>$room ] );
+        // return view( 'Transaction.Add', [ 'good'=>$good, 'supplier'=>$supplier, 'room'=>$room ] );
+        return $good;
     }
 
     /**

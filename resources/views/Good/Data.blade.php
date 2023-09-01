@@ -8,7 +8,7 @@
         <tr align="center">
             <th>ID.</th>
             <th>Nama</th>
-            <th>ID Category</th>
+            <th>Category</th>
             <th>Aksi</th>
         </tr>
         

@@ -12,7 +12,7 @@ class RoomController extends Controller
      * Display a listing of the resource.
      */
     public function index(){
-        $data = Room::all();
+        $data = Room::with('Company')->get();
         return view( 'Room.Data', [ 'data'=>$data ] );
     }
 

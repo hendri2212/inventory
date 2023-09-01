@@ -1,4 +1,4 @@
-@extends('index')
+@extends('main')
 
 @section('konten')
     <form action="{{url('transaction')}}" method="POST">
