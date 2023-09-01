@@ -48,7 +48,11 @@ class GoodController extends Controller
      */
     public function edit(Good $good)
     {
-        //
+        return view( 'Good.Edit', [ 
+            'good' => $good,
+            $data = Good::all()
+        ]);
+        return redirect('/good');
     }
 
 

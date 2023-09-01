@@ -49,13 +49,16 @@ class CategoryController extends Controller
             $data = Category::all()
         ]);
         return redirect('/category');
-    }
+    } 
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, Category $category){
-        return redirect('/category');
+        
+        $data = Category::find($category->id);
+        $data->update($request->all());
+        return redirect('/category')->with('Data berhasil diupdate');
     }
 
     /**

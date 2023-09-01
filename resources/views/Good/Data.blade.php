@@ -20,7 +20,8 @@
             <form action="{{ url('/good', ['id'=>$good->id]) }}" method="POST">
                 @method('delete')
                 @csrf
-                <td align="center"><button onclick="return confirm('Apakah anda yakin?')">delete</button></td>
+                <td align="center"><button onclick="return confirm('Apakah anda yakin?')">delete</button>| 
+                <button><a href="{{url('good/' . $good->id . '/edit')}}">Edit</a></td></button></td>
             </form>
         </tr>
         @endforeach
