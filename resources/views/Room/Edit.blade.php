@@ -9,7 +9,7 @@
         <br>
         <label for="company_id">Nama Company :</label>
         <select name="company_id" id="">
-            @foreach ($data as $company)
+            @foreach ($company as $company)
                 <option value="{{$company['id']}}">{{$company['name']}}</option>
             @endforeach
         </select>

@@ -60,7 +60,21 @@ class SupplierController extends Controller
      */
     public function update(Request $request, Supplier $supplier)
     {
-        //
+       
+        $rules = [
+            'name'=> 'required',
+            'owner' => 'required',
+            'telephone' => 'required',
+            'addres' => 'required'
+        ];
+
+        $validatedData = $request->validate($rules);
+
+        Supplier::where('id', $supplier->id)
+            ->update($validatedData);
+            
+        
+        return redirect('/supplier')->with('Data berhasil diupdate');
     }
 
     /**
