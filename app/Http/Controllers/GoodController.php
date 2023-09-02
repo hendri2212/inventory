@@ -63,8 +63,19 @@ class GoodController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, Good $good)
-    {
-        //
+    {    
+        $rules = [
+            'name'=> 'required',
+            'category_id' => 'required'
+        ];
+
+        $validatedData = $request->validate($rules);
+
+        Good::where('id', $good->id)
+            ->update($validatedData);
+            
+        
+        return redirect('/good')->with('Data berhasil diupdate');
     }
 
     /**
