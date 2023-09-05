@@ -8,14 +8,14 @@
   <!-- Font Awesome -->
   <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
   <!-- Theme style -->
-  <!-- <link rel="stylesheet" href="dist/css/adminlte.min.css"> -->
+  <link rel="stylesheet" href="dist/css/adminlte.min.css">
   <!-- overlayScrollbars -->
   <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
   <!-- summernote -->
   <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
 
   <!-- @vite(['resources/css/app.css', 'resources/js/app.js']) -->
-  @vite(['resources/js/app.js','plugins/fontawesome-free/css/all.min.css','dist/css/adminlte.min.css','plugins/overlayScrollbars/css/OverlayScrollbars.min.css','plugins/summernote/summernote-bs4.min.css'])
+  @vite(['resources/js/app.js','plugins/fontawesome-free/css/all.min.css','resources/css/adminlte.min.css','plugins/overlayScrollbars/css/OverlayScrollbars.min.css','plugins/summernote/summernote-bs4.min.css'])
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
