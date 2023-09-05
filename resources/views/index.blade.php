@@ -5,29 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>inventory</title>
 
-  <!-- Google Font: Source Sans Pro -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
-  <!-- Ionicons -->
-  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-  <!-- Tempusdominus Bootstrap 4 -->
-  <link rel="stylesheet" href="plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
-  <!-- iCheck -->
-  <link rel="stylesheet" href="plugins/icheck-bootstrap/icheck-bootstrap.min.css">
-  <!-- JQVMap -->
-  <link rel="stylesheet" href="plugins/jqvmap/jqvmap.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="dist/css/adminlte.min.css">
   <!-- overlayScrollbars -->
   <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
-  <!-- Daterange picker -->
-  <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
   <!-- summernote -->
   <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
 
   <!-- @vite(['resources/css/app.css', 'resources/js/app.js']) -->
-  @vite(['resources/js/app.js','dist/css/adminlte.min.css','plugins/icheck-bootstrap/icheck-bootstrap.min.css'])
+  @vite(['resources/js/app.js','plugins/fontawesome-free/css/all.min.css','resources/css/adminlte.min.css','plugins/overlayScrollbars/css/OverlayScrollbars.min.css','plugins/summernote/summernote-bs4.min.css'])
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -85,24 +73,25 @@
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="index3.html" class="brand-link">
-      <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-      <span class="brand-text font-weight-light"><b>INVENTORY</b></span>
+      <!-- <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8"> -->
+      <span class="brand-text font-weight-light "><b>INVENTORY</b></span>
     </a>
 
     <!-- Sidebar -->
     <div class="sidebar">
       <!-- Sidebar user panel (optional) -->
-    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+      
+    <!-- <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
           		<img src="Avatar/Ryo.jpeg" class="img-circle elevation-2" alt="User Image">
         	</div>
         	<div class="info">
           		<a href="#" class="d-block">Ryooooo</a>
         </div>
-    </div>
+    </div> -->
 
       <!-- SidebarSearch Form -->
-    <div class="form-inline">
+    <div class="form-inline py-2">
         <div class="input-group" data-widget="sidebar-search">
             <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
           		<div class="input-group-append">
@@ -118,9 +107,9 @@
     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-
+    
         <li class="nav-item">
-            <a href="/beranda" class="nav-link">
+            <a href="/beranda" class="nav-link bg-light mt-1">
                 <i class="nav-icon far fa-image"></i>
                 <p>
                     Beranda
@@ -129,7 +118,7 @@
         </li>
 
         <li class="nav-item">
-            <a href="/good" class="nav-link">
+            <a href="/good" class="nav-link bg-light mt-1">
                 <i class="nav-icon fas fa-th"></i>
                 <p>
                     Data Barang
@@ -138,7 +127,7 @@
         </li>
 
           <li class="nav-item">
-            <a href="/transaction" class="nav-link">
+            <a href="/transaction" class="nav-link bg-light mt-1">
                 <i class="nav-icon fas fa-table"></i>
                 <p>
                     Transaksi
@@ -147,7 +136,7 @@
         </li>
 
         <li class="nav-item">
-            <a href="/supplier" class="nav-link">
+            <a href="/supplier" class="nav-link bg-light mt-1">
                 <i class="nav-icon fas fa-edit"></i>
                 <p>
                     Supply
@@ -156,7 +145,7 @@
         </li>
 
         <li class="nav-item">
-            <a href="{{url('room')}}" class="nav-link">
+            <a href="{{url('room')}}" class="nav-link bg-light mt-1">
                 <i class="nav-icon fas fa-columns"></i>
                 <p>
                     Rooms
@@ -165,10 +154,28 @@
         </li>
 
         <li class="nav-item">
-            <a href="/category" class="nav-link">
+            <a href="/category" class="nav-link bg-light mt-1">
                 <i class="nav-icon fas fa-th"></i>
                 <p>
                     Kategory
+                </p>
+            </a>
+        </li>
+
+	   <li class="nav-item">
+            <a href="{{url('company')}}" class="nav-link bg-light mt-1">
+                <i class="nav-icon fas fa-columns"></i>
+                <p>
+                    Company
+                </p>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a href="/user" class="nav-link bg-light mt-1">
+                <i class="nav-icon fas fa-th"></i>
+                <p>
+                    User
                 </p>
             </a>
         </li>
@@ -178,6 +185,7 @@
     </div>
 
 </aside>
+<div class="">
     <!-- /.content-header -->
     @yield('tittle')
 
@@ -185,12 +193,13 @@
     <section class="content">
     
     @yield('konten')
-     
+</div>
     </section>
 
     <!-- Control Sidebar -->
     <aside class="control-sidebar control-sidebar-dark">
     <!-- Control sidebar content goes here -->
+
 </aside>
 
 

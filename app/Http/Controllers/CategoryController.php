@@ -55,9 +55,16 @@ class CategoryController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, Category $category){
-        
-        $data = Category::find($category->id);
-        $data->update($request->all());
+    
+        $rules = [
+            'name'=> 'required'
+        ];
+
+        $validatedData = $request->validate($rules);
+
+        Category::where('id', $category->id)
+            ->update($validatedData);
+            
         return redirect('/category')->with('Data berhasil diupdate');
     }
 
@@ -69,3 +76,4 @@ class CategoryController extends Controller
         return redirect('/category')->with('Data berhasil dihapus');
     }
 }
+

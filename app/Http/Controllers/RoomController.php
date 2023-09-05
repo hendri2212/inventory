@@ -47,12 +47,10 @@ class RoomController extends Controller
      * Show the form for editing the specified resource.
      */
     public function edit(Room $room){
-        return view( 'room.Edit', [ 
-            'room' => $room,
-            $data = room::all(),
-            'data'=>$data
-        ]);
-        return redirect('/room');
+        
+        $room = Room::with('company')->find($room->id);
+        $company = Company::all();
+        return view( 'Room.Edit', [ 'company'=>$company, 'room' => $room] );
     }
 
     /**
@@ -60,7 +58,19 @@ class RoomController extends Controller
      */
     public function update(Request $request, Room $room)
     {
-        //
+        
+        $rules = [
+            'name'=> 'required',
+            'company_id' => 'required'
+        ];
+
+        $validatedData = $request->validate($rules);
+
+        Room::where('id', $room->id)
+            ->update($validatedData);
+            
+        
+        return redirect('/room')->with('Data berhasil diupdate');
     }
 
     /**
