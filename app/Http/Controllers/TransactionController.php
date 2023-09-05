@@ -14,7 +14,9 @@ class TransactionController extends Controller
      * Display a listing of the resource.
      */
     public function index(){
-        $data = Transaction::all();
+        // $data = Transaction::all();
+        // return view( 'Transaction.Data', [ 'data'=>$data ] );
+        $data = Transaction::with('room','good','supplier')->get();
         return view( 'Transaction.Data', [ 'data'=>$data ] );
     }
 
@@ -25,8 +27,7 @@ class TransactionController extends Controller
         $good = Good::all();
         $supplier = Supplier::all();
         $room = Room::all();
-        // return view( 'Transaction.Add', [ 'good'=>$good, 'supplier'=>$supplier, 'room'=>$room ] );
-        return $good;
+        return view( 'Transaction.Add', [ 'good'=>$good, 'supplier'=>$supplier, 'room'=>$room ] );
     }
 
     /**
@@ -58,11 +59,16 @@ class TransactionController extends Controller
      * Show the form for editing the specified resource.
      */
     public function edit(Transaction $transaction){
-        return view( 'transaction.Edit', [ 
-            'transaction' => $transaction,
-            $data = transaction::all()
-        ]);
+        $good = Good::all();
+        $supplier = Supplier::all();
+        $room = Room::all();
+        return view( 'transaction.Edit', ['transaction' => $transaction, 'good'=>$good, 'supplier'=>$supplier, 'room'=>$room, $data = Transaction::all()]);
         return redirect('/transaction');
+        
+        // $good = Good::all();
+        // $supplier = Supplier::all();
+        // $room = Room::all();
+        // return view( 'Transaction.Add', [ 'good'=>$good, 'supplier'=>$supplier, 'room'=>$room ] );
     }
 
     /**

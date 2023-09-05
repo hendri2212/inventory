@@ -35,9 +35,9 @@
             <th>Harga</th>
             <th>Tanggal</th>
             <th>Kondisi</th>
-            <th>ID barang</th>
-            <th>ID Toko</th>
-            <th>ID Ruangan</th>
+            <th>Nama barang</th>
+            <th>Nama Toko</th>
+            <th>Nama Ruangan</th>
             <th>Aksi</th>
         </tr>
         @foreach ($data as $transaction)
@@ -48,9 +48,9 @@
             <td>{{$transaction['price']}}</td>
             <td>{{$transaction['date']}}</td>
             <td>{{$transaction['condition']}}</td>
-            <td>{{$transaction['goods_id']}}</td>
-            <td>{{$transaction['shop_id']}}</td>
-            <td>{{$transaction['room_id']}}</td>
+            <td>{{$transaction['good']['name']}}</td>
+            <td>{{$transaction['supplier']['name']}}</td>
+            <td>{{$transaction['room']['name']}}</td>
             <form action="{{url('transaction', ['id'=>$transaction->id])}}" method="POST">
                 @method('delete')
                 @csrf

@@ -13,11 +13,11 @@ class Transaction extends Model
         return $this->belongsTo(Good::class);
     }
 
-    // public function Supplier() {
-    //     return $this->belongsTo(Supplier::class);
-    // }
+    public function Supplier() {
+        return $this->belongsTo(Supplier::class);
+    }
 
-    // public function Room() {
-    //     return $this->belongsTo(Room::class);
-    // }
+    public function Room() {
+        return $this->belongsTo(Room::class);
+    }
 }

@@ -49,7 +49,8 @@ class RoomController extends Controller
     public function edit(Room $room){
         return view( 'room.Edit', [ 
             'room' => $room,
-            $data = room::all()
+            $data = room::all(),
+            'data'=>$data
         ]);
         return redirect('/room');
     }
