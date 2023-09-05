@@ -1,4 +1,4 @@
-@extends('main')
+@extends('index')
 
 @section('konten')
 
