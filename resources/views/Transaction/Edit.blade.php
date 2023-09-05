@@ -5,7 +5,7 @@
         @method('put')
         @csrf
         <label for="information">Informasi :</label>
-        <input type="text" name="information"  value="{{$transaction->name}}">
+        <input type="text" name="information"  value="{{$transaction->information}}">
         <br>
         <label for="image">Gambar :</label>
         <input type="image" name="image" value="{{$transaction->image}}">

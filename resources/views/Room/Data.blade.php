@@ -25,7 +25,7 @@
         <tr>
             <th>ID.</th>
             <th>Nama</th>
-            <th>ID Company</th>
+            <th>Nama Company</th>
             <th>Aksi</th>
         </tr>
         @foreach ($data as $room)
