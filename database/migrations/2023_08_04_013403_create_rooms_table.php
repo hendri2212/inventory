@@ -11,16 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('rooms', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            // $table->enum('role', []);
-            $table->char('username', 100);
-            $table->char('password');
+            $table->char('name', 100);
             $table->unsignedBigInteger('company_id');
+            $table->unsignedBigInteger('good_id');
+            $table->unsignedBigInteger('supplier_id');
             $table->timestamps();
 
             $table->foreign('company_id')->references('id')->on('companies');
+            $table->foreign('good_id')->references('id')->on('goods');
+            $table->foreign('supplier_id')->references('id')->on('suppliers');
         });
     }
 
@@ -29,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('rooms');
     }
 };

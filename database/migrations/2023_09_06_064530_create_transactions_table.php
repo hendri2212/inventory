@@ -17,14 +17,17 @@ return new class extends Migration
             $table->binary('image');
             $table->biginteger('price');
             $table->date('date');
-            $table->enum('condition', ['sangat_baik', 'kurang_baik', 'rusak']);
-            $table->unsignedBigInteger('goods_id');
-            $table->unsignedBigInteger('shop_id');
+            $table->unsignedBigInteger('borrow_id');
+            $table->unsignedBigInteger('condition_id');
+            $table->unsignedBigInteger('good_id');
+            $table->unsignedBigInteger('supplier_id');
             $table->unsignedBigInteger('room_id');
             $table->timestamps();
 
+            $table->foreign('borrow_id')->references('id')->on('borrows');
+            $table->foreign('condition_id')->references('id')->on('conditions');
             $table->foreign('good_id')->references('id')->on('goods');
-            $table->foreign('shop_id')->references('id')->on('suppliers');
+            $table->foreign('supplier_id')->references('id')->on('suppliers');
             $table->foreign('room_id')->references('id')->on('rooms');
         });
     }

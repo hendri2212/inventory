@@ -11,13 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('suppliers', function (Blueprint $table) {
+        Schema::create('borrows', function (Blueprint $table) {
             $table->id();
-            $table->char('name', 100);
-            $table->char('owner', 100);
-            $table->string('telephone', 20);
-            $table->text('addres');
+            $table->unsignedBigInteger('good_id');
+            // $table->unsignedBigInteger('loan_date(Loan apaan?)');
+            $table->unsignedBigInteger('room_id');
             $table->timestamps();
+
+            $table->foreign('good_id')->references('id')->on('goods');
+            $table->foreign('room_id')->references('id')->on('rooms');
         });
     }
 
@@ -26,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('supliers');
+        Schema::dropIfExists('borrows');
     }
 };
