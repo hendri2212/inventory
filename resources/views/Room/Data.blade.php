@@ -33,6 +33,8 @@
             <td align="center">{{$room['id']}}</td>
             <td>{{$room['name']}}</td>
             <td>{{$room['company']['name']}}</td>
+            <td>{{$room['good']['name']}}</td>
+            <td>{{$room['supplier']['name']}}</td>
             <form action="{{url('room', ['id'=>$room->id])}}" method="POST">
                 @method('delete')
                 @csrf

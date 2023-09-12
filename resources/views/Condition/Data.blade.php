@@ -1,35 +1,33 @@
 @extends('index')
 
 @section('konten')
-
     <table border="2px" align="center" id="example" class="table table-striped" style="width:97%" height="100px">
-        <tr>
-            <th>ID.</th>
+        <tr align="center">
+            <th>ID</th>
             <th>Nama</th>
-            <th>Addres</th>
-            <th>Telephone</th>
             <th>Aksi</th>
         </tr>
-        @foreach ($data as $company)
+        @foreach ($data as $condition)
         <tr>
-            <td align="center">{{$company['id']}}</td>
-            <td>{{$company['name']}}</td>
-            <td>{{$company['address']}}</td>
-            <td>{{$company['telephone']}}</td>
-            <form action="{{url('company', ['id'=>$company->id])}}" method="POST">
+            <td align="center" width="5%">{{$condition['id']}}</td>
+            <td>{{$condition['name']}}</td>
+            <form action="{{url('condition', ['id'=>$condition->id])}}" method="POST">
                 @method('delete')
                 @csrf
-                    <td align="center"><button><a href="{{url('company/' . $company->id . '/edit')}}">Edit</a></button> | 
-                    <button onclick="return confirm('Apakah anda yakin?')">delete</button></td>
+                <td align="center"><button><a href="{{url('condition/' . $condition->id . '/edit')}}">Edit</a></button> | 
+                <button onclick="return confirm('Apakah anda yakin?')">delete</button></td>
             </form>
+            <!-- <td><a href="{{url('condition/' . $condition->id . '/edit')}}">tes</a></td> -->
         </tr>
         @endforeach
     </table>
 	<div class="a">
-   <button> <a href="{{ url('company/add') }}">tambahkan data</a> </button>
-   </div>
+    <a href="{{ url('condition/add') }}">tambahkan data</a>
+	</div>
 @endsection
 
+
+<!-- NAVBAR -->
 @section('tittle')
 
 
@@ -38,7 +36,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
           	<div class="col-sm-6">
-            	<h1 class="m-0">Company</h1>
+            	<h1 class="m-0">Kondisi</h1>
           	</div><!-- /.col -->
           	<div class="col-sm-6">
             	<ol class="breadcrumb float-sm-right">

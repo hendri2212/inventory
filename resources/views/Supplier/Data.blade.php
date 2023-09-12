@@ -14,9 +14,10 @@
         <tr>
             <td align="center">{{$supplier['id']}}</td>
             <td>{{$supplier['name']}}</td>
-            <td>{{$supplier['owner']}}</td>
+            <td>{{$supplier['company']['name']}}</td>
+            <td>{{$supplier['image']}}</td>
             <td>{{$supplier['telephone']}}</td>
-            <td>{{$supplier['addres']}}</td>
+            <td>{{$supplier['address']}}</td>
             <form action="{{url('supplier', ['id'=>$supplier->id])}}" method="POST">
                 @method('delete')
                 @csrf

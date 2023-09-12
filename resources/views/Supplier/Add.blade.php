@@ -6,14 +6,17 @@
         <label for="name">Nama :</label>
         <input type="text" name="name">
         <br>
-        <label for="owner">Pemilik :</label>
-        <input type="text" name="owner">
+        <label for="company_id">Company :</label>
+        <input type="text" name="company_id">
+        <br>
+        <label for="image">gambar :</label>
+        <input type="text" name="image">
         <br>
         <label for="telephone">Telepon :</label>
         <input type="number" name="telephone">
         <br>
-        <label for="addres">Alamat :</label>
-        <input type="text" name="addres">
+        <label for="address">Alamat :</label>
+        <input type="text" name="address">
         <br>
         <input type="submit" value="Simpan">
     </form>

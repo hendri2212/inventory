@@ -54,6 +54,12 @@ Route::get('/index', function () {
 
 
 
+Route::prefix('borrow')->group(function () {
+    Route::get('/add', [BorrowController::class, 'create']);
+        Route::get('/edit', [BorrowController::class, 'edit']);
+});
+Route::resource('borrow', BorrowController::class);
+
 
 Route::prefix('category')->group(function () {
     Route::get('/add', [CategoryController::class, 'create']);
@@ -68,12 +74,24 @@ Route::prefix('company')->group(function () {
 });
 Route::resource('company', CompanyController::class);
 
+Route::prefix('condition')->group(function () {
+    Route::get('/add', [ConditionController::class, 'create']);
+        Route::get('/edit', [ConditionController::class, 'edit']);
+});
+Route::resource('condition', ConditionController::class);
+
 
 Route::prefix('good')->group(function () {
     Route::get('/add', [GoodController::class, 'create']);
         Route::get('/edit', [GoodController::class, 'edit']);
 });
 Route::resource('good', GoodController::class);
+
+Route::prefix('roles')->group(function () {
+    Route::get('/add', [RolesController::class, 'create']);
+        Route::get('/edit', [RolesController::class, 'edit']);
+});
+Route::resource('roles', RolesController::class);
 
 
 Route::prefix('room')->group(function () {

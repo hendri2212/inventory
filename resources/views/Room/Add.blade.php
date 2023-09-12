@@ -14,6 +14,22 @@
             @endforeach
         </select>
         <br>
+        <label for="good_id">Nama barang :</label>
+        <select name="good_id" id="">
+            <option value=""></option>
+            @foreach ($data as $good)
+                <option value="{{$good['id']}}">{{$good['name']}}</option>
+            @endforeach
+        </select>
+        <br>
+        <label for="supplier_id">Nama Supplier :</label>
+        <select name="supplier_id" id="">
+            <option value=""></option>
+            @foreach ($data as $supplier)
+                <option value="{{$supplier['id']}}">{{$supplier['name']}}</option>
+            @endforeach
+        </select>
+        <br>
         <input type="submit" value="Simpan">
     </form>
 @endsection

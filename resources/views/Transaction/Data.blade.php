@@ -47,7 +47,8 @@
             <td>{{$transaction['image']}}</td>
             <td>{{$transaction['price']}}</td>
             <td>{{$transaction['date']}}</td>
-            <td>{{$transaction['condition']}}</td>
+            <td>{{$transaction['borrow']['name']}}</td>
+            <td>{{$transaction['condition']['name']}}</td>
             <td>{{$transaction['good']['name']}}</td>
             <td>{{$transaction['supplier']['name']}}</td>
             <td>{{$transaction['room']['name']}}</td>

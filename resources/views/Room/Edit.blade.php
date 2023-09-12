@@ -1,4 +1,4 @@
-@extends('Main')
+@extends('index')
 
 @section('konten')
     <form action="{{url('room', ['id'=>$room->id])}}" method="POST">
@@ -11,6 +11,20 @@
         <select name="company_id" id="">
             @foreach ($company as $company)
                 <option value="{{$company['id']}}">{{$company['name']}}</option>
+            @endforeach
+        </select>
+        <br>
+        <label for="good_id">Nama Barang :</label>
+        <select name="good_id" id="">
+            @foreach ($good as $good)
+                <option value="{{$good['id']}}">{{$good['name']}}</option>
+            @endforeach
+        </select>
+        <br>
+        <label for="supplier_id">Nama Supplier :</label>
+        <select name="supplier_id" id="">
+            @foreach ($supplier as $supplier)
+                <option value="{{$supplier['id']}}">{{$supplier['name']}}</option>
             @endforeach
         </select>
         <br>

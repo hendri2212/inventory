@@ -14,9 +14,10 @@
         <tr>
             <td align="center">{{$user['id']}}</td>
             <td>{{$user['name']}}</td>
+            <td>{{$user['role']['name']}}</td>
             <td>{{$user['username']}}</td>
             <td>{{$user['password']}}</td>
-            <td>{{$user['company_id']}}</td>
+            <td>{{$user['company']['name']}}</td>
             <form action="{{url('user', ['id'=>$user->id])}}" method="POST">
                 @method('delete')
                 @csrf

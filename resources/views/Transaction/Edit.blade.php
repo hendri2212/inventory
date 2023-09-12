@@ -1,4 +1,4 @@
-@extends('Main')
+@extends('index')
 
 @section('konten')
     <form action="{{url('transaction', ['id'=>$transaction->id])}}" method="POST">
@@ -16,22 +16,29 @@
         <label for="date">Tanggal :</label>
         <input type="date" name="date" value="{{$transaction->date}}">
         <br>
-        <label for="condition">Kondisi :</label>
-        <select name="condition" id="">
-            <option value="sangat_baik">Sangat Baik</option>
-            <option value="kurang_baik">Kurang Baik</option>
-            <option value="rusak">Rusak</option>
+        <label for="borrow_id">Borrow :</label>
+        <select name="borrow_id" id="">
+            @foreach ($borrow as $borrow)
+                <option value="{{$borrow['id']}}">{{$borrow['name']}}</option>
+            @endforeach
         </select>
         <br>
-        <label for="goods_id">Nama Barang :</label>
-        <select name="goods_id" id="">
+        <label for="condition_id">Kondisi :</label>
+        <select name="condition_id" id="">
+            @foreach ($condition as $condition)
+                <option value="{{$condition['id']}}">{{$condition['name']}}</option>
+            @endforeach
+        </select>
+        <br>
+        <label for="good_id">Nama Barang :</label>
+        <select name="good_id" id="">
             @foreach ($good as $good)
                 <option value="{{$good['id']}}">{{$good['name']}}</option>
             @endforeach
         </select>
         <br>
-        <label for="shop_id">Nama Supplier :</label>
-        <select name="shop_id" id="">
+        <label for="supplier_id">Nama Supplier :</label>
+        <select name="supplier_id" id="">
             @foreach ($supplier as $supplier)
                 <option value="{{$supplier['id']}}">{{$supplier['name']}}</option>
             @endforeach

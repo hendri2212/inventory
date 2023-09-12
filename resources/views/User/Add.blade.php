@@ -1,10 +1,18 @@
-@extends('Main')
+@extends('index')
 
 @section('konten')
     <form action="{{url('user')}}" method="POST">
         @csrf
         <label for="name">Nama :</label>
         <input type="text" name="name">
+        <br>
+        <label for="role_id">Nama role :</label>
+        <select name="role_id" id="">
+            <option value=""></option>
+            @foreach ($data as $role)
+                <option value="{{$role['id']}}">{{$role['name']}}</option>
+            @endforeach
+        </select>
         <br>
         <label for="username">Username :</label>
         <input type="text" name="username">
