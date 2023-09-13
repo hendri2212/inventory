@@ -16,7 +16,15 @@
 
 
 <!-- @vite(['resources/css/app.css', 'resources/js/app.js']) -->
-@vite(['resources/js/app.js','resources/css/all.min.css','resources/css/adminlte.min.css','resources/css/OverlayScrollbars.min.css','resources/css/summernote-bs4.min.css'])
+@vite([
+        'resources/js/app.js',
+        'resources/css/all.min.css',
+        'resources/css/adminlte.min.css',
+        'resources/css/OverlayScrollbars.min.css',
+        'resources/css/summernote-bs4.min.css',
+        'resources/js/jquery.min.js',
+        'resources/js/adminlte.js'
+    ])
 
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -83,14 +91,14 @@
     <div class="sidebar">
         <!-- Sidebar user panel (optional) -->
       
-    <!-- <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
           		<img src="Avatar/Ryo.jpeg" class="img-circle elevation-2" alt="User Image">
         	</div>
         	<div class="info">
           		<a href="#" class="d-block">Ryooooo</a>
         </div>
-    </div> -->
+    </div>
 
       <!-- SidebarSearch Form -->
     <div class="form-inline py-2">
@@ -181,6 +189,33 @@
                 </p>
             </a>
         </li>
+
+        <li class="nav-item">
+            <a href="/borrow" class="nav-link bg-light mt-1">
+                <i class="nav-icon fas fa-th"></i>
+                <p>
+                    Borrow
+                </p>
+            </a>
+        </li>
+
+	   <li class="nav-item">
+            <a href="/condition" class="nav-link bg-light mt-1">
+                <i class="nav-icon fas fa-columns"></i>
+                <p>
+                    Condition
+                </p>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a href="/role" class="nav-link bg-light mt-1">
+                <i class="nav-icon fas fa-th"></i>
+                <p>
+                    Role
+                </p>
+            </a>
+        </li>
     </ul>
 
     </nav>
@@ -222,26 +257,26 @@
 <!-- ChartJS -->
 <script src="plugins/chart.js/Chart.min.js"></script>
 <!-- Sparkline -->
-<script src="plugins/sparklines/sparkline.js"></script>
+<!-- <script src="plugins/sparklines/sparkline.js"></script> -->
 <!-- JQVMap -->
-<script src="plugins/jqvmap/jquery.vmap.min.js"></script>
-<script src="plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
+<!-- <script src="plugins/jqvmap/jquery.vmap.min.js"></script> -->
+<!-- <script src="plugins/jqvmap/maps/jquery.vmap.usa.js"></script> -->
 <!-- jQuery Knob Chart -->
-<script src="plugins/jquery-knob/jquery.knob.min.js"></script>
+<!-- <script src="plugins/jquery-knob/jquery.knob.min.js"></script> -->
 <!-- daterangepicker -->
-<script src="plugins/moment/moment.min.js"></script>
-<script src="plugins/daterangepicker/daterangepicker.js"></script>
+<!-- <script src="plugins/moment/moment.min.js"></script> -->
+<!-- <script src="plugins/daterangepicker/daterangepicker.js"></script> -->
 <!-- Tempusdominus Bootstrap 4 -->
-<script src="plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+<!-- <script src="plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script> -->
 <!-- Summernote -->
-<script src="plugins/summernote/summernote-bs4.min.js"></script>
+<!-- <script src="plugins/summernote/summernote-bs4.min.js"></script> -->
 <!-- overlayScrollbars -->
-<script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+<!-- <script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script> -->
 <!-- AdminLTE App -->
 <script src="dist/js/adminlte.js"></script>
 <!-- AdminLTE for demo purposes -->
-<script src="dist/js/demo.js"></script>
+<!-- <script src="dist/js/demo.js"></script> -->
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="dist/js/pages/dashboard.js"></script>
+<!-- <script src="dist/js/pages/dashboard.js"></script> -->
 </body>
 </html>
