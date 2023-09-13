@@ -12,4 +12,12 @@ class Room extends Model
     public function Company() {
         return $this->belongsTo(Company::class);
     }
+
+    public function Good() {
+        return $this->belongsTo(Good::class);
+    }
+
+    public function Supplier() {
+        return $this->belongsTo(Supplier::class);
+    }
 }

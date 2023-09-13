@@ -8,4 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Borrow extends Model
 {
     use HasFactory;
+
+    public function Good() {
+        return $this->belongsTo(Good::class);
+    }
+
+    public function Room() {
+        return $this->belongsTo(Room::class);
+    }
 }

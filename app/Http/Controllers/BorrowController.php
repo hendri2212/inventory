@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Borrow;
+use App\Models\Good;
+use App\Models\Room;
 use Illuminate\Http\Request;
 
 class BorrowController extends Controller
@@ -11,7 +13,7 @@ class BorrowController extends Controller
      * Display a listing of the resource.
      */
     public function index(){
-        $data = Borrow::all();
+        $data = Borrow::with('Good','Room');
         return view( 'Borrow.Data', [ 'data'=>$data ] );
     }
 
@@ -19,8 +21,10 @@ class BorrowController extends Controller
      * Show the form for creating a new resource.
      */
     public function create(){
-        $data = Borrow::all();
-        return view( 'Borrow.Add', [ 'data'=>$data ] );
+        $borrow = Borrow::all();
+        $good = Good::all();
+        $room = Room::all();
+        return view( 'Borrow.Add', [ 'borrow'=>$borrow, 'good'=>$good, 'room'=>$room ] );
     }
 
     /**
@@ -43,11 +47,10 @@ class BorrowController extends Controller
      * Show the form for editing the specified resource.
      */
     public function edit(Borrow $borrow){
-        return view( 'Borrow.Edit', [ 
-            'borrow' => $borrow,
-            $data = Borrow::all()
-        ]);
-        return redirect('/borrow');
+        $borrow = Borrow::all();
+        $good = Good::all();
+        $room = Room::all();
+        return view( 'Borrow.Edit', [ 'borrow'=>$borrow, 'good'=>$good, 'room'=>$room ] );
     }
 
     /**

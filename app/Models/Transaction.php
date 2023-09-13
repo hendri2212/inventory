@@ -20,4 +20,12 @@ class Transaction extends Model
     public function Room() {
         return $this->belongsTo(Room::class);
     }
+
+    public function Borrow() {
+        return $this->belongsTo(Borrow::class);
+    }
+
+    public function Condition() {
+        return $this->belongsTo(Condition::class);
+    }
 }

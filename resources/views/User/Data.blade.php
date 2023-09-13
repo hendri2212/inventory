@@ -5,6 +5,7 @@
         <tr>
             <th>ID.</th>
             <th>Nama</th>
+            <th>Nama Role</th>
             <th>Username</th>
             <th>Password</th>
             <th>ID Company</th>

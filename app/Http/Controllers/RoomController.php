@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Room;
 use App\Models\Company;
+use App\Models\Good;
+use App\Models\Supplier;
 use Illuminate\Http\Request;
 
 class RoomController extends Controller
@@ -12,7 +14,7 @@ class RoomController extends Controller
      * Display a listing of the resource.
      */
     public function index(){
-        $data = Room::with('Company')->get();
+        $data = Room::with('Company','Good','Supplier')->get();
         return view( 'Room.Data', [ 'data'=>$data ] );
     }
 
@@ -20,8 +22,10 @@ class RoomController extends Controller
      * Show the form for creating a new resource.
      */
     public function create(){
-        $data = Company::all();
-        return view( 'Room.Add', [ 'data'=>$data ] );
+        $company = Company::all();
+        $good = Good::all();
+        $supplier = Supplier::all();
+        return view( 'Room.Add', [ 'company'=>$company, 'good'=>$good, 'supplier'=>$supplier ] );
     }
 
     /**
@@ -47,10 +51,11 @@ class RoomController extends Controller
      * Show the form for editing the specified resource.
      */
     public function edit(Room $room){
-        
-        $room = Room::with('company')->find($room->id);
+        // $room = Room::with('company')->find($room->id);
         $company = Company::all();
-        return view( 'Room.Edit', [ 'company'=>$company, 'room' => $room] );
+        $good = Good::all();
+        $supplier = Supplier::all();
+        return view( 'Room.Edit', [ 'company'=>$company, 'good'=>$good, 'supplier'=>$supplier ] );
     }
 
     /**

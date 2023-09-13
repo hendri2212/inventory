@@ -34,6 +34,7 @@
             <th>Gambar</th>
             <th>Harga</th>
             <th>Tanggal</th>
+            <th>PInjam</th>
             <th>Kondisi</th>
             <th>Nama barang</th>
             <th>Nama Toko</th>

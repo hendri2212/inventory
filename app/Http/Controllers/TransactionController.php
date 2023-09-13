@@ -6,6 +6,8 @@ use App\Models\Transaction;
 use App\Models\Good;
 use App\Models\Supplier;
 use App\Models\Room;
+use App\Models\Borrow;
+use App\Models\Condition;
 use Illuminate\Http\Request;
 
 class TransactionController extends Controller
@@ -14,9 +16,7 @@ class TransactionController extends Controller
      * Display a listing of the resource.
      */
     public function index(){
-        // $data = Transaction::all();
-        // return view( 'Transaction.Data', [ 'data'=>$data ] );
-        $data = Transaction::with('room','good','supplier')->get();
+        $data = Transaction::with('Room','Good','Supplier','Borrow','Condition')->get();
         return view( 'Transaction.Data', [ 'data'=>$data ] );
     }
 
@@ -27,7 +27,9 @@ class TransactionController extends Controller
         $good = Good::all();
         $supplier = Supplier::all();
         $room = Room::all();
-        return view( 'Transaction.Add', [ 'good'=>$good, 'supplier'=>$supplier, 'room'=>$room ] );
+        $borrow = Borrow::all();
+        $condition = Condition::all();
+        return view( 'Transaction.Add', [ 'good'=>$good, 'supplier'=>$supplier, 'room'=>$room, 'borrow'=>$borrow, 'condition'=>$condition ] );
     }
 
     /**
@@ -62,13 +64,9 @@ class TransactionController extends Controller
         $good = Good::all();
         $supplier = Supplier::all();
         $room = Room::all();
-        return view( 'transaction.Edit', ['transaction' => $transaction, 'good'=>$good, 'supplier'=>$supplier, 'room'=>$room, $data = Transaction::all()]);
-        return redirect('/transaction');
-        
-        // $good = Good::all();
-        // $supplier = Supplier::all();
-        // $room = Room::all();
-        // return view( 'Transaction.Add', [ 'good'=>$good, 'supplier'=>$supplier, 'room'=>$room ] );
+        $borrow = Borrow::all();
+        $condition = Condition::all();
+        return view( 'Transaction.Edit', [ 'good'=>$good, 'supplier'=>$supplier, 'room'=>$room, 'borrow'=>$borrow, 'condition'=>$condition ] );
     }
 
     /**

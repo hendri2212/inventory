@@ -13,14 +13,7 @@ return new class extends Migration
     {
         Schema::create('borrows', function (Blueprint $table) {
             $table->id();
-            $table->char('name', 100);
-            $table->unsignedBigInteger('good_id');
-            // $table->unsignedBigInteger('loan_date(Loan apaan?)');
-            $table->unsignedBigInteger('room_id');
             $table->timestamps();
-
-            $table->foreign('good_id')->references('id')->on('goods');
-            $table->foreign('room_id')->references('id')->on('rooms');
         });
     }
 

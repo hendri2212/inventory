@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Role;
 use App\Models\Company;
 use Illuminate\Http\Request;
 
@@ -12,7 +13,7 @@ class UserController extends Controller
      * Display a listing of the resource.
      */
     public function index(){
-        $data = User::all();
+        $data = User::with('Role','Company')->get();
         return view( 'User.Data', [ 'data'=>$data ] );
     }
 
@@ -20,8 +21,9 @@ class UserController extends Controller
      * Show the form for creating a new resource.
      */
     public function create(){
-        $data = Company::all();
-        return view( 'User.Add', [ 'data'=>$data ] );
+        $company = Company::all();
+        $role = Role::all();
+        return view( 'User.Add', [ 'company'=>$company,'role'=>$role ] );
     }
 
     /**
@@ -49,11 +51,9 @@ class UserController extends Controller
      * Show the form for editing the specified resource.
      */
     public function edit(User $user){
-        return view( 'user.Edit', [ 
-            'user' => $user,
-            $data = user::all()
-        ]);
-        return redirect('/user');
+        $company = Company::all();
+        $role = Role::all();
+        return view( 'User.Edit', [ 'company'=>$company,'role'=>$role ] );
     }
 
     /**
