@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
 use Illuminate\Http\Request;
 
 class RoleController extends Controller
@@ -9,17 +10,17 @@ class RoleController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        //
+    public function index(){
+        $data = Role::all();
+        return view( 'Role.Data', [ 'data'=>$data ] );
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        //
+    public function create(){
+        $data = Role::all();
+        return view( 'Role.Add', [ 'data'=>$data ] );
     }
 
     /**
@@ -33,7 +34,7 @@ class RoleController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Role $role)
     {
         //
     }
@@ -41,15 +42,18 @@ class RoleController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
-    {
-        //
+    public function edit(Role $role){
+        return view( 'Role.Edit', [ 
+            'role' => $role,
+            $data = Role::all()
+        ]);
+        return redirect('/role');
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Role $role)
     {
         //
     }
@@ -57,8 +61,8 @@ class RoleController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
-    {
-        //
+    public function destroy(Role $role){
+        Role::destroy($role->id);
+        return redirect('/role')->with('Data berhasil dihapus');
     }
 }
