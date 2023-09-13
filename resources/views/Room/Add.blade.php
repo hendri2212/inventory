@@ -9,7 +9,7 @@
         <label for="company_id">Nama Company :</label>
         <select name="company_id" id="">
             <option value=""></option>
-            @foreach ($data as $company)
+            @foreach ($company as $company)
                 <option value="{{$company['id']}}">{{$company['name']}}</option>
             @endforeach
         </select>
@@ -17,7 +17,7 @@
         <label for="good_id">Nama barang :</label>
         <select name="good_id" id="">
             <option value=""></option>
-            @foreach ($data as $good)
+            @foreach ($good as $good)
                 <option value="{{$good['id']}}">{{$good['name']}}</option>
             @endforeach
         </select>
@@ -25,7 +25,7 @@
         <label for="supplier_id">Nama Supplier :</label>
         <select name="supplier_id" id="">
             <option value=""></option>
-            @foreach ($data as $supplier)
+            @foreach ($supplier as $supplier)
                 <option value="{{$supplier['id']}}">{{$supplier['name']}}</option>
             @endforeach
         </select>
