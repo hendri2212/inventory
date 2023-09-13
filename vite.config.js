@@ -5,7 +5,15 @@ import path from 'path';
 export default defineConfig({
     plugins: [
         laravel({
-            input: ['resources/js/app.js','plugins/fontawesome-free/css/all.min.css','resources/css/adminlte.min.css','plugins/overlayScrollbars/css/OverlayScrollbars.min.css','plugins/summernote/summernote-bs4.min.css'],
+            input: [
+                        'resources/js/app.js',
+                        'resources/css/all.min.css',
+                        'resources/css/adminlte.min.css',
+                        'resources/css/OverlayScrollbars.min.css',
+                        'resources/css/summernote-bs4.min.css',
+                        'resources/js/jquery.min.js',
+                        'resources/js/adminlte.js'
+                    ],
             refresh: true,
         }),
     ],
