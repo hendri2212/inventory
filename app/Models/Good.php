@@ -12,8 +12,4 @@ class Good extends Model
     public function Category() {
         return $this->belongsTo(Category::class);
     }
-    
-    public function Transaction() {
-        return $this->belongsTo(Transaction::class);
-    }
 }

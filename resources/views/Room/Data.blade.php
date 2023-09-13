@@ -26,6 +26,8 @@
             <th>ID.</th>
             <th>Nama</th>
             <th>Nama Company</th>
+            <th>Nama Barang</th>
+            <th>Nama Supplier</th>
             <th>Aksi</th>
         </tr>
         @foreach ($data as $room)

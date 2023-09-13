@@ -8,7 +8,7 @@
         <br>
         <label for="role_id">Nama role :</label>
         <select name="role_id" id="">
-            @foreach ($data as $role)
+            @foreach ($role as $role)
                 <option value="{{$role['id']}}">{{$role['name']}}</option>
             @endforeach
         </select>
@@ -21,7 +21,7 @@
         <br>
         <label for="company_id">Nama Company :</label>
         <select name="company_id" id="">
-            @foreach ($data as $company)
+            @foreach ($company as $company)
                 <option value="{{$company['id']}}">{{$company['name']}}</option>
             @endforeach
         </select>

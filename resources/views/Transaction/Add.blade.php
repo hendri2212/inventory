@@ -15,7 +15,7 @@
         <label for="date">Tanggal :</label>
         <input type="date" name="date">
         <br>
-        <label for="borrow_id">Nama Barang :</label>
+        <label for="borrow_id">Borrow :</label>
         <select name="borrow_id" id="">
             <option value=""></option>
             @foreach ($borrow as $borrow)
@@ -23,7 +23,7 @@
             @endforeach
         </select>
         <br>
-        <label for="condition_id">Nama Barang :</label>
+        <label for="condition_id">Kondisi :</label>
         <select name="condition_id" id="">
             <option value=""></option>
             @foreach ($condition as $condition)

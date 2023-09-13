@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Supplier;
+use App\Models\Company;
 use Illuminate\Http\Request;
 
 class SupplierController extends Controller
@@ -11,7 +12,7 @@ class SupplierController extends Controller
      * Display a listing of the resource.
      */
     public function index(){
-        $data = Supplier::all();
+        $data = Supplier::with('Company')->get();
         return view( 'Supplier.Data', [ 'data'=>$data ] );
     }
 
@@ -19,8 +20,9 @@ class SupplierController extends Controller
      * Show the form for creating a new resource.
      */
     public function create(){
-        $data = Supplier::all();
-        return view( 'Supplier.Add', [ 'data'=>$data ] );
+        $supplier = Supplier::all();
+        $company = Company::all();
+        return view( 'Supplier.Add', [ 'supplier'=>$supplier, 'company'=>$company ] );
     }
 
     /**
@@ -48,11 +50,9 @@ class SupplierController extends Controller
      * Show the form for editing the specified resource.
      */
     public function edit(Supplier $supplier){
-        return view( 'supplier.Edit', [ 
-            'supplier' => $supplier,
-            $data = supplier::all()
-        ]);
-        return redirect('/supplier');
+        $supplier = Supplier::all();
+        $company = Company::all();
+        return view( 'Supplier.Edit', [ 'supplier'=>$supplier, 'company'=>$company ] );
     }
 
     /**

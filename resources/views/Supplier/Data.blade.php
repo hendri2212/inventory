@@ -5,7 +5,8 @@
         <tr>
             <th>ID.</th>
             <th>Nama</th>
-            <th>Owner</th>
+            <th>Nama Company</th>
+            <th>Gambar</th>
             <th>Telepon</th>
             <th>Alamat</th>
             <th>Aksi</th>

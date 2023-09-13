@@ -7,17 +7,17 @@
             <th>Nama</th>
             <th>Aksi</th>
         </tr>
-        @foreach ($data as $category)
+        @foreach ($data as $borrow)
         <tr>
-            <td align="center" width="5%">{{$category['id']}}</td>
-            <td>{{$category['name']}}</td>
-            <form action="{{url('category', ['id'=>$category->id])}}" method="POST">
+            <td align="center" width="5%">{{$borrow['id']}}</td>
+            <td>{{$borrow['name']}}</td>
+            <form action="{{url('borrow', ['id'=>$borrow->id])}}" method="POST">
                 @method('delete')
                 @csrf
-                <td align="center"><button><a href="{{url('category/' . $category->id . '/edit')}}">Edit</a></button> | 
+                <td align="center"><button><a href="{{url('borrow/' . $borrow->id . '/edit')}}">Edit</a></button> | 
                 <button onclick="return confirm('Apakah anda yakin?')">delete</button></td>
             </form>
-            <!-- <td><a href="{{url('category/' . $category->id . '/edit')}}">tes</a></td> -->
+            <!-- <td><a href="{{url('borrow/' . $borrow->id . '/edit')}}">tes</a></td> -->
         </tr>
         @endforeach
     </table>
