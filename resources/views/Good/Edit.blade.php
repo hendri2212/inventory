@@ -7,6 +7,7 @@
         <label for="name">Nama :</label>
         <input type="text" name="name" value="{{$good->name}}">
         <br>
+        <label for="category_id">Kategory :</label>
         <select name="category_id" id="" value="{{$good->name}}">
             <option value="{{$good->category_id}}">{{$good->category->name}}</option>
             @foreach ($category as $category)

@@ -6,9 +6,17 @@
         <label for="name">Nama :</label>
         <input type="text" name="name">
         <br>
-        <label for="company_id">Company :</label>
-        <input type="text" name="company_id">
+        <label for="company_id">Nama Company :</label>
+        <select name="company_id" id="">
+            <option value=""></option>
+            @foreach ($company as $company)
+                <option value="{{$company['id']}}">{{$company['name']}}</option>
+            @endforeach
+        </select>
         <br>
+        {{-- <label for="company_id">Company :</label>
+        <input type="text" name="company_id">
+        <br> --}}
         <label for="image">gambar :</label>
         <input type="text" name="image">
         <br>

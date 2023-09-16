@@ -28,6 +28,7 @@
         <label for="name">Nama :</label>
         <input type="text" name="name">
         <br>
+        <label for="category_id">Kategory :</label>
         <select name="category_id" id="">
             <option value=""></option>
         @foreach ($data as $category)

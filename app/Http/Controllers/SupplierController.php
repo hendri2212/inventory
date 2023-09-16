@@ -31,9 +31,10 @@ class SupplierController extends Controller
     public function store(Request $request){
         $store = new Supplier();
         $store->name = $request->input('name');
-        $store->owner = $request->input('owner');
+        $store->company_id = $request->input('company_id');
+        $store->image = $request->input('image');
         $store->telephone = $request->input('telephone');
-        $store->addres = $request->input('addres');
+        $store->address = $request->input('address');
         $store->save();
         return redirect('/supplier');
     }
@@ -50,7 +51,7 @@ class SupplierController extends Controller
      * Show the form for editing the specified resource.
      */
     public function edit(Supplier $supplier){
-        $supplier = Supplier::all();
+        // $supplier = Supplier::all();
         $company = Company::all();
         return view( 'Supplier.Edit', [ 'supplier'=>$supplier, 'company'=>$company ] );
     }

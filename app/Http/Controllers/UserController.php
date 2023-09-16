@@ -32,6 +32,7 @@ class UserController extends Controller
     public function store(Request $request){
         $store = new User();
         $store->name = $request->input('name');
+        $store->role_id = $request->input('role_id');
         $store->username = $request->input('username');
         $store->password = $request->input('password');
         $store->company_id = $request->input('company_id');
@@ -53,7 +54,7 @@ class UserController extends Controller
     public function edit(User $user){
         $company = Company::all();
         $role = Role::all();
-        return view( 'User.Edit', [ 'company'=>$company,'role'=>$role ] );
+        return view( 'User.Edit', [ 'user'=>$user,'company'=>$company,'role'=>$role ] );
     }
 
     /**

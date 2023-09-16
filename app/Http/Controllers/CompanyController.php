@@ -46,9 +46,9 @@ class CompanyController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Company $company)
-    {
-        //
+    public function edit(Company $company){
+        // $company = Company::all();
+        return view( 'Company.Edit', ['company'=>$company] );
     }
 
     /**

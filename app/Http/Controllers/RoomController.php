@@ -35,6 +35,8 @@ class RoomController extends Controller
         $store = new Room();
         $store->name = $request->input('name');
         $store->company_id = $request->input('company_id');
+        $store->good_id = $request->input('good_id');
+        $store->supplier_id = $request->input('supplier_id');
         $store->save();
         return redirect('/room');
     }
@@ -55,7 +57,7 @@ class RoomController extends Controller
         $company = Company::all();
         $good = Good::all();
         $supplier = Supplier::all();
-        return view( 'Room.Edit', [ 'company'=>$company, 'good'=>$good, 'supplier'=>$supplier ] );
+        return view( 'Room.Edit', [ 'room'=>$room,'company'=>$company, 'good'=>$good, 'supplier'=>$supplier ] );
     }
 
     /**
