@@ -87,11 +87,11 @@ Route::prefix('good')->group(function () {
 });
 Route::resource('good', GoodController::class);
 
-Route::prefix('roles')->group(function () {
-    Route::get('/add', [RolesController::class, 'create']);
-        Route::get('/edit', [RolesController::class, 'edit']);
+Route::prefix('role')->group(function () {
+    Route::get('/add', [RoleController::class, 'create']);
+        Route::get('/edit', [RoleController::class, 'edit']);
 });
-Route::resource('roles', RolesController::class);
+Route::resource('role', RoleController::class);
 
 
 Route::prefix('room')->group(function () {

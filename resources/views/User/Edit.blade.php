@@ -2,6 +2,7 @@
 
 @section('konten')
     <form action="{{url('user', ['id'=>$user->id])}}" method="POST">
+        @method('put')
         @csrf
         <label for="name">Nama :</label>
         <input type="text" name="name" value="{{$user->name}}">

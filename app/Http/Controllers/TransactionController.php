@@ -41,9 +41,10 @@ class TransactionController extends Controller
         $store->image = $request->input('image');
         $store->price = $request->input('price');
         $store->date = $request->input('date');
-        $store->condition = $request->input('condition');
+        $store->borrow_id = $request->input('borrow_id');
+        $store->condition_id = $request->input('condition_id');
         $store->goods_id = $request->input('goods_id');
-        $store->shop_id = $request->input('shop_id');
+        $store->supplier_id = $request->input('supplier_id');
         $store->room_id = $request->input('room_id');
         $store->save();
         return redirect('/transaction');
