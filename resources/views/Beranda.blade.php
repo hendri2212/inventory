@@ -7,20 +7,20 @@
     <div class="container-fluid">
         <!-- Small boxes (Stat box) -->
 		<div class="container pb-5 pt-3">
-			<div class="row" >
-				<div class="col-4 justify-content-start">
+			<div class="row gy-3" >
+				<div class="col-md-4 justify-content-start">
 					<div class="card h-100" style="width: 22rem;">
 						<img src="./Avatar/gray.jpg" class="card-img-top" alt="...">
 					</div>					
 				</div>
 
-				<div class="col-4 justify-content-between">
+				<div class="col-md-4 justify-content-between">
 					<div class="card h-100" style="width: 22rem;">
 						<img src="./Avatar/gray.jpg" class="card-img-top" alt="...">
 					</div>	
 				</div>
 
-				<div class="col-4 justify-content-end">
+				<div class="col-md-4 justify-content-end">
 					<div class="card h-100" style="width: 22rem;">
 						<img src="./Avatar/gray.jpg" class="card-img-top" alt="...">
 					</div>	
