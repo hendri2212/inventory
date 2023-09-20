@@ -54,9 +54,21 @@ class CompanyController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Company $company)
-    {
-        //
+    public function update(Request $request, Company $company){
+    
+        $rules = [
+            'name'=> 'required',
+            'address'=> 'required', 
+            'telephone'=> 'required'
+        ];
+
+        $validatedData = $request->validate($rules);
+
+        Company::where('id', $company->id)
+            ->update($validatedData);
+            
+        return redirect('/company')->with('Data berhasil diupdate');
+        
     }
 
     /**

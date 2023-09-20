@@ -60,9 +60,22 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $user)
-    {
-        //
+    public function update(Request $request, User $user){
+    
+        $rules = [
+            'name'=> 'required',
+            'role_id'=> 'required',
+            'username'=> 'required',
+            'password'=> 'required',
+            'company_id'=> 'required'
+        ];
+
+        $validatedData = $request->validate($rules);
+
+        User::where('id', $user->id)
+            ->update($validatedData);
+            
+        return redirect('/user')->with('Data berhasil diupdate');
     }
 
     /**

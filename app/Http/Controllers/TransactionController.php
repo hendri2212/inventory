@@ -73,9 +73,27 @@ class TransactionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Transaction $transaction)
-    {
-        //
+    public function update(Request $request, Transaction $transaction){
+        
+            $rules = [
+                'information'=> 'required',
+                'image'=> 'nullable',
+                'price'=> 'required',
+                'date'=> 'required',
+                'borrow_id'=> 'required',
+                'condition_id'=> 'required',
+                'good_id'=> 'required',
+                'supplier_id'=> 'required',
+                'room_id'=> 'required'
+            ];
+    
+            $validatedData = $request->validate($rules);
+    
+            Transaction::where('id', $transaction->id)
+                ->update($validatedData);
+                
+            
+            return redirect('/transaction')->with('Data berhasil diupdate');
     }
 
     /**

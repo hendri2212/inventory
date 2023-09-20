@@ -21,15 +21,16 @@
 <div class="Bg">
 <div class="container">
     <div class="login">
-        <form action="">
+        <form action="/login" method="POST">
+            @csrf
             <H1>LOGIN</H1>
             <hr>
             <p>Gatau Mau Nulis Apa</p>
-            <label for="">EMAIL</label>
-            <input type="text" placeholder="Example@gmail.com">
+            <label for="email">EMAIL</label>
+            <input type="email" name="email" id="email" placeholder="Example@gmail.com" required>
 
             <label for="">PASSWORD</label>
-            <input type="text"placeholder="Password">
+            <input type="email" name="email" id="email" placeholder="Password" required>
 
             <button>LOGIN</button>
 

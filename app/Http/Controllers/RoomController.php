@@ -68,7 +68,9 @@ class RoomController extends Controller
         
         $rules = [
             'name'=> 'required',
-            'company_id' => 'required'
+            'company_id' => 'required',
+            'good_id' => 'required',
+            'supplier_id' => 'required',
         ];
 
         $validatedData = $request->validate($rules);

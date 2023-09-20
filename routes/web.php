@@ -26,9 +26,9 @@ Route::get('/', function () {
     return view('/beranda');
 });
 
-Route::get('/login', function () {
-    return view('Login/login');
-});
+// Route::get('/login', function () {
+//     return view('Login/login');
+// });
 
 Route::get('/beranda', function () {
     return view('Beranda');
@@ -120,3 +120,6 @@ Route::prefix('user')->group(function () {
         Route::get('/edit', [UserController::class, 'edit']);
 });
 Route::resource('user', UserController::class);
+
+route::get('/login', [LoginController::class, 'index']);
+route::post('/login', [LoginController::class, 'authenticate']);

@@ -64,9 +64,10 @@ class SupplierController extends Controller
        
         $rules = [
             'name'=> 'required',
-            'owner' => 'required',
+            'company_id' => 'required',
+            'image' => 'nullable',
             'telephone' => 'required',
-            'addres' => 'required'
+            'address' => 'required'
         ];
 
         $validatedData = $request->validate($rules);
