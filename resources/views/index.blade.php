@@ -38,7 +38,7 @@
     <!-- Left navbar links -->
     <ul class="navbar-nav">
         <li class="nav-item">
-            <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+            <a class="nav-link ml-3" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
             <a href="index3.html" class="nav-link">Home</a>
@@ -71,6 +71,16 @@
                 </div>
             </form>
         </div>
+    </li>
+
+    <li class="nav-item">
+    <div class="user-panel mt-1 pb-0 mb-1 mr-3 d-flex">
+        <div class="image">
+            <a href="#">
+                <img src="Avatar/gray3.png" class="rounded-circle" style="width: 35px;" alt="User Image">
+            </a>
+        </div>
+    </div>
     </li>
 
 
