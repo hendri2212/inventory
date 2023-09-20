@@ -5,11 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>inventory</title>
 <style>
-    .a {
-        margin: 20px;
-    }
-        
+
 </style>
+<link rel="stylesheet" href="css/main.css">
 
 <!-- Font Awesome -->
 <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
@@ -36,7 +34,7 @@
 </div>
 
 <!-- Navbar -->
-<nav class="main-header navbar navbar-expand navbar-white navbar-light">
+<nav class="main-header navbar navbar-expand navbar-light bg-success navbar-light">
     <!-- Left navbar links -->
     <ul class="navbar-nav">
         <li class="nav-item">
@@ -80,25 +78,25 @@
 <!-- /.navbar -->
 
 <!-- Main Sidebar Container -->
-<aside class="main-sidebar sidebar-dark-primary elevation-4">
+<aside class="main-sidebar sidebar-light-primary bg-success elevation-4">
     <!-- Brand Logo -->
-    <a href="index3.html" class="brand-link">
+    <a style="text-decoration:none" href="index3.html" class="brand-link">
         <!-- <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8"> -->
-        <span class="brand-text font-weight-light "><b>INVENTORY</b></span>
+        <span class="brand-text text-dark  d-flex justify-content-center "><b>INVENTORY</b></span>
     </a>
 
     <!-- Sidebar -->
     <div class="sidebar">
         <!-- Sidebar user panel (optional) -->
       
-    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+    <!-- <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
           		<img src="Avatar/Ryo.jpeg" class="img-circle elevation-2" alt="User Image">
         	</div>
         	<div class="info">
-          		<a href="#" class="d-block">Ryooooo</a>
+          		<a style="text-decoration:none" href="#" class="d-block">Ryooooo</a>
         </div>
-    </div>
+    </div> -->
 
       <!-- SidebarSearch Form -->
     <div class="form-inline py-2">
