@@ -6,7 +6,31 @@
     <section class="content">
     <div class="container-fluid">
         <!-- Small boxes (Stat box) -->
+		<div class="container pb-5 pt-3">
+			<div class="row" >
+				<div class="col-4 justify-content-start">
+					<div class="card h-100" style="width: 22rem;">
+						<img src="./Avatar/gray.jpg" class="card-img-top" alt="...">
+					</div>					
+				</div>
+
+				<div class="col-4 justify-content-between">
+					<div class="card h-100" style="width: 22rem;">
+						<img src="./Avatar/gray.jpg" class="card-img-top" alt="...">
+					</div>	
+				</div>
+
+				<div class="col-4 justify-content-end">
+					<div class="card h-100" style="width: 22rem;">
+						<img src="./Avatar/gray.jpg" class="card-img-top" alt="...">
+					</div>	
+				</div>
+			</div>
+		</div>
+
+
         <div class="row">
+
           	<div class="col-lg-3 col-6">
             	<!-- small box -->
             	<div class="small-box bg-light">
@@ -77,7 +101,7 @@
 @section('tittle')
     <!-- Content Header (Page header) -->
 <div class="content-header">
-    <div class="container-fluid shadow bg-success">
+    <div class="container-fluid rounded shadow bg-success">
         <div class="row mb-2">
           	<div class="col-sm-6">
             	<h1 class="m-3 text-dark">Beranda</h1>
