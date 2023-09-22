@@ -38,7 +38,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
           	<div class="col-sm-6">
-            	<h1 class="m-0">Company</h1>
+            	<h1 class="m-3 text">Company</h1>
           	</div><!-- /.col -->
           	<div class="col-sm-6 d-flex align-items-center justify-content-end">
               <ol class="breadcrumb float-sm-right d-flex align-items-stretch">

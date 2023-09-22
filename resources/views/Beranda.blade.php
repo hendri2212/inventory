@@ -42,7 +42,7 @@
               	<div class="icon">
                 	<i class="ion ion-bag"></i>
               	</div>
-              	<a href="/good" class="small-box-footer text-dark bg-success">More info <i class="fas fa-arrow-circle-right"></i></a>
+              	<a href="/good" id="bcg" class="small-box-footer text-dark bg-success">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
         </div>
 		  
@@ -58,7 +58,7 @@
               	<div class="icon">
                 	<i class="ion ion-stats-bars"></i>
               	</div>
-              	<a href="/transaction" class="small-box-footer bg-success ">More info <i class="fas fa-arrow-circle-right"></i></a>
+              	<a href="/transaction" id="bcg" class="small-box-footer bg-success ">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
         </div>
 
@@ -74,7 +74,7 @@
               	<div class="icon">
                 	<i class="ion ion-person-add"></i>
               	</div>
-              	<a href="/supplier" class="small-box-footer bg-success">More info <i class="fas fa-arrow-circle-right"></i></a>
+              	<a href="/supplier" id="bcg" class="small-box-footer bg-success">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
         </div>
 
@@ -90,7 +90,7 @@
               	<div class="icon">
                 	<i class="ion ion-pie-graph"></i>
               	</div>
-              	<a href="{{url('room')}}" class="small-box-footer bg-success">More info <i class="fas fa-arrow-circle-right"></i></a>
+              	<a href="{{url('room')}}" id="bcg" class="small-box-footer bg-success">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
         </div>
         <!-- ./col -->
@@ -101,7 +101,7 @@
 @section('tittle')
     <!-- Content Header (Page header) -->
 <div class="content-header">
-    <div class="container-fluid rounded shadow bg-success">
+    <div id="bcg" class="container-fluid rounded shadow bg-success">
         <div class="row mb-2">
           	<div class="col-sm-6">
             	<h1 class="m-3 text-dark">Beranda</h1>

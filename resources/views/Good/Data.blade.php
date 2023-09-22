@@ -4,8 +4,8 @@
 @section('konten')
 <!-- <body> -->
     
-<table border="2" align="center" id="example" class="table table-striped" style="width:97%" height="100px">
-        <tr align="center">
+<table border="2" align="center" id="example" class="table table-bordered table-success table-hover " style="width:97%" height="100px">
+        <tr align="center" class="table-active">
             <th>ID.</th>
             <th>Nama</th>
             <th>Category</th>
@@ -14,7 +14,7 @@
         
         @foreach ($data as $good)
         <tr>
-            <td>{{$good['id']}}</td>
+            <td align="center">{{$good['id']}}</td>
             <td>{{$good['name']}}</td>
             <td>{{$good['category']['name']}}</td>
             <form action="{{ url('good', ['id'=>$good->id]) }}" method="POST">
@@ -39,7 +39,7 @@
 
     <!-- Content Header (Page header) -->
 <div class="content-header">
-    <div class="container-fluid rounded shadow bg-success">
+    <div class="container-fluid mb-3 rounded shadow bg-success">
     	<div class="row mb-2">
           	<div class="col-sm-6">
             	<h1 class="m-3 text-dark">Data Barang</h1>

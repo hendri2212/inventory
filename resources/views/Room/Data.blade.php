@@ -21,8 +21,8 @@
 
 </style> -->
 
-<table border="2" align="center" id="example" class="table table-striped" style="width:97%" height="100px">
-        <tr>
+<table  align="center" id="example" class="table table-bordered table-success table-hover table-striped" style="width:97%" >
+        <tr class="table-active">
             <th>ID.</th>
             <th>Nama</th>
             <th>Nama Company</th>
@@ -55,7 +55,7 @@
 @section('tittle')
 
 <div class="content-header">
-    <div class="container-fluid rounded shadow bg-success">
+    <div id="Head" class="container-fluid rounded shadow bg-success">
         <div class="row mb-2">
             <div class="col-sm-6">
                 <h1 class="m-3 text-dark">Room</h1>

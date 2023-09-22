@@ -5,7 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>inventory</title>
 <style>
+    /* #bcg {
+        background-color: #6cbc35 !important;
+    }
 
+    #ContentBg {
+        background: #FFFFDD !important;
+    } 
+
+    #Navbar {
+        background: #6cbc35 !important;
+    }
+
+    #Sidebar {
+        background: #6cbc35 !important;
+    } */
+
+    #Head {
+        background-color: #198754 !important;
+    }
 </style>
 <link rel="stylesheet" href="css/main.css">
 
@@ -34,7 +52,7 @@
 </div>
 
 <!-- Navbar -->
-<nav class="main-header navbar navbar-expand navbar-light bg-success navbar-light">
+<nav id="Navbar" class="main-header navbar navbar-expand navbar-light bg-success navbar-light">
     <!-- Left navbar links -->
     <ul class="navbar-nav">
         <li class="nav-item">
@@ -88,7 +106,7 @@
 <!-- /.navbar -->
 
 <!-- Main Sidebar Container -->
-<aside class="main-sidebar sidebar-light-primary bg-success elevation-4">
+<aside id="Sidebar" class="main-sidebar sidebar-light-primary bg-success elevation-4">
     <!-- Brand Logo -->
     <a style="text-decoration:none" href="index3.html" class="brand-link">
         <!-- <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8"> -->
@@ -233,7 +251,7 @@
 
 </aside>
 <div class="px-3">
-    <div class="content-wrapper p-3">
+    <div id="ContentBg" class="content-wrapper p-3">
     
         @yield('tittle')
     </div>    
