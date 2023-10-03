@@ -37,6 +37,10 @@ Route::get('/beranda', function () {
     return view('Beranda');
 });
 
+Route::get('/Register', function () {
+    return view('Register');
+});
+
 // GOODS
 
 

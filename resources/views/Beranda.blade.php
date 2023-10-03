@@ -101,7 +101,7 @@
 @section('tittle')
     <!-- Content Header (Page header) -->
 <div class="content-header">
-    <div id="bcg" class="container-fluid rounded shadow bg-success">
+    <div id="Head" class="container-fluid rounded shadow bg-success">
         <div class="row mb-2">
           	<div class="col-sm-6">
             	<h1 class="m-3 text-dark">Beranda</h1>
