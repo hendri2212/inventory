@@ -1,6 +1,7 @@
 @extends('index')
 
 @section('konten')
+   
 <form class="ml-4" action="{{url('good')}}" method="POST">
     @csrf
     <label for="name" class="form-label">Nama</label>
@@ -11,7 +12,8 @@
 
     <div class="mb-3">
       <label for="category_id" class="form-label">Kategori</label>
-      <select name="category_id" style="width: 50%;" class="form-select">
+
+      <select id="select1" name="category_id" style="width: 50%;" class="form-select">
         <option value=""></option>
         @foreach ($data as $category)
             <option value="{{$category['id']}}">{{$category['name']}}</option>

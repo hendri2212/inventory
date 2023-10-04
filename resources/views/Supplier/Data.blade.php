@@ -1,8 +1,8 @@
 @extends('index')
 
 @section('konten')
-<table border="1" align="center" id="example" class="  table table-striped" style="width:97%" >
-        <tr>
+<table border="2" align="center" id="example" class="table table-bordered table-success table-hover " style="width:97%" height="100px">
+        <tr align="center" class="table-active">
             <th>ID.</th>
             <th>Nama</th>
             <th>Nama Company</th>

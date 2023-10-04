@@ -39,7 +39,7 @@
 @section('tittle')
 
 <div class="content-header">
-    <div class="container-fluid rounded shadow bg-success">
+    <div id="Head" class="container-fluid rounded shadow bg-success">
         <div class="row mb-2">
             <div class="col-sm-6">
                 <h1 class="m-3 text-dark">Add Room</h1>

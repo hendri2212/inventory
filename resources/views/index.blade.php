@@ -52,7 +52,7 @@
 </div>
 
 <!-- Navbar -->
-<nav id="Navbar" class="main-header navbar navbar-expand navbar-light bg-success navbar-light">
+<nav id="Navbar" class="main-header navbar navbar-expand navbar-light bg-success">
     <!-- Left navbar links -->
     <ul class="navbar-nav">
         <li class="nav-item">

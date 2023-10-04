@@ -10,19 +10,25 @@
 			<div class="row gy-3" >
 				<div class="col-md-4 justify-content-start">
 					<div class="card h-100" style="width: 22rem;">
+						<a href="">
 						<img src="./Avatar/gray.jpg" class="card-img-top" alt="">
+						</a>
 					</div>					
 				</div>
 
 				<div class="col-md-4 justify-content-between">
 					<div class="card h-100" style="width: 22rem;">
+						<a href="">
 						<img src="./Avatar/gray.jpg" class="card-img-top" alt="">
+						</a>
 					</div>	
 				</div>
 
 				<div class="col-md-4 justify-content-end">
 					<div class="card h-100" style="width: 22rem;">
+						<a href="">
 						<img src="./Avatar/gray.jpg" class="card-img-top" alt="">
+						</a>
 					</div>	
 				</div>
 			</div>
