@@ -1,11 +1,11 @@
 @extends('index')
 
 @section('konten')
-    <form action="{{url('category', ['id'=>$category->id])}}" method="POST">
+    <form action="{{url('borrow', ['id'=>$borrow->id])}}" method="POST">
         @method('put')
         @csrf
         <label for="name">Nama :</label>
-        <input type="text" name="name" value="{{$category->name}}">
+        <input type="text" name="name" value="{{$borrow->name}}">
         <br>
         <label for="good_id">good :</label>
         <select name="good_id" id="">

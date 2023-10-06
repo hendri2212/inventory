@@ -26,9 +26,11 @@ class ConditionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        //
+    public function store(Request $request){
+        $store = new Condition();
+        $store->name = $request->input('name');
+        $store->save();
+        return redirect('/condition');
     }
 
     /**

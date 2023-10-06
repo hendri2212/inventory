@@ -1,11 +1,11 @@
 @extends('index')
 
 @section('konten')
-    <form action="{{url('category', ['id'=>$category->id])}}" method="POST">
+    <form action="{{url('role', ['id'=>$role->id])}}" method="POST">
         @method('put')
         @csrf
         <label for="name">Nama :</label>
-        <input type="text" name="name" value="{{$category->name}}">
+        <input type="text" name="name" value="{{$role->name}}">
         <br>
         <input type="submit" value="Simpan">
     </form>

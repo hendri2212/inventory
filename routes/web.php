@@ -5,11 +5,13 @@ use App\Http\Controllers\GoodController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\BorrowController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\ConditionController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TransactionController;
 
 /*
@@ -24,18 +26,18 @@ use App\Http\Controllers\TransactionController;
 */
 
 // HALAMAN
-Route::get('/', function () {
-    // return view('welcome');
-    return view('/beranda');
-});
+// Route::get('/', function () {
+//     // return view('welcome');
+//     return view('/beranda');
+// });
 
 // Route::get('/login', function () {
 //     return view('Login/login');
 // });
 
-Route::get('/beranda', function () {
-    return view('Beranda');
-});
+// Route::get('/beranda', function () {
+//     return view('Beranda');
+// });
 
 // GOODS
 
@@ -126,3 +128,5 @@ Route::resource('user', UserController::class);
 
 route::get('/login', [LoginController::class, 'index']);
 route::post('/login', [LoginController::class, 'authenticate']);
+Route::get('/', [DashboardController::class, 'index']);
+Route::get('/beranda', [DashboardController::class, 'index']);

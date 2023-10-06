@@ -5,12 +5,16 @@
         <tr align="center">
             <th>ID</th>
             <th>Nama</th>
+            <th>Nama Barang</th>
+            <th>Nama Ruangan</th>
             <th>Aksi</th>
         </tr>
         @foreach ($data as $borrow)
         <tr>
             <td align="center" width="5%">{{$borrow['id']}}</td>
             <td>{{$borrow['name']}}</td>
+            <td>{{$borrow['good']['name']}}</td>
+            <td>{{$borrow['room']['name']}}</td>
             <form action="{{url('borrow', ['id'=>$borrow->id])}}" method="POST">
                 @method('delete')
                 @csrf
@@ -36,7 +40,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
           	<div class="col-sm-6">
-            	<h1 class="m-0">Kategory</h1>
+            	<h1 class="m-0">Borrow</h1>
           	</div><!-- /.col -->
           	<div class="col-sm-6">
             	<ol class="breadcrumb float-sm-right">

@@ -13,7 +13,7 @@ class BorrowController extends Controller
      * Display a listing of the resource.
      */
     public function index(){
-        $data = Borrow::with('Good','Room');
+        $data = Borrow::with('Good','Room')->get();
         return view( 'Borrow.Data', [ 'data'=>$data ] );
     }
 
@@ -30,9 +30,13 @@ class BorrowController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        //
+    public function store(Request $request){
+        $store = new Borrow();
+        $store->name = $request->input('name');
+        $store->good_id = $request->input('good_id');
+        $store->room_id = $request->input('room_id');
+        $store->save();
+        return redirect('/borrow');
     }
 
     /**

@@ -43,7 +43,7 @@ class TransactionController extends Controller
         $store->date = $request->input('date');
         $store->borrow_id = $request->input('borrow_id');
         $store->condition_id = $request->input('condition_id');
-        $store->goods_id = $request->input('goods_id');
+        $store->good_id = $request->input('good_id');
         $store->supplier_id = $request->input('supplier_id');
         $store->room_id = $request->input('room_id');
         $store->save();

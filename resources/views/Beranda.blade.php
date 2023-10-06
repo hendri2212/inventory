@@ -35,7 +35,7 @@
             	<!-- small box -->
             	<div class="small-box bg-light">
               		<div class="inner">
-                		<h3>150</h3>
+                		<h3>{{ $good }}</h3>
 
                 	<p>Data Barang</p>
               	</div>
@@ -51,7 +51,7 @@
             <!-- small box -->
             <div class="small-box bg-light">
               	<div class="inner">
-                	<h3>53<sup style="font-size: 20px">%</sup></h3>
+                	<h3>{{ $transaction }}<sup style="font-size: 20px">%</sup></h3>
 
                 	<p>Transaksi</p>
               	</div>
@@ -67,7 +67,7 @@
             <!-- small box -->
             <div class="small-box bg-light">
               	<div class="inner">
-                	<h3>44</h3>
+                	<h3>{{ $supplier }}</h3>
 
                 	<p>Supply</p>
               	</div>
@@ -83,7 +83,7 @@
             <!-- small box -->
             <div class="small-box bg-light">
               	<div class="inner">
-                	<h3>65</h3>
+                	<h3>{{ $room }}</h3>
 
                 	<p>Room</p>
               	</div>

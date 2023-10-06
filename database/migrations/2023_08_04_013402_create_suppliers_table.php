@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->char('name', 100);
             $table->unsignedBigInteger('company_id');
-            $table->binary('image');
+            $table->string('image')->nullable();
             $table->string('telephone', 20);
             $table->text('address');
             $table->timestamps();
