@@ -20,14 +20,16 @@
             <form action="{{ url('good', ['id'=>$good->id]) }}" method="POST">
                 @method('delete')
                 @csrf
-                <td align="center"><button><a href="{{url('good/' . $good->id . '/edit')}}">Edit</a></button> | 
-                <button onclick="return confirm('Apakah anda yakin?')">delete</button></td>
+            <td align="center">
+                <a href="{{url('good/' . $good->id . '/edit')}}" class="btn btn-warning">Edit</a> | 
+                <button onclick="return confirm('Apakah anda yakin?')" class="btn btn-danger">delete</button>
+            </td>
             </form>
         </tr>
         @endforeach
     </table>
 	<div class="a">
-    <a href="{{ url('good/add') }}">tambahkan data</a>
+    <a href="{{ url('good/add') }}" class="btn btn-gray btn-hover">tambahkan data</a>
 	</div>
 @endsection
 

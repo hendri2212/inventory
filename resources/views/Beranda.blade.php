@@ -4,29 +4,43 @@
 
 <!-- Main content -->
     <section class="content">
-    <div class="container-fluid">
-        <!-- Small boxes (Stat box) -->
-		<div class="container pb-5 pt-3 align-item-center justify-content-center">
-			<div class="row gy-3" >
-				<div class="col-md-4 justify-content-start">
-					<div class="card h-100" style="width: 22rem;">
-						<img src="./Avatar/gray.jpg" class="card-img-top" alt="">
-					</div>					
-				</div>
+    <div class="container mt-4 mb-4">
+    <div class="row">
+        <!-- First Photo Card -->
+        <div class="col-lg-4 col-md-6">
+            <div class="card">
+                <img src="Avatar/gray.jpg" class="card-img-top" alt="Image 1">
+                <!-- <div class="card-body">
+                    <h5 class="card-title"></h5>
+                    <p class="card-text"></p>
+                </div> -->
+            </div>
+        </div>
 
-				<div class="col-md-4 justify-content-between">
-					<div class="card h-100" style="width: 22rem;">
-						<img src="./Avatar/gray.jpg" class="card-img-top" alt="">
-					</div>	
-				</div>
+        <!-- Second Photo Card -->
+        <div class="col-lg-4 col-md-6">
+            <div class="card">
+                <img src="Avatar/gray.jpg" class="card-img-top" style alt="Image 2">
+                <!-- <div class="card-body">
+                    <h5 class="card-title"></h5>
+                    <p class="card-text"></p>
+                </div> -->
+            </div>
+        </div>
 
-				<div class="col-md-4 justify-content-end">
-					<div class="card h-100" style="width: 22rem;">
-						<img src="./Avatar/gray.jpg" class="card-img-top" alt="">
-					</div>	
-				</div>
-			</div>
-		</div>
+        <!-- Third Photo Card -->
+        <div class="col-lg-4 col-md-6">
+            <div class="card">
+                <img src="Avatar/gray.jpg" class="card-img-top" alt="Image 3">
+                <!-- <div class="card-body">
+                    <h5 class="card-title"></h5>
+                    <p class="card-text"></p>
+                </div> -->
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
         <div class="row">
@@ -101,7 +115,7 @@
 @section('tittle')
     <!-- Content Header (Page header) -->
 <div class="content-header">
-    <div id="bcg" class="container-fluid rounded shadow bg-success">
+    <div id="Head" class="container-fluid rounded shadow bg-success">
         <div class="row mb-2">
           	<div class="col-sm-6">
             	<h1 class="m-3 text-dark">Beranda</h1>

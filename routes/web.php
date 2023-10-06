@@ -39,6 +39,10 @@ use App\Http\Controllers\TransactionController;
 //     return view('Beranda');
 // });
 
+Route::get('/Register', function () {
+    return view('Register');
+});
+
 // GOODS
 
 
