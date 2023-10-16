@@ -9,7 +9,9 @@
         <!-- First Photo Card -->
         <div class="col-lg-4 col-md-6">
             <div class="card">
-                <img src="Avatar/gray.jpg" class="card-img-top" alt="Image 1">
+				<a href="">
+                	<img src="Avatar/gray.jpg" class="card-img-top" alt="Image 1">
+				</a>
                 <!-- <div class="card-body">
                     <h5 class="card-title"></h5>
                     <p class="card-text"></p>
@@ -20,7 +22,9 @@
         <!-- Second Photo Card -->
         <div class="col-lg-4 col-md-6">
             <div class="card">
-                <img src="Avatar/gray.jpg" class="card-img-top" style alt="Image 2">
+				<a href="">
+				<img src="Avatar/gray.jpg" class="card-img-top" style alt="Image 2">
+				</a>
                 <!-- <div class="card-body">
                     <h5 class="card-title"></h5>
                     <p class="card-text"></p>
@@ -31,7 +35,9 @@
         <!-- Third Photo Card -->
         <div class="col-lg-4 col-md-6">
             <div class="card">
-                <img src="Avatar/gray.jpg" class="card-img-top" alt="Image 3">
+				<a href="">
+					<img src="Avatar/gray.jpg" class="card-img-top" alt="Image 3">
+				</a>
                 <!-- <div class="card-body">
                     <h5 class="card-title"></h5>
                     <p class="card-text"></p>
