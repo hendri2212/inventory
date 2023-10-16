@@ -9,6 +9,14 @@ class User extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+        'role_id',
+        'username',
+        'password',
+        'company_id'
+    ];
+
     public function Role() {
         return $this->belongsTo(Role::class);
     }

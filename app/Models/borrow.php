@@ -9,6 +9,12 @@ class Borrow extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+        'good_id',
+        'room_id'
+    ];
+
     public function Good() {
         return $this->belongsTo(Good::class);
     }

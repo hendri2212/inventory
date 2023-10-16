@@ -29,14 +29,32 @@ class SupplierController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request){
-        $store = new Supplier();
-        $store->name = $request->input('name');
-        $store->company_id = $request->input('company_id');
-        $store->image = $request->input('image');
-        $store->telephone = $request->input('telephone');
-        $store->address = $request->input('address');
-        $store->save();
-        return redirect('/supplier');
+        // $store = new Supplier();
+        // $store->name = $request->input('name');
+        // $store->company_id = $request->input('company_id');
+        // $store->image = $request->input('image');
+        // $store->telephone = $request->input('telephone');
+        // $store->address = $request->input('address');
+        // $store->save();
+        // return redirect('/supplier');
+
+        $rules = [
+            'name' => 'required',
+            'company_id' => 'required',
+            'image' => 'image|file|nullable',
+            'telephone' => 'required',
+            'address' => 'required'
+        ];
+
+        $validatedData = $request->validate($rules);
+
+        if($request->file('image')) {
+            $validatedData['image'] = $request->file('image')->store('images');
+        }
+
+        Supplier::create($validatedData);
+            
+        return redirect('/supplier')->with('Data berhasil diupdate');
     }
 
     /**

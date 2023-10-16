@@ -27,10 +27,20 @@ class RoleController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request){
-        $store = new Role();
-        $store->name = $request->input('name');
-        $store->save();
-        return redirect('/role');
+        // $store = new Role();
+        // $store->name = $request->input('name');
+        // $store->save();
+        // return redirect('/role');
+
+        $rules = [
+            'name' => 'required'
+        ];
+
+        $validatedData = $request->validate($rules);
+
+        Role::create($validatedData);
+            
+        return redirect('/role')->with('Data berhasil diupdate');
     }
 
     /**

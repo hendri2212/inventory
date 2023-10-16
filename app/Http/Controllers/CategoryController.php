@@ -26,11 +26,22 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request) {
-        $store = new Category();
-        $store->name = $request->input('name');
-        $store->save();
-        return redirect('/category');
+    public function store(Request $request, Category $category) {
+        // $store = new Category();
+        // $store->name = $request->input('name');
+        // $store->save();
+        // return redirect('/category');
+
+        $rules = [
+            'name' => 'required'
+        ];
+
+        $validatedData = $request->validate($rules);
+
+        Category::create($validatedData);
+            
+        return redirect('/category')->with('Data berhasil diupdate');
+
     }
 
     /**

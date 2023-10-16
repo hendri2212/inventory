@@ -36,18 +36,41 @@ class TransactionController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request){
-        $store = new Transaction();
-        $store->information = $request->input('information');
-        $store->image = $request->input('image');
-        $store->price = $request->input('price');
-        $store->date = $request->input('date');
-        $store->borrow_id = $request->input('borrow_id');
-        $store->condition_id = $request->input('condition_id');
-        $store->good_id = $request->input('good_id');
-        $store->supplier_id = $request->input('supplier_id');
-        $store->room_id = $request->input('room_id');
-        $store->save();
-        return redirect('/transaction');
+        // $store = new Transaction();
+        // $store->information = $request->input('information');
+        // $store->image = $request->input('image');
+        // $store->price = $request->input('price');
+        // $store->date = $request->input('date');
+        // $store->borrow_id = $request->input('borrow_id');
+        // $store->condition_id = $request->input('condition_id');
+        // $store->good_id = $request->input('good_id');
+        // $store->supplier_id = $request->input('supplier_id');
+        // $store->room_id = $request->input('room_id');
+        // $store->save();
+        // return redirect('/transaction');
+
+        $rules = [
+            'information' => 'required',
+            'image' => 'image|file|nullable',
+            'price' => 'required',
+            'date' => 'required',
+            'borrow_id' => 'required',
+            'condition_id' => 'required',
+            'good_id' => 'required',
+            'supplier_id' => 'required',
+            'room_id' => 'required'
+        ];
+
+        $validatedData = $request->validate($rules);
+
+        if($request->file('image')) {
+            $validatedData['image'] = $request->file('image')->store('images');
+        }
+
+        Transaction::create($validatedData);
+            
+        // return redirect('/transaction')->with('Data berhasil diupdate');
+        return $request;
     }
 
     /**
@@ -77,7 +100,7 @@ class TransactionController extends Controller
         
             $rules = [
                 'information'=> 'required',
-                'image'=> 'nullable',
+                'image'=> 'image|file|nullable',
                 'price'=> 'required',
                 'date'=> 'required',
                 'borrow_id'=> 'required',

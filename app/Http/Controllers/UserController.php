@@ -30,14 +30,28 @@ class UserController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request){
-        $store = new User();
-        $store->name = $request->input('name');
-        $store->role_id = $request->input('role_id');
-        $store->username = $request->input('username');
-        $store->password = $request->input('password');
-        $store->company_id = $request->input('company_id');
-        $store->save();
-        return redirect('/user');
+        // $store = new User();
+        // $store->name = $request->input('name');
+        // $store->role_id = $request->input('role_id');
+        // $store->username = $request->input('username');
+        // $store->password = $request->input('password');
+        // $store->company_id = $request->input('company_id');
+        // $store->save();
+        // return redirect('/user');
+
+        $rules = [
+            'name' => 'required',
+            'role_id' => 'required',
+            'username' => 'required',
+            'password' => 'required',
+            'company_id' => 'required',
+        ];
+
+        $validatedData = $request->validate($rules);
+
+        User::create($validatedData);
+            
+        return redirect('/user')->with('Data berhasil diupdate');
     }
 
     /**

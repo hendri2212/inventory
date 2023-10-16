@@ -27,12 +27,24 @@ class CompanyController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request){
-        $store = new Company();
-        $store->name = $request->input('name');
-        $store->address = $request->input('address');
-        $store->telephone = $request->input('telephone');
-        $store->save();
-        return redirect('/company');
+        // $store = new Company();
+        // $store->name = $request->input('name');
+        // $store->address = $request->input('address');
+        // $store->telephone = $request->input('telephone');
+        // $store->save();
+        // return redirect('/company');
+        
+        $rules = [
+            'name' => 'required',
+            'address' => 'required',
+            'telephone' => 'required'
+        ];
+
+        $validatedData = $request->validate($rules);
+
+        Company::create($validatedData);
+            
+        return redirect('/company')->with('Data berhasil diupdate');
     }
 
     /**

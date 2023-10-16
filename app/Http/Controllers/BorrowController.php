@@ -31,12 +31,18 @@ class BorrowController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request){
-        $store = new Borrow();
-        $store->name = $request->input('name');
-        $store->good_id = $request->input('good_id');
-        $store->room_id = $request->input('room_id');
-        $store->save();
-        return redirect('/borrow');
+
+        $rules = [
+            'name' => 'required',
+            'good_id' => 'required',
+            'room_id' => 'required'
+        ];
+
+        $validatedData = $request->validate($rules);
+
+        Borrow::create($validatedData);
+            
+        return redirect('/borrow')->with('Data berhasil diupdate');
     }
 
     /**

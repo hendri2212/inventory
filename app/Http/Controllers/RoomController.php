@@ -32,13 +32,26 @@ class RoomController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request){
-        $store = new Room();
-        $store->name = $request->input('name');
-        $store->company_id = $request->input('company_id');
-        $store->good_id = $request->input('good_id');
-        $store->supplier_id = $request->input('supplier_id');
-        $store->save();
-        return redirect('/room');
+        // $store = new Room();
+        // $store->name = $request->input('name');
+        // $store->company_id = $request->input('company_id');
+        // $store->good_id = $request->input('good_id');
+        // $store->supplier_id = $request->input('supplier_id');
+        // $store->save();
+        // return redirect('/room');
+
+        $rules = [
+            'name' => 'required',
+            'company_id' => 'required',
+            'good_id' => 'required',
+            'supplier_id' => 'required'
+        ];
+
+        $validatedData = $request->validate($rules);
+
+        Room::create($validatedData);
+            
+        return redirect('/room')->with('Data berhasil diupdate');
     }
 
     /**

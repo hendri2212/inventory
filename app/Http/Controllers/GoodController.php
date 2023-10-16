@@ -28,11 +28,22 @@ class GoodController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request){
-        $store = new Good();
-        $store->name = $request->input('name');
-        $store->category_id = $request->input('category_id');
-        $store->save();
-        return redirect('/good');
+        // $store = new Good();
+        // $store->name = $request->input('name');
+        // $store->category_id = $request->input('category_id');
+        // $store->save();
+        // return redirect('/good');
+
+        $rules = [
+            'name' => 'required',
+            'category_id' => 'required'
+        ];
+
+        $validatedData = $request->validate($rules);
+
+        Good::create($validatedData);
+            
+        return redirect('/good')->with('Data berhasil diupdate');
         
     }
 

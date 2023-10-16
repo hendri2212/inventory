@@ -7,7 +7,7 @@
         <input type="text" name="information">
         <br>
         <label for="image">Gambar :</label>
-        <input type="image" name="image">
+        <input type="file" name="image">
         <br>
         <label for="price">Harga :</label>
         <input type="text" name="price">
