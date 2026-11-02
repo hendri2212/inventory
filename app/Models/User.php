@@ -16,6 +16,7 @@ use Illuminate\Support\Carbon;
  * @property string $name
  * @property string $email
  * @property Carbon|null $email_verified_at
+ * @property 'admin'|'operator'|'peminjam' $role
  * @property string $password
  * @property string|null $remember_token
  * @property Carbon|null $created_at
