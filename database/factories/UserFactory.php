@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
@@ -26,6 +27,13 @@ class UserFactory extends Factory
     {
         return [
             'name' => fake()->name(),
+            'role' => 'peminjam',
+            'institution_id' => fn () => DB::table('institutions')->insertGetId([
+                'code' => (string) Str::ulid(), 'name' => fake()->company(),
+            ]),
+            'department_id' => fn (array $attributes) => DB::table('departments')->insertGetId([
+                'institution_id' => $attributes['institution_id'], 'code' => 'TU', 'name' => 'Tata Usaha',
+            ]),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
@@ -40,6 +48,13 @@ class UserFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
+        ]);
+    }
+
+    public function superadmin(): static
+    {
+        return $this->state(fn () => [
+            'role' => 'superadmin', 'institution_id' => null, 'department_id' => null,
         ]);
     }
 }

@@ -18,7 +18,7 @@ const initials = computed(() =>
         .join('')
         .toUpperCase(),
 );
-const groups = [
+const groups = computed(() => [
     {
         label: 'WORKSPACE',
         items: [
@@ -32,6 +32,9 @@ const groups = [
         label: 'MANAJEMEN',
         items: [
             { key: 'peminjaman', label: 'Peminjaman', icon: 'arrows' },
+            ...(page.props.auth.user.role === 'superadmin'
+                ? [{ key: 'instansi', label: 'Instansi', icon: 'layers' }]
+                : []),
             { key: 'pengguna', label: 'Pengguna', icon: 'users' },
             { key: 'laporan', label: 'Laporan', icon: 'chart' },
         ],
@@ -40,9 +43,15 @@ const groups = [
         label: 'PREFERENSI',
         items: [{ key: 'pengaturan', label: 'Pengaturan', icon: 'settings' }],
     },
-];
+]);
 function navigate(key: string) {
-    emit('navigate', key);
+    if (key === 'instansi') {
+        router.visit('/institutions');
+    } else if (page.component !== 'Welcome') {
+        router.visit('/?menu=' + encodeURIComponent(key));
+    } else {
+        emit('navigate', key);
+    }
     mobileOpen.value = false;
 }
 function logout() {

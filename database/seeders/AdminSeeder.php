@@ -22,7 +22,7 @@ class AdminSeeder extends Seeder
         $admin->name = 'Administrator';
         $admin->email = $email;
         $admin->password = $password;
-        $admin->role = 'admin';
+        $admin->role = 'superadmin';
         $admin->email_verified_at = now();
         $admin->save();
 

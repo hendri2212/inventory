@@ -6,7 +6,10 @@ import AppIcon from '../components/AppIcon.vue';
 import type { Auth } from '../types/auth';
 
 const page = usePage<{ auth: Auth }>();
-const active = ref('dashboard');
+const requestedMenu = new URLSearchParams(page.url.split('?')[1] ?? '').get(
+    'menu',
+);
+const active = ref(requestedMenu ?? 'dashboard');
 const titles: Record<string, string> = {
     dashboard: 'Dashboard',
     barang: 'Data barang',

@@ -2,9 +2,19 @@
 
 namespace App\Providers;
 
+use App\Models\Category;
+use App\Models\Department;
+use App\Models\Institution;
+use App\Models\Item;
+use App\Models\User;
+use App\Policies\DepartmentPolicy;
+use App\Policies\InstitutionPolicy;
+use App\Policies\InventoryPolicy;
+use App\Policies\UserPolicy;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 
@@ -24,6 +34,13 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->configureDefaults();
+        foreach ([Institution::class, Department::class, Category::class, Item::class] as $model) {
+            Gate::policy($model, InventoryPolicy::class);
+        }
+        Gate::policy(User::class, UserPolicy::class);
+        Gate::policy(Institution::class, InstitutionPolicy::class);
+        Gate::policy(Department::class, DepartmentPolicy::class);
+        Gate::policy(Category::class, DepartmentPolicy::class);
     }
 
     /**
