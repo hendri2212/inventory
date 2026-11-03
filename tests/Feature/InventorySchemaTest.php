@@ -17,28 +17,18 @@ function inventoryFixture(): array
     return [$institution, $otherInstitution, $department, $category];
 }
 
-test('items cannot reference another institution department or category', function (string $relation) {
-    [$institution, $otherInstitution, $department, $category] = inventoryFixture();
-    if ($relation === 'department') {
-        $department = DB::table('departments')->insertGetId([
-            'institution_id' => $otherInstitution, 'code' => 'TU', 'name' => 'Tata Usaha',
-        ]);
-    } else {
-        $category = DB::table('categories')->insertGetId([
-            'institution_id' => $otherInstitution, 'name' => 'Elektronik',
-        ]);
-    }
-
+test('items cannot reference another institution category', function () {
+    [$institution, $otherInstitution] = inventoryFixture();
+    $category = DB::table('categories')->insertGetId(['institution_id' => $otherInstitution, 'name' => 'Lain']);
     expect(fn () => DB::table('items')->insert([
-        'institution_id' => $institution, 'department_id' => $department,
-        'category_id' => $category, 'code' => 'PC-01', 'name' => 'Komputer',
+        'institution_id' => $institution, 'category_id' => $category, 'code' => 'PC-01', 'name' => 'Komputer',
     ]))->toThrow(QueryException::class);
-})->with(['department', 'category']);
+});
 
 test('item codes can repeat across institutions but not inside an institution', function () {
     [$institution, $otherInstitution, $department, $category] = inventoryFixture();
     $item = [
-        'institution_id' => $institution, 'department_id' => $department,
+        'institution_id' => $institution,
         'category_id' => $category, 'code' => 'PC-01', 'name' => 'Komputer',
     ];
     DB::table('items')->insert($item);
@@ -49,7 +39,7 @@ test('item codes can repeat across institutions but not inside an institution', 
         'institution_id' => $otherInstitution, 'name' => 'Elektronik',
     ]);
     DB::table('items')->insert(array_replace($item, [
-        'institution_id' => $otherInstitution, 'department_id' => $otherDepartment,
+        'institution_id' => $otherInstitution,
         'category_id' => $otherCategory,
     ]));
 
@@ -59,10 +49,11 @@ test('item codes can repeat across institutions but not inside an institution', 
 
 test('referenced inventory parents cannot be deleted', function (string $table) {
     [$institution, , $department, $category] = inventoryFixture();
-    DB::table('items')->insert([
-        'institution_id' => $institution, 'department_id' => $department,
+    $item = DB::table('items')->insertGetId([
+        'institution_id' => $institution,
         'category_id' => $category, 'code' => 'PC-01', 'name' => 'Komputer',
     ]);
+    DB::table('item_units')->insert(['institution_id' => $institution, 'item_id' => $item, 'department_id' => $department, 'code' => 'UNIT']);
     $id = match ($table) {
         'institutions' => $institution,
         'departments' => $department,

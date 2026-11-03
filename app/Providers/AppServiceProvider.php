@@ -6,6 +6,12 @@ use App\Models\Category;
 use App\Models\Department;
 use App\Models\Institution;
 use App\Models\Item;
+use App\Models\ItemTransfer;
+use App\Models\ItemTransferItem;
+use App\Models\ItemUnit;
+use App\Models\Loan;
+use App\Models\LoanItem;
+use App\Models\Room;
 use App\Models\User;
 use App\Policies\DepartmentPolicy;
 use App\Policies\InstitutionPolicy;
@@ -34,13 +40,15 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->configureDefaults();
-        foreach ([Institution::class, Department::class, Category::class, Item::class] as $model) {
+        foreach ([Institution::class, Department::class, Category::class, Item::class, ItemUnit::class, Room::class, Loan::class, LoanItem::class, ItemTransfer::class, ItemTransferItem::class] as $model) {
             Gate::policy($model, InventoryPolicy::class);
         }
         Gate::policy(User::class, UserPolicy::class);
         Gate::policy(Institution::class, InstitutionPolicy::class);
         Gate::policy(Department::class, DepartmentPolicy::class);
         Gate::policy(Category::class, DepartmentPolicy::class);
+        Gate::policy(Item::class, DepartmentPolicy::class);
+        Gate::policy(Room::class, DepartmentPolicy::class);
     }
 
     /**

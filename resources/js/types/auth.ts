@@ -2,7 +2,7 @@ export type User = {
     id: number;
     name: string;
     email: string;
-    role: 'superadmin' | 'admin' | 'operator' | 'peminjam';
+    role: 'superadmin' | 'admin' | 'operator';
     institution_id: number | null;
     department_id: number | null;
     avatar?: string;

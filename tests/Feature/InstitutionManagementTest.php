@@ -16,7 +16,7 @@ test('only superadmins can access institution management endpoints', function (s
     $this->post('/institutions', ['code' => 'NEW', 'name' => 'New', 'is_active' => true])->assertForbidden();
     $this->put('/institutions/'.$user->institution_id, ['name' => 'Changed'])->assertForbidden();
     $this->delete('/institutions/'.$user->institution_id)->assertForbidden();
-})->with(['admin', 'operator', 'peminjam']);
+})->with(['admin', 'operator']);
 
 test('superadmins can list search create update and delete institutions', function () {
     $this->actingAs(User::factory()->superadmin()->create());

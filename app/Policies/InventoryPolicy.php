@@ -20,7 +20,7 @@ class InventoryPolicy
 
     public function create(User $user): bool
     {
-        return $user->hasValidAssignment() && $user->role !== 'peminjam';
+        return $user->hasValidAssignment();
     }
 
     public function update(User $user, Model $model): bool

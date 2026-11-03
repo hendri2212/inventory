@@ -23,7 +23,7 @@ use Illuminate\Validation\ValidationException;
  * @property string $name
  * @property string $email
  * @property CarbonImmutable|null $email_verified_at
- * @property 'superadmin'|'admin'|'operator'|'peminjam' $role
+ * @property 'superadmin'|'admin'|'operator' $role
  * @property int|null $institution_id
  * @property int|null $department_id
  * @property string $password
@@ -50,9 +50,9 @@ class User extends Authenticatable
                 if ($actor->role !== 'superadmin') {
                     $original = $user->exists ? User::find($user->id) : null;
                     if ($actor->role !== 'admin' || $user->institution_id !== $actor->institution_id
-                        || ! in_array($user->role, ['operator', 'peminjam'], true)
+                        || ! in_array($user->role, ['operator'], true)
                         || ($original !== null && ($original->institution_id !== $actor->institution_id
-                            || ! in_array($original->role, ['operator', 'peminjam'], true)))) {
+                            || ! in_array($original->role, ['operator'], true)))) {
                         throw new AuthorizationException;
                     }
                 }
@@ -79,7 +79,7 @@ class User extends Authenticatable
             return $this->department_id === null;
         }
 
-        return in_array($this->role, ['operator', 'peminjam'], true)
+        return in_array($this->role, ['operator'], true)
             && DB::table('departments')->where('id', $this->department_id)
                 ->where('institution_id', $this->institution_id)->where('is_active', true)->exists();
     }

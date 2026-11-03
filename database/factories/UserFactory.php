@@ -27,7 +27,7 @@ class UserFactory extends Factory
     {
         return [
             'name' => fake()->name(),
-            'role' => 'peminjam',
+            'role' => 'operator',
             'institution_id' => fn () => DB::table('institutions')->insertGetId([
                 'code' => (string) Str::ulid(), 'name' => fake()->company(),
             ]),

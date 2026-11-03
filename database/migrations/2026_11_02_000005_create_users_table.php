@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->enum('role', ['superadmin', 'admin', 'operator', 'peminjam'])->default('peminjam');
+            $table->enum('role', ['superadmin', 'admin', 'operator'])->default('operator');
             $table->foreignId('institution_id')->nullable()->constrained()->restrictOnDelete();
             $table->foreignId('department_id')->nullable()->constrained()->restrictOnDelete();
             $table->index(['institution_id', 'department_id']);

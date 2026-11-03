@@ -113,12 +113,7 @@ const shortcuts = [
 
 <template>
     <Head :title="title" />
-    <AdminLayout
-        v-if="page.props.auth.user.role === 'admin'"
-        :active="active"
-        :title="title"
-        @navigate="active = $event"
-    >
+    <AdminLayout :active="active" :title="title" @navigate="active = $event">
         <div class="page-heading">
             <div>
                 <div class="section-eyebrow">OVERVIEW WORKSPACE</div>
@@ -153,7 +148,7 @@ const shortcuts = [
                     <p>Kelola aset, peminjaman, dan tim dalam satu ruang.</p>
                     <button
                         class="btn banner-button"
-                        @click="active = 'barang'"
+                        @click="router.visit('/items')"
                     >
                         Jelajahi inventaris <AppIcon name="arrow" :size="16" />
                     </button>
@@ -253,7 +248,11 @@ const shortcuts = [
                     v-for="shortcut in shortcuts"
                     :key="shortcut.key"
                     class="shortcut-card"
-                    @click="active = shortcut.key"
+                    @click="
+                        shortcut.key === 'barang'
+                            ? router.visit('/items')
+                            : (active = shortcut.key)
+                    "
                 >
                     <span class="shortcut-icon"
                         ><AppIcon :name="shortcut.icon" :size="21" /></span
@@ -283,16 +282,6 @@ const shortcuts = [
             </button>
         </section>
     </AdminLayout>
-    <main v-else class="member-home">
-        <Head title="Beranda" /><span class="section-eyebrow"
-            >INVENTORY WORKSPACE</span
-        >
-        <h1>Selamat datang, {{ page.props.auth.user.name }}.</h1>
-        <p>Anda masuk sebagai {{ page.props.auth.user.role }}.</p>
-        <button class="btn placeholder-back" @click="router.post('/logout')">
-            Keluar dari akun
-        </button>
-    </main>
 </template>
 
 <style scoped>

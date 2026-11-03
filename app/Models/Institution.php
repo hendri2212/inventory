@@ -40,6 +40,12 @@ class Institution extends Model
         return $this->hasMany(Item::class);
     }
 
+    /** @return HasMany<Room, $this> */
+    public function rooms(): HasMany
+    {
+        return $this->hasMany(Room::class);
+    }
+
     /** @return HasMany<User, $this> */
     public function users(): HasMany
     {

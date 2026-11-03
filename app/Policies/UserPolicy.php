@@ -24,7 +24,7 @@ class UserPolicy
     public function update(User $user, User $target): bool
     {
         return $this->view($user, $target)
-            && ($user->role === 'superadmin' || in_array($target->role, ['operator', 'peminjam'], true));
+            && ($user->role === 'superadmin' || in_array($target->role, ['operator'], true));
     }
 
     public function delete(User $user, User $target): bool

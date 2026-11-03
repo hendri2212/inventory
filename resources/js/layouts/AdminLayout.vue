@@ -23,8 +23,11 @@ const groups = computed(() => [
         label: 'WORKSPACE',
         items: [
             { key: 'dashboard', label: 'Dashboard', icon: 'grid' },
-            { key: 'barang', label: 'Data barang', icon: 'box' },
-            { key: 'kategori', label: 'Kategori', icon: 'layers' },
+            { key: 'barang', label: 'Katalog barang', icon: 'box' },
+            { key: 'unit', label: 'Unit aset', icon: 'box' },
+            ...(['superadmin', 'admin'].includes(page.props.auth.user.role)
+                ? [{ key: 'kategori', label: 'Kategori', icon: 'layers' }]
+                : []),
             { key: 'lokasi', label: 'Lokasi & ruangan', icon: 'pin' },
         ],
     },
@@ -35,7 +38,12 @@ const groups = computed(() => [
             ...(page.props.auth.user.role === 'superadmin'
                 ? [{ key: 'instansi', label: 'Instansi', icon: 'layers' }]
                 : []),
-            { key: 'pengguna', label: 'Pengguna', icon: 'users' },
+            ...(['superadmin', 'admin'].includes(page.props.auth.user.role)
+                ? [
+                      { key: 'bidang', label: 'Bidang', icon: 'layers' },
+                      { key: 'pengguna', label: 'Pengguna', icon: 'users' },
+                  ]
+                : []),
             { key: 'laporan', label: 'Laporan', icon: 'chart' },
         ],
     },
@@ -45,8 +53,20 @@ const groups = computed(() => [
     },
 ]);
 function navigate(key: string) {
-    if (key === 'instansi') {
+    if (key === 'barang') {
+        router.visit('/items');
+    } else if (key === 'unit') {
+        router.visit('/item-units');
+    } else if (key === 'lokasi') {
+        router.visit('/rooms');
+    } else if (key === 'kategori') {
+        router.visit('/categories');
+    } else if (key === 'instansi') {
         router.visit('/institutions');
+    } else if (key === 'bidang') {
+        router.visit('/departments');
+    } else if (key === 'pengguna') {
+        router.visit('/users');
     } else if (page.component !== 'Welcome') {
         router.visit('/?menu=' + encodeURIComponent(key));
     } else {
@@ -97,7 +117,7 @@ function logout() {
                 <span class="workspace-symbol">I</span>
                 <div>
                     <strong>Inventory Workspace</strong
-                    ><small>Panel administrator</small>
+                    ><small>Panel inventaris</small>
                 </div>
                 <span class="workspace-tag">PRO</span>
             </div>
@@ -167,7 +187,7 @@ function logout() {
                     <span class="account-avatar">{{ initials }}</span>
                     <div>
                         <strong>{{ page.props.auth.user.name }}</strong
-                        ><small>Administrator</small>
+                        ><small>{{ page.props.auth.user.role }}</small>
                     </div>
                     <span class="account-status" title="Sesi aktif"></span>
                 </div>

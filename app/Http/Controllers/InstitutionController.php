@@ -47,7 +47,7 @@ class InstitutionController extends Controller
         DB::transaction(function () use ($institution): void {
             $institution = Institution::query()->lockForUpdate()->whereKey($institution->getKey())->firstOrFail();
             if ($institution->departments()->exists() || $institution->categories()->exists()
-                || $institution->items()->exists() || User::where('institution_id', $institution->getKey())->exists()) {
+                || $institution->rooms()->exists() || $institution->items()->exists() || User::where('institution_id', $institution->getKey())->exists()) {
                 throw ValidationException::withMessages(['institution' => 'Instansi masih memiliki data terkait. Nonaktifkan instansi atau hapus data terkait terlebih dahulu.']);
             }
             $institution->delete();

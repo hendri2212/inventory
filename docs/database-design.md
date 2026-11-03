@@ -1,78 +1,74 @@
-# Database inventaris multi instansi
+# Inventaris per unit, multi instansi
 
-Satu database bersama. `institution_id` menandai pemilik data.
+Skema untuk database baru/dibangun ulang. Migration pembuatan `items` dan `users` diubah langsung; bukan jalur upgrade data lama. Jangan menjalankan `migrate:fresh` pada database berisi data yang perlu dipertahankan.
 
-| Tabel          | Fungsi                               | Kolom utama                                                                                                                                                                                                                              |
-| -------------- | ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `institutions` | Instansi/sekolah                     | `id`, `code`, `name`, `address`, `phone`, `email`, `is_active`                                                                                                                                                                           |
-| `departments`  | Bidang/unit kerja                    | `id`, `institution_id`, `code`, `name`, `description`, `is_active`                                                                                                                                                                       |
-| `categories`   | Kategori bersama dalam satu instansi | `id`, `institution_id`, `name`, `description`                                                                                                                                                                                            |
-| `items`        | Stok barang milik bidang             | `id`, `institution_id`, `department_id`, `category_id`, `code`, `name`, `description`, `quantity`, `unit`, `purchase_year`, `purchase_price`, `photo_path`, `condition`, `condition_notes`, `disposed_at`, `disposal_notes`, `is_active` |
-| `users`        | Akun pengguna                        | `id`, `name`, `email`, `password`, `institution_id`, `department_id`, `role`, kolom autentikasi; role `superadmin`, `admin`, `operator`, `peminjam`                                                                                      |
+## Akun dan pencatatan
 
-Semua tabel memiliki `created_at` dan `updated_at`.
+Role: `superadmin`, `admin`, `operator`. Tidak ada akun khusus peminjam. Operator mencatat peminjaman untuk orang lain melalui identitas peminjam pada transaksi; orang tersebut tidak perlu login.
 
-## Relasi dan batasan
+| Role         | Penempatan                   | Akses                                                                   |
+| ------------ | ---------------------------- | ----------------------------------------------------------------------- |
+| `superadmin` | Instansi/bidang kosong       | Seluruh instansi                                                        |
+| `admin`      | Satu instansi, bidang kosong | Katalog, kategori, bidang, ruang, unit, akun operator dalam instansinya |
+| `operator`   | Satu instansi dan bidang     | Baca katalog/ruang instansi; kelola unit bidang sendiri                 |
 
-- Instansi memiliki banyak bidang, kategori, dan barang.
-- Bidang memiliki banyak barang. Satu baris barang dimiliki satu bidang.
-- Kategori dapat dipakai banyak bidang dalam instansi yang sama.
-- Kode instansi unik global. Kode bidang dan kode barang unik per instansi. Nama kategori unik per instansi.
-- Foreign key gabungan memastikan bidang dan kategori barang berada di instansi yang sama.
-- Penghapusan instansi, bidang, atau kategori yang masih digunakan ditolak (`RESTRICT`). Instansi, bidang, dan barang dapat dinonaktifkan lewat `is_active`.
-- `quantity` berupa jumlah bulat, default `0`. `unit` default `unit`.
-- `purchase_year`: tahun pembelian, bilangan tahun empat digit yang perlu divalidasi aplikasi.
-- `purchase_price`: harga beli per unit dalam rupiah, `DECIMAL(15,2)`; aplikasi perlu menolak nilai negatif.
-- `photo_path`: lokasi satu file foto di storage; database menyimpan path, bukan isi file. Upload dan akses foto perlu mengikuti otorisasi instansi.
-- Ketiga kolom pembelian/foto nullable agar data lama atau informasi yang belum tersedia tetap dapat disimpan. `NULL` berarti belum diketahui, berbeda dari harga `0`.
-- Satu baris barang memiliki satu tahun dan harga pembelian. Pembelian dengan tahun/harga berbeda perlu baris berkode berbeda; bila kelak perlu satu katalog barang dengan banyak pembelian, pisahkan detail pengadaan ke tabel tersendiri.
+Katalog bersama dikelola admin karena perubahan nama/kategori memengaruhi unit semua bidang. Unit fisik tetap milik satu bidang. Global scope menolak pembacaan tanpa akun/penempatan valid. Logout tetap tersedia untuk akun yang penempatannya dinonaktifkan.
 
-Contoh: Sekolah A → Tata Usaha → Komputer, kategori Elektronik. Sekolah B boleh memakai kode barang yang sama, dengan data bidang dan kategorinya sendiri.
+## Tabel
 
-## Kondisi dan pemusnahan
+| Tabel                 | Isi                                                                                                            |
+| --------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `institutions`        | Instansi/sekolah                                                                                               |
+| `departments`         | Bidang pengelola dalam instansi                                                                                |
+| `categories`          | Kategori bersama dalam instansi                                                                                |
+| `items`               | Katalog: kode katalog, nama, kategori, deskripsi, satuan, aktif                                                |
+| `rooms`               | Ruang fisik dalam instansi: kode, nama, deskripsi, aktif                                                       |
+| `item_units`          | Satu aset: kode inventaris, katalog, bidang, ruang, nomor seri, pembelian, foto, kondisi, pemusnahan, aktif    |
+| `users`               | Akun login dan penempatan role                                                                                 |
+| `loans`               | Nomor transaksi, bidang pemberi pinjaman, identitas peminjam, waktu pinjam/jatuh tempo, pencatat, catatan      |
+| `loan_items`          | Unit yang dipinjam, kondisi keluar, pengembalian per unit, kondisi kembali, petugas penerima                   |
+| `item_transfers`      | Nomor transaksi, jenis `room`/`department`, bidang/ruang asal dan tujuan, waktu, pencatat, pemberi persetujuan |
+| `item_transfer_items` | Daftar unit dalam satu mutasi                                                                                  |
 
-| Kolom             | Arti                                                                       |
-| ----------------- | -------------------------------------------------------------------------- |
-| `condition`       | `good` = baik, `minor_damage` = rusak ringan, `major_damage` = rusak parah |
-| `condition_notes` | Catatan pemeriksaan atau kerusakan                                         |
-| `disposed_at`     | Waktu pemusnahan; `NULL` berarti belum tercatat dimusnahkan                |
-| `disposal_notes`  | Alasan atau referensi berita acara pemusnahan                              |
+Setiap tabel memiliki timestamps. Foreign key gabungan `institution_id` + ID menjaga katalog, unit, ruang, bidang, dan detail transaksi tetap dalam instansi yang sama. Penghapusan referensi memakai `RESTRICT` untuk mempertahankan riwayat.
 
-Semua kolom ini nullable. Kondisi `NULL` berarti belum diperiksa/dicatat; data lama tidak otomatis dianggap baik. Pemusnahan terpisah dari kondisi fisik agar kondisi terakhir tetap tersimpan. `is_active` tetap penanda administratif.
+Kode katalog, kode inventaris, kode ruang, dan nomor masing-masing jenis transaksi unik per instansi. Nomor seri opsional; kode inventaris adalah identitas utama unit. Ruang opsional untuk unit yang belum ditempatkan. Ruang adalah lokasi fisik; bidang adalah pengelola, keduanya terpisah.
 
-Satu baris `items` mewakili jumlah barang dengan kondisi dan status pemusnahan yang sama. Contoh 10 kursi: 7 baik, 2 rusak ringan, 1 dimusnahkan perlu tiga baris berkode berbeda. Pemusnahan sebagian jumlah harus memisahkan baris terlebih dahulu; `disposed_at` berlaku untuk seluruh jumlah pada baris tersebut.
+## Per unit
 
-Saat fitur stok/peminjaman dibuat, barang dengan `disposed_at` terisi harus dikecualikan dari stok tersedia dan tidak boleh dipinjam. Migration ini hanya menambah penyimpanan informasi; alur pemusnahan, validasi, dan riwayat perubahan belum dibuat. Kondisi tambahan memerlukan perubahan daftar enum melalui migration.
+Contoh katalog `Laptop Lenovo ThinkPad` memiliki unit `LPT-001`, `LPT-002`, `LPT-003`. Setiap unit bisa memiliki bidang, ruang, nomor seri, harga/tahun pembelian, sumber dana, foto, kondisi dan tanggal pemusnahan berbeda.
 
-## Batas tahap ini
+Tidak ada kolom `quantity`. Jumlah berasal dari relasi `items.units`; jumlah yang dilihat operator hanya unit bidangnya. Jumlah tercatat mencakup unit nonaktif/dimusnahkan dan berbeda dari jumlah tersedia untuk dipinjam.
 
-`items` mencatat stok per jenis barang dalam satu bidang. Nomor seri, kondisi per unit, ruangan, pengadaan, peminjaman, dan riwayat mutasi belum dibuat. Untuk aset individual, tambahkan `item_units` sebelum membangun fitur tersebut.
+Harga memakai `DECIMAL(15,2)`; nilai tidak diketahui disimpan `NULL`, berbeda dari harga nol. Sumber dana: `BOSP`, `BOSDA`, `Bantuan`. Kondisi: `good`, `minor_damage`, `major_damage`; `NULL` berarti belum diperiksa. Pemusnahan terpisah dari kondisi terakhir.
 
-## Akun dan akses
+Foto disimpan pada disk lokal privat. Endpoint foto unit memakai otorisasi dan scope bidang/instansi. Form edit unit tidak dapat mengganti katalog, instansi, bidang atau ruang; perpindahan harus melalui alur mutasi.
 
-| Role         | Penempatan                    | Akses                                                                         |
-| ------------ | ----------------------------- | ----------------------------------------------------------------------------- |
-| `superadmin` | Instansi dan bidang `NULL`    | Seluruh instansi                                                              |
-| `admin`      | Instansi wajib; bidang `NULL` | Kelola bidang, kategori, barang, dan akun operator/peminjam dalam instansinya |
-| `operator`   | Instansi dan bidang wajib     | Kelola barang bidang sendiri; baca kategori instansi                          |
-| `peminjam`   | Instansi dan bidang wajib     | Baca barang bidang sendiri dan kategori instansi                              |
+## Kontrak alur transaksi
 
-Satu akun berada dalam maksimal satu instansi dan satu bidang. Satu bidang dapat memiliki banyak akun. Foreign key gabungan menolak penempatan akun pada bidang instansi lain; foreign key bidang tunggal juga memastikan bidang benar-benar ada ketika instansi kosong. Validasi model menegakkan penempatan sesuai role. Kolom role/penempatan tidak masuk mass assignment.
+Tabel dan relasi transaksi sudah tersedia. Endpoint, UI dan service peminjaman/pengembalian/mutasi belum dibuat pada tahap ini. Berikut aturan yang wajib diterapkan saat membuat alurnya:
 
-Model `Institution`, `Department`, `Category`, dan `Item` memiliki global scope berdasarkan akun login. Tanpa akun/penempatan valid, query tidak mengembalikan data. Operator/peminjam hanya melihat bidang sendiri; kategori dibagi dalam instansi. Event model menolak penyimpanan/penghapusan inventaris di luar akses akun. Akun instansi/bidang nonaktif ditolak. Dashboard memakai `EnsureTenantAccess`; logout tetap tersedia.
+- Semua operasi menggunakan transaksi database serta penguncian unit `lockForUpdate`; urutkan ID unit saat mengunci banyak unit.
+- Peminjaman tidak mengganti bidang pemilik atau ruang penempatan. Pemegang sementara dicatat dalam `loans`.
+- Satu pinjaman hanya berisi unit dari bidang pemberi pinjaman yang sama. Peminjam disimpan sebagai snapshot nama, identitas opsional, bidang asal opsional, dan kontak opsional; bukan foreign key ke akun.
+- Saat menyerahkan unit, isi `active_item_unit_id = item_unit_id`. Indeks unik pada `active_item_unit_id` menjadi pengaman pinjaman bersamaan. Kolom ini tidak otomatis diisi database; service wajib mengelolanya dan memverifikasi nilainya.
+- Saat menerima pengembalian unit, isi `returned_at`, `condition_in`, `notes_in`, `returned_by`, lalu kosongkan `active_item_unit_id` dan perbarui kondisi unit secara atomik. Detail lain boleh tetap terbuka untuk pengembalian bertahap.
+- Status pinjaman diturunkan dari detail: masih ada `returned_at = NULL` berarti aktif; seluruh detail kembali berarti selesai. Keterlambatan dibandingkan dengan `due_at`.
+- Unit nonaktif, dimusnahkan, sedang dipinjam, atau berkondisi tidak layak tidak boleh dipinjam/dimutasi. Validasi tanggal, petugas dan status katalog/bidang/ruang juga diperlukan.
+- Mutasi ruang mempertahankan bidang. Mutasi bidang mengganti bidang dan dapat mengganti ruang. Asal setiap unit harus cocok dengan header transaksi; pecah transaksi jika asal berbeda.
+- Mutasi memperbarui posisi unit dan menulis riwayat dalam transaksi database yang sama. Identitas asal/tujuan pada header harus dipertahankan setelah mutasi.
+- Mutasi antarbidang memerlukan otorisasi instansi serta verifikasi tujuan. Scope baca operator mencakup riwayat mutasi keluar/masuk bidangnya; penulisan model mutasi generik oleh operator sengaja ditolak sampai service khusus tersedia.
+- Petugas pencatat/penerima/pemberi persetujuan berasal dari akun login yang berwenang; jangan mempercayai ID petugas dari input klien. FK akun mempertahankan referensi, tetapi tidak memverifikasi kecocokan instansi petugas.
+- Jangan mengubah atau menghapus detail transaksi selesai untuk mengoreksi posisi saat ini. Buat transaksi koreksi yang memiliki riwayat.
 
-Policies terdaftar untuk inventaris dan akun. Endpoint CRUD belum dibuat. Saat menambah endpoint, gunakan middleware `auth` dan `EnsureTenantAccess`, route binding model yang berscope, validasi request, serta `Gate::authorize(...)` sebelum tindakan. Query daftar akun wajib `User::query()->visibleTo($request->user())` disertai policy `viewAny`; model `User` tidak memakai global scope agar autentikasi tetap dapat menemukan akun. Relasi `institution->users` dan `department->users` sudah membatasi akun yang terlihat.
+CRUD unit menolak pengeditan unit yang sedang dipinjam dan penghapusan unit dengan riwayat transaksi. Aturan transaksi di atas belum seluruhnya dijamin oleh skema atau event model; jangan memakai penulisan model generik sebagai pengganti service transaksi.
 
-Untuk membuat barang, tetapkan relasi instansi/bidang/kategori secara eksplisit setelah otorisasi, bukan lewat mass assignment input request. Jangan memakai `DB::table`, `withoutGlobalScopes`, atau bulk update/delete untuk operasi pengguna: jalur tersebut dapat melewati event/policies. Job/CLI perlu konteks akun valid untuk menggunakan model inventaris. Query mentah hanya untuk pekerjaan internal terpercaya.
+## Migration
 
-Role dan relasi akun langsung didefinisikan dalam migration pembuatan `users`. Migration `users` lama diganti nama menjadi `2026_11_02_000005_create_users_table.php` agar dijalankan setelah instansi/bidang tersedia. Tidak ada migration alter akun atau pemetaan akun lama. Rancangan ini untuk database yang dibangun ulang melalui `migrate:fresh`. Seeder membuat akun admin baru sebagai `superadmin` dan tidak menimpa akun yang sudah ada.
-
-## Menjalankan migration
-
-Dari `/Users/hendriarifin/CODE/inventory`:
+Dari `/Users/hendriarifin/CODE/inventory`, untuk database baru:
 
 ```sh
 php artisan migrate
 ```
 
-Lima migration domain, urutan: instansi → bidang → kategori → barang → akun. Kolom pembelian, foto, kondisi, dan pemusnahan langsung didefinisikan di migration pembuatan barang. Gunakan PHP yang memenuhi kebutuhan Composer proyek.
+Urutan domain: instansi → bidang → kategori → katalog → akun → ruang → unit aset → pinjaman → detail pinjaman → mutasi → detail mutasi. Tidak ada migrasi otomatis dari stok jumlah lama menjadi unit individual. Database yang sudah pernah memakai migration lama memerlukan rencana pemetaan data sebelum memakai skema ini.

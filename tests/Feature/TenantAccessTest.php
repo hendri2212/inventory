@@ -4,6 +4,7 @@ use App\Models\Category;
 use App\Models\Department;
 use App\Models\Institution;
 use App\Models\Item;
+use App\Models\ItemUnit;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\QueryException;
@@ -26,8 +27,12 @@ function tenantAccessFixture(): array
             'institution_id' => $institution, 'name' => 'Kategori '.$index,
         ]);
         $items[] = DB::table('items')->insertGetId([
-            'institution_id' => $institution, 'department_id' => $departments[$index],
+            'institution_id' => $institution,
             'category_id' => $categories[$index], 'code' => 'I'.$index, 'name' => 'Barang '.$index,
+        ]);
+        $items[$index] = DB::table('item_units')->insertGetId([
+            'institution_id' => $institution, 'item_id' => $items[$index],
+            'department_id' => $departments[$index], 'code' => 'UNIT'.$index,
         ]);
     }
 
@@ -38,21 +43,21 @@ test('inventory queries are restricted by role institution and department', func
     [$a, , $departments] = tenantAccessFixture();
     $user = User::factory()->create([
         'role' => $role, 'institution_id' => $role === 'superadmin' ? null : $a,
-        'department_id' => in_array($role, ['operator', 'peminjam']) ? $departments[0] : null,
+        'department_id' => in_array($role, ['operator']) ? $departments[0] : null,
     ]);
     $this->actingAs($user);
 
-    expect(Item::count())->toBe($count)
+    expect(ItemUnit::count())->toBe($count)
         ->and(Department::count())->toBe($count)
         ->and(Institution::count())->toBe($role === 'superadmin' ? 2 : 1)
         ->and(Category::count())->toBe($role === 'superadmin' ? 3 : 2);
 })->with([
-    ['superadmin', 3], ['admin', 2], ['operator', 1], ['peminjam', 1],
+    ['superadmin', 3], ['admin', 2], ['operator', 1],
 ]);
 
 test('unauthenticated inventory queries fail closed', function () {
     tenantAccessFixture();
-    expect(Item::count())->toBe(0)->and(Institution::count())->toBe(0);
+    expect(ItemUnit::count())->toBe(0)->and(Institution::count())->toBe(0);
 });
 
 test('operators cannot fetch or change another department item', function () {
@@ -61,10 +66,10 @@ test('operators cannot fetch or change another department item', function () {
         'role' => 'operator', 'institution_id' => $a, 'department_id' => $departments[0],
     ]);
     $this->actingAs($user);
-    expect(Item::find($items[1]))->toBeNull()->and(Item::find($items[2]))->toBeNull();
-    $other = Item::withoutGlobalScopes()->findOrFail($items[1]);
+    expect(ItemUnit::find($items[1]))->toBeNull()->and(ItemUnit::find($items[2]))->toBeNull();
+    $other = ItemUnit::withoutGlobalScopes()->findOrFail($items[1]);
     expect(Gate::allows('update', $other))->toBeFalse();
-    $other->name = 'Unauthorized';
+    $other->serial_number = 'Unauthorized';
     expect(fn () => $other->save())->toThrow(AuthorizationException::class);
 });
 
@@ -74,23 +79,12 @@ test('operators can update own items but cannot move them to another department'
         'role' => 'operator', 'institution_id' => $a, 'department_id' => $departments[0],
     ]);
     $this->actingAs($user);
-    $item = Item::findOrFail($items[0]);
+    $item = ItemUnit::findOrFail($items[0]);
     expect(Gate::allows('update', $item))->toBeTrue();
-    $item->name = 'Updated';
+    $item->serial_number = 'Updated';
     $item->save();
     $item->department_id = $departments[1];
     expect(fn () => $item->save())->toThrow(AuthorizationException::class);
-});
-
-test('borrowers can read items but cannot modify them', function () {
-    [$a, , $departments, , $items] = tenantAccessFixture();
-    $user = User::factory()->create([
-        'role' => 'peminjam', 'institution_id' => $a, 'department_id' => $departments[0],
-    ]);
-    $this->actingAs($user);
-    $item = Item::findOrFail($items[0]);
-    expect(Gate::allows('view', $item))->toBeTrue()->and(Gate::allows('update', $item))->toBeFalse();
-    expect(fn () => $item->delete())->toThrow(AuthorizationException::class);
 });
 
 test('user assignment rejects mismatched role institution or department', function (string $role, string $placement) {
@@ -137,7 +131,7 @@ test('invalid or inactive assignments block home but allow logout', function (st
     }
     $this->actingAs($user->fresh());
     $this->get(route('home'))->assertForbidden();
-    expect(Item::count())->toBe(0);
+    expect(ItemUnit::count())->toBe(0);
     $this->post(route('logout'))->assertRedirect(route('login'));
 })->with(['missing', 'institution', 'department']);
 
@@ -164,7 +158,8 @@ test('institution user relations respect department access', function () {
 test('creation policies restrict shared administration to admins', function () {
     $user = User::factory()->create(['role' => 'operator']);
     $this->actingAs($user);
-    expect(Gate::allows('create', Item::class))->toBeTrue()
+    expect(Gate::allows('create', ItemUnit::class))->toBeTrue()
+        ->and(Gate::allows('create', Item::class))->toBeFalse()
         ->and(Gate::allows('create', Category::class))->toBeFalse()
         ->and(Gate::allows('create', Department::class))->toBeFalse()
         ->and(Gate::allows('create', Institution::class))->toBeFalse()
@@ -175,10 +170,10 @@ test('admins cannot transfer inventory between institutions', function () {
     [$a, $b, $departments, $categories, $items] = tenantAccessFixture();
     $admin = User::factory()->create(['role' => 'admin', 'institution_id' => $a, 'department_id' => null]);
     $this->actingAs($admin);
-    $item = Item::findOrFail($items[0]);
+    $item = ItemUnit::findOrFail($items[0]);
     $item->institution_id = $b;
     $item->department_id = $departments[2];
-    $item->category_id = $categories[2];
+
     expect(fn () => $item->save())->toThrow(AuthorizationException::class);
 });
 
@@ -188,8 +183,8 @@ test('superadmins can manage inventory and accounts across institutions', functi
     $target = User::factory()->create(['role' => 'admin', 'institution_id' => $b, 'department_id' => null]);
     $this->actingAs($superadmin);
     expect(Gate::allows('update', $target))->toBeTrue();
-    $item = Item::findOrFail($items[2]);
-    $item->name = 'Updated by superadmin';
+    $item = ItemUnit::findOrFail($items[2]);
+    $item->serial_number = 'Updated by superadmin';
     $item->save();
-    expect($item->fresh()->name)->toBe('Updated by superadmin');
+    expect($item->fresh()->serial_number)->toBe('Updated by superadmin');
 });

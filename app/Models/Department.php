@@ -30,10 +30,10 @@ class Department extends Model
         return $this->belongsTo(Institution::class);
     }
 
-    /** @return HasMany<Item, $this> */
-    public function items(): HasMany
+    /** @return HasMany<ItemUnit, $this> */
+    public function units(): HasMany
     {
-        return $this->hasMany(Item::class);
+        return $this->hasMany(ItemUnit::class);
     }
 
     /** @return HasMany<User, $this> */
