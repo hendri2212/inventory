@@ -59,16 +59,34 @@ test('operators create edit inspect and delete individual units with private pho
     $operator = User::factory()->create(['role' => 'operator', 'institution_id' => $a, 'department_id' => $departments[0]]);
     $this->actingAs($operator);
     $data = unitPayload($fixture);
-    $photo = UploadedFile::fake()->createWithContent('photo.png', base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jRZkAAAAASUVORK5CYII='));
-    $this->post('/item-units', [...$data, 'photo' => $photo])->assertSessionHasNoErrors();
+    $image = base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jRZkAAAAASUVORK5CYII=');
+    $this->post('/item-units', [...$data, 'photos' => [
+        UploadedFile::fake()->createWithContent('front.png', $image),
+        UploadedFile::fake()->createWithContent('back.png', $image),
+    ]])->assertSessionHasNoErrors();
     $unit = ItemUnit::firstOrFail();
-    Storage::disk('local')->assertExists($unit->getAttribute('photo_path'));
-    $this->get('/item-units/'.$unit->getKey().'/photo')->assertOk();
-    $this->get('/item-units?search=UNIT-001')->assertInertia(fn (Assert $page) => $page->component('ItemUnits/Index')->has('units.data', 1)->where('units.data.0.purchase_price', '12500000.50'));
-    $this->put('/item-units/'.$unit->getKey(), [...$data, 'condition' => 'minor_damage', 'remove_photo' => true])->assertSessionHasNoErrors();
-    Storage::disk('local')->assertMissing($unit->getAttribute('photo_path'));
-    $this->get('/item-units/'.$unit->getKey().'/photo')->assertNotFound();
+    [$front, $back] = $unit->photos()->get()->all();
+    Storage::disk('local')->assertExists([$front->path, $back->path]);
+    $frontUrl = route('item-units.photo', [$unit, $front->id]);
+    $backUrl = route('item-units.photo', [$unit, $back->id]);
+    $this->get($frontUrl)->assertOk();
+    $this->get($backUrl)->assertOk();
+    $other = DB::table('item_units')->insertGetId([...$data, 'code' => 'UNIT-002']);
+    $this->get('/item-units/'.$other.'/photo/'.$front->id)->assertNotFound();
+    $this->put('/item-units/'.$other, [...$data, 'code' => 'UNIT-002', 'remove_photo_ids' => [$front->id]])
+        ->assertSessionHasErrors('remove_photo_ids.0');
+    $this->get('/item-units?search=UNIT-001')->assertInertia(fn (Assert $page) => $page->component('ItemUnits/Index')
+        ->has('units.data.0.photos', 2)->missing('units.data.0.photos.0.path')->where('units.data.0.purchase_price', '12500000.50'));
+    $this->put('/item-units/'.$unit->getKey(), [...$data, 'condition' => 'minor_damage', 'remove_photo_ids' => [$front->id],
+        'photos' => [UploadedFile::fake()->createWithContent('side.png', $image)]])->assertSessionHasNoErrors();
+    Storage::disk('local')->assertMissing($front->path);
+    $this->get($frontUrl)->assertNotFound();
+    $this->get($backUrl)->assertOk();
+    $paths = $unit->photos()->pluck('path')->all();
+    expect($paths)->toHaveCount(2);
     $this->delete('/item-units/'.$unit->getKey())->assertSessionHasNoErrors();
+    Storage::disk('local')->assertMissing($paths);
+    $this->assertDatabaseMissing('item_unit_photos', ['item_unit_id' => $unit->getKey()]);
     $this->assertDatabaseMissing('item_units', ['id' => $unit->getKey()]);
 });
 
@@ -81,10 +99,26 @@ test('unit requests reject cross institution references forged departments dupli
     $this->post('/item-units', $data)->assertSessionHasNoErrors();
     $this->post('/item-units', $data)->assertSessionHasErrors('code');
     $id = DB::table('item_units')->value('id');
-    $this->put('/item-units/'.$id, [...$data, 'room_id' => null])->assertSessionHasErrors('room_id');
+    $this->put('/item-units/'.$id, [
+        ...$data, 'item_id' => $items[2], 'department_id' => $departments[1], 'room_id' => $rooms[1],
+    ])->assertSessionHasErrors(['item_id', 'department_id', 'room_id']);
+    DB::table('rooms')->where('id', $rooms[0])->update(['is_active' => false]);
+    $this->put('/item-units/'.$id, $data)->assertSessionHasNoErrors();
+    $this->put('/item-units/'.$id, [...$data, 'item_id' => $items[1], 'room_id' => null])->assertSessionHasNoErrors();
+    $this->assertDatabaseHas('item_units', ['id' => $id, 'item_id' => $items[1], 'room_id' => null]);
+    $this->put('/item-units/'.$id, $data)->assertSessionHasErrors('room_id');
+    DB::table('rooms')->where('id', $rooms[0])->update(['is_active' => true]);
+
+    $this->app['auth']->forgetGuards();
+    $this->actingAs(User::factory()->create(['role' => 'admin', 'institution_id' => $a, 'department_id' => null]));
+    $this->put('/item-units/'.$id, [...$data, 'department_id' => $departments[1]])->assertSessionHasNoErrors();
+    $this->assertDatabaseHas('item_units', ['id' => $id, 'department_id' => $departments[1], 'room_id' => $rooms[0]]);
+
     $this->app['auth']->forgetGuards();
     $this->actingAs(User::factory()->superadmin()->create());
-    $this->put('/item-units/'.$id, [...$data, 'department_id' => $departments[1]])->assertSessionHasErrors('department_id');
+    $this->put('/item-units/'.$id, [
+        ...$data, 'institution_id' => $b, 'item_id' => $items[2], 'department_id' => $departments[2], 'room_id' => $rooms[1],
+    ])->assertSessionHasErrors('institution_id');
 });
 
 test('unit routes hide other department assets and private photos', function () {

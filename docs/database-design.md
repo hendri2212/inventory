@@ -42,7 +42,7 @@ Tidak ada kolom `quantity`. Jumlah berasal dari relasi `items.units`; jumlah yan
 
 Harga memakai `DECIMAL(15,2)`; nilai tidak diketahui disimpan `NULL`, berbeda dari harga nol. Sumber dana: `BOSP`, `BOSDA`, `Bantuan`. Kondisi: `good`, `minor_damage`, `major_damage`; `NULL` berarti belum diperiksa. Pemusnahan terpisah dari kondisi terakhir.
 
-Foto disimpan pada disk lokal privat. Endpoint foto unit memakai otorisasi dan scope bidang/instansi. Form edit unit tidak dapat mengganti katalog, instansi, bidang atau ruang; perpindahan harus melalui alur mutasi.
+Foto disimpan pada disk lokal privat. Endpoint foto unit memakai otorisasi dan scope bidang/instansi. Form edit unit dapat mengganti katalog dan ruang di instansi yang sama. Admin dan superadmin dapat mengganti bidang pemilik di instansi tersebut. Operator tetap menggunakan bidang akunnya.
 
 ## Kontrak alur transaksi
 

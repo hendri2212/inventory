@@ -4,6 +4,7 @@ import { Head, Link, router, useForm, usePage } from '@inertiajs/vue3';
 import AdminLayout from '../../layouts/AdminLayout.vue';
 import type { Auth } from '../../types/auth';
 type Option = { id: number; name: string; institution_id?: number };
+type UnitPhoto = { id: number; url: string };
 type Unit = {
     id: number;
     institution_id: number;
@@ -21,7 +22,7 @@ type Unit = {
     disposed_at: string | null;
     disposal_notes: string | null;
     is_active: boolean;
-    photo_url: string | null;
+    photos: UnitPhoto[];
     item: Option;
     institution: Option;
     department: Option;
@@ -44,6 +45,7 @@ const page = usePage<{ auth: Auth }>();
 const search = ref(props.filters.search ?? '');
 const itemFilter = ref(props.filters.item_id ?? '');
 const editing = ref<number | null>(null);
+const existingPhotos = ref<UnitPhoto[]>([]);
 const duplicateSource = ref<string | null>(null);
 const open = ref(false);
 const detail = ref<Unit | null>(null);
@@ -58,15 +60,15 @@ const form = useForm({
     serial_number: '',
     description: '',
     purchase_year: null as number | null,
-    purchase_price: '' as string | number,
+    purchase_price: '',
     funding_source: '',
     condition: '',
     condition_notes: '',
     disposed_at: '',
     disposal_notes: '',
     is_active: true,
-    photo: null as File | null,
-    remove_photo: false,
+    photos: [] as File[],
+    remove_photo_ids: [] as number[],
 });
 const items = computed(() =>
     props.items.filter((i) => i.institution_id === form.institution_id),
@@ -77,6 +79,14 @@ const departments = computed(() =>
 const rooms = computed(() =>
     props.rooms.filter((i) => i.institution_id === form.institution_id),
 );
+const currentInactiveRoom = computed(() => {
+    const room = props.units.data.find(
+        (unit) => unit.id === editing.value,
+    )?.room;
+    return room && !rooms.value.some((option) => option.id === room.id)
+        ? room
+        : null;
+});
 watch(
     () => form.institution_id,
     () => {
@@ -84,7 +94,7 @@ watch(
             form.item_id = null;
         if (!departments.value.some((i) => i.id === form.department_id))
             form.department_id = null;
-        if (!rooms.value.some((i) => i.id === form.room_id))
+        if (!editing.value && !rooms.value.some((i) => i.id === form.room_id))
             form.room_id = null;
     },
 );
@@ -93,9 +103,60 @@ const conditions: Record<string, string> = {
     minor_damage: 'Rusak ringan',
     major_damage: 'Rusak parah',
 };
+const rupiah = new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    currency: 'IDR',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
+});
+
+function formatPrice(price: string | null) {
+    return price === null ? '—' : rupiah.format(Number(price));
+}
+
+const purchasePriceInput = computed(() => {
+    const [whole, fraction] = form.purchase_price.split('.');
+    const grouped = whole.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    return fraction === undefined ? grouped : `${grouped},${fraction}`;
+});
+
+function updatePurchasePrice(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const text = input.value;
+    const pastedDecimal =
+        event instanceof InputEvent &&
+        event.inputType === 'insertFromPaste' &&
+        /^\d+\.\d{1,2}$/.test(text);
+    const raw = pastedDecimal
+        ? text.replace('.', ',')
+        : text.replaceAll('.', '');
+
+    if (/^\d*(?:,\d{0,2})?$/.test(raw)) {
+        const [whole, fraction] = raw.split(',');
+        const digits = whole.replace(/^0+(?=\d)/, '');
+        form.purchase_price =
+            fraction === undefined ? digits : `${digits || '0'}.${fraction}`;
+    }
+
+    const formatted = purchasePriceInput.value;
+    if (formatted === text) return;
+
+    let remaining = text
+        .slice(input.selectionStart ?? text.length)
+        .replaceAll('.', '').length;
+    let caret = formatted.length;
+    while (caret > 0 && remaining > 0) {
+        caret--;
+        if (formatted[caret] !== '.') remaining--;
+    }
+    input.value = formatted;
+    input.setSelectionRange(caret, caret);
+}
+
 function show(unit?: Unit, duplicate = false) {
     form.reset();
     form.clearErrors();
+    existingPhotos.value = duplicate ? [] : (unit?.photos ?? []);
     editing.value = duplicate ? null : (unit?.id ?? null);
     duplicateSource.value = duplicate && unit ? unit.code : null;
     if (unit)
@@ -108,7 +169,7 @@ function show(unit?: Unit, duplicate = false) {
             serial_number: duplicate ? '' : (unit.serial_number ?? ''),
             description: unit.description ?? '',
             purchase_year: unit.purchase_year,
-            purchase_price: unit.purchase_price ?? '',
+            purchase_price: unit.purchase_price?.replace(/\.00$/, '') ?? '',
             funding_source: unit.funding_source ?? '',
             condition: unit.condition ?? '',
             condition_notes: unit.condition_notes ?? '',
@@ -123,12 +184,13 @@ function show(unit?: Unit, duplicate = false) {
         });
     open.value = true;
 }
-function photo(event: Event) {
-    form.photo = (event.target as HTMLInputElement).files?.[0] ?? null;
+function selectPhotos(event: Event) {
+    form.photos = Array.from((event.target as HTMLInputElement).files ?? []);
 }
 function save() {
     form.transform((data) => ({
         ...data,
+        purchase_price: data.purchase_price.replace(/\.$/, ''),
         ...(editing.value ? { _method: 'put' } : {}),
     })).post(editing.value ? `/item-units/${editing.value}` : '/item-units', {
         forceFormData: true,
@@ -188,6 +250,7 @@ function filter() {
                         <tr>
                             <th>Unit / barang</th>
                             <th>Bidang / ruang</th>
+                            <th>Pembelian</th>
                             <th>Kondisi</th>
                             <th>Status</th>
                             <th>Aksi</th>
@@ -210,6 +273,15 @@ function filter() {
                                     unit.room?.name || 'Belum ditempatkan'
                                 }}</small>
                             </td>
+                            <td class="purchase-cell">
+                                <strong>{{
+                                    formatPrice(unit.purchase_price)
+                                }}</strong>
+                                <small
+                                    >Tahun
+                                    {{ unit.purchase_year ?? '—' }}</small
+                                >
+                            </td>
                             <td>
                                 {{
                                     conditions[unit.condition ?? ''] ??
@@ -226,7 +298,11 @@ function filter() {
                                 }}
                             </td>
                             <td>
-                                <div class="actions">
+                                <div
+                                    class="action-group"
+                                    role="group"
+                                    :aria-label="`Aksi unit ${unit.code}`"
+                                >
                                     <button @click="detail = unit">
                                         Detail</button
                                     ><button @click="show(unit)">Edit</button
@@ -247,7 +323,7 @@ function filter() {
                             </td>
                         </tr>
                         <tr v-if="!units.data.length">
-                            <td colspan="5">Belum ada unit aset.</td>
+                            <td colspan="6">Belum ada unit aset.</td>
                         </tr>
                     </tbody>
                 </table>
@@ -284,11 +360,14 @@ function filter() {
                         lainnya. Foto dan data pemusnahan tidak disalin.
                     </p>
                     <div class="fields">
-                        <label v-if="page.props.auth.user.role === 'superadmin'"
+                        <label
+                            v-if="
+                                page.props.auth.user.role === 'superadmin' &&
+                                !editing
+                            "
                             >Instansi<select
                                 v-model="form.institution_id"
                                 required
-                                :disabled="!!editing"
                             >
                                 <option :value="null">Pilih instansi</option>
                                 <option
@@ -301,11 +380,7 @@ function filter() {
                             </select></label
                         >
                         <label
-                            >Barang<select
-                                v-model="form.item_id"
-                                required
-                                :disabled="!!editing"
-                            >
+                            >Barang<select v-model="form.item_id" required>
                                 <option :value="null">Pilih barang</option>
                                 <option
                                     v-for="i in items"
@@ -316,14 +391,10 @@ function filter() {
                                 </option>
                             </select></label
                         >
-                        <label
+                        <label v-if="page.props.auth.user.role !== 'operator'"
                             >Bidang pemilik<select
                                 v-model="form.department_id"
                                 required
-                                :disabled="
-                                    !!editing ||
-                                    page.props.auth.user.role === 'operator'
-                                "
                             >
                                 <option :value="null">Pilih bidang</option>
                                 <option
@@ -336,11 +407,14 @@ function filter() {
                             </select></label
                         >
                         <label
-                            >Ruang penempatan<select
-                                v-model="form.room_id"
-                                :disabled="!!editing"
-                            >
+                            >Ruang penempatan<select v-model="form.room_id">
                                 <option :value="null">Belum ditempatkan</option>
+                                <option
+                                    v-if="currentInactiveRoom"
+                                    :value="currentInactiveRoom.id"
+                                >
+                                    {{ currentInactiveRoom.name }} (nonaktif)
+                                </option>
                                 <option
                                     v-for="i in rooms"
                                     :key="i.id"
@@ -377,10 +451,11 @@ function filter() {
                                 :max="new Date().getFullYear()" /></label
                         ><label
                             >Harga pembelian (Rp)<input
-                                v-model="form.purchase_price"
-                                type="number"
-                                min="0"
-                                step="0.01"
+                                :value="purchasePriceInput"
+                                type="text"
+                                inputmode="decimal"
+                                placeholder="2.000.000"
+                                @input="updatePurchasePrice"
                         /></label>
                         <label
                             >Sumber dana<select v-model="form.funding_source">
@@ -415,26 +490,44 @@ function filter() {
                                 v-model="form.disposal_notes"
                             />
                         </label>
-                        <label
-                            >Foto<input
+                        <label>
+                            Tambah foto
+                            <input
                                 type="file"
+                                multiple
                                 accept="image/jpeg,image/png,image/webp"
-                                @change="photo" /></label
-                        ><label
-                            ><input
-                                v-model="form.remove_photo"
-                                type="checkbox"
+                                @change="selectPhotos"
                             />
-                            Hapus foto lama</label
-                        ><label
+                            <small
+                                >Maks. 10 foto per unggahan, 5 MB per
+                                foto.</small
+                            >
+                        </label>
+                        <div v-if="existingPhotos.length" class="photo-gallery">
+                            <label
+                                v-for="(photo, index) in existingPhotos"
+                                :key="photo.id"
+                            >
+                                <img
+                                    :src="photo.url"
+                                    :alt="'Foto ' + (index + 1)"
+                                    class="thumbnail"
+                                />
+                                <span>
+                                    <input
+                                        v-model="form.remove_photo_ids"
+                                        type="checkbox"
+                                        :value="photo.id"
+                                    />
+                                    Hapus foto {{ index + 1 }}
+                                </span>
+                            </label>
+                        </div>
+                        <label
                             ><input v-model="form.is_active" type="checkbox" />
                             Aktif</label
                         >
                     </div>
-                    <p v-if="editing">
-                        Perpindahan bidang atau ruang dicatat melalui transaksi
-                        mutasi.
-                    </p>
                     <p
                         v-for="(error, key) in form.errors"
                         :key="key"
@@ -466,12 +559,15 @@ function filter() {
                     </h2>
                     <button aria-label="Tutup" @click="detail = null">×</button>
                 </header>
-                <img
-                    v-if="detail.photo_url"
-                    :src="detail.photo_url"
-                    alt="Foto unit aset"
-                    style="max-width: 100%; max-height: 300px"
-                />
+                <div v-if="detail.photos.length" class="photo-gallery">
+                    <img
+                        v-for="(photo, index) in detail.photos"
+                        :key="photo.id"
+                        :src="photo.url"
+                        :alt="'Foto unit aset ' + (index + 1)"
+                        class="photo-preview"
+                    />
+                </div>
                 <dl>
                     <dt>Nomor seri</dt>
                     <dd>{{ detail.serial_number || '—' }}</dd>
@@ -486,8 +582,8 @@ function filter() {
                     </dd>
                     <dt>Pembelian</dt>
                     <dd>
-                        {{ detail.purchase_year || '—' }} · Rp
-                        {{ detail.purchase_price ?? '—' }} ·
+                        {{ detail.purchase_year ?? '—' }} ·
+                        {{ formatPrice(detail.purchase_price) }} ·
                         {{ detail.funding_source || '—' }}
                     </dd>
                     <dt>Kondisi</dt>
@@ -547,6 +643,11 @@ function filter() {
     object-fit: cover;
     border-radius: 6px;
 }
+.photo-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
 .photo-preview {
     max-width: 100%;
     max-height: 220px;
@@ -576,11 +677,31 @@ select {
 .heading,
 .toolbar,
 .pagination,
-.actions,
 .modal-actions {
     display: flex;
     align-items: center;
     gap: 12px;
+}
+.action-group {
+    display: inline-flex;
+    white-space: nowrap;
+}
+.action-group > button {
+    border-radius: 0;
+}
+.action-group > button + button {
+    margin-inline-start: -1px;
+}
+.action-group > button:first-child {
+    border-start-start-radius: 7px;
+    border-end-start-radius: 7px;
+}
+.action-group > button:last-child {
+    border-start-end-radius: 7px;
+    border-end-end-radius: 7px;
+}
+.action-group > button:focus-visible {
+    outline-offset: -2px;
 }
 .heading {
     justify-content: space-between;
@@ -682,6 +803,9 @@ td small {
 td small {
     color: #829078;
     margin-top: 5px;
+}
+.purchase-cell {
+    white-space: nowrap;
 }
 .address {
     max-width: 240px;

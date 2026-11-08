@@ -11,7 +11,7 @@ class ItemUnit extends Model
 {
     use BelongsToTenant;
 
-    protected $fillable = ['code', 'serial_number', 'description', 'purchase_year', 'purchase_price', 'funding_source', 'photo_path', 'condition', 'condition_notes', 'disposed_at', 'disposal_notes', 'is_active'];
+    protected $fillable = ['code', 'serial_number', 'description', 'purchase_year', 'purchase_price', 'funding_source', 'condition', 'condition_notes', 'disposed_at', 'disposal_notes', 'is_active'];
 
     /** @return array<string, string> */
     protected function casts(): array
@@ -51,6 +51,12 @@ class ItemUnit extends Model
     public function room(): BelongsTo
     {
         return $this->belongsTo(Room::class);
+    }
+
+    /** @return HasMany<ItemUnitPhoto, $this> */
+    public function photos(): HasMany
+    {
+        return $this->hasMany(ItemUnitPhoto::class)->orderBy('id');
     }
 
     /** @return HasMany<LoanItem, $this> */

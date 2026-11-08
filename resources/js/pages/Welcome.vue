@@ -5,6 +5,36 @@ import AdminLayout from '../layouts/AdminLayout.vue';
 import AppIcon from '../components/AppIcon.vue';
 import type { Auth } from '../types/auth';
 
+type Loan = {
+    id: number;
+    code: string;
+    borrower_name: string;
+    borrower_department: string | null;
+    borrowed_at: string;
+    unit_names: string[];
+    unit_count: number;
+    returned_count: number;
+};
+
+const props = defineProps<{
+    scope: { institution: string | null; department: string | null };
+    summary: {
+        total_units: number;
+        total_purchase_value: `${number}`;
+        loaned_units: number;
+        available_units: number;
+        total_users: number | null;
+        item_types: number | null;
+    };
+    loans: Loan[];
+}>();
+const scopeLabel = computed(
+    () =>
+        [props.scope.institution, props.scope.department]
+            .filter(Boolean)
+            .join(' · ') || 'Semua instansi',
+);
+
 const page = usePage<{ auth: Auth }>();
 const requestedMenu = new URLSearchParams(page.url.split('?')[1] ?? '').get(
     'menu',
@@ -27,68 +57,74 @@ const date = new Intl.DateTimeFormat('id-ID', {
     year: 'numeric',
     timeZone: 'Asia/Makassar',
 }).format(new Date());
-const metrics = [
+const number = new Intl.NumberFormat('id-ID');
+const rupiah = new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    currency: 'IDR',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
+});
+const loanDate = new Intl.DateTimeFormat('id-ID', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+    timeZone: 'Asia/Makassar',
+});
+const metrics = computed(() => [
     {
-        label: 'Total barang',
-        value: '248',
-        unit: 'aset terdaftar',
+        label: 'Total unit aset',
+        value: props.summary.total_units,
+        unit: 'unit tercatat',
         icon: 'box',
         tone: 'green',
     },
     {
         label: 'Sedang dipinjam',
-        value: '18',
-        unit: 'peminjaman aktif',
+        value: props.summary.loaned_units,
+        unit: 'unit belum kembali',
         icon: 'arrows',
         tone: 'amber',
     },
     {
-        label: 'Barang tersedia',
-        value: '230',
-        unit: 'siap digunakan',
+        label: 'Unit tersedia',
+        value: props.summary.available_units,
+        unit: 'unit aktif dan siap dipinjam',
         icon: 'check',
         tone: 'sage',
     },
-    {
-        label: 'Total pengguna',
-        value: '42',
-        unit: 'anggota workspace',
-        icon: 'users',
-        tone: 'blue',
-    },
-];
-const loans = [
-    {
-        initials: 'AP',
-        name: 'Andi Pratama',
-        team: 'Tim operasional',
-        item: 'Laptop Lenovo ThinkPad',
-        code: 'INV-001',
-        date: '02 Nov 2026',
-        status: 'Dipinjam',
-        tone: 'amber',
-    },
-    {
-        initials: 'SR',
-        name: 'Sinta Rahma',
-        team: 'Tim administrasi',
-        item: 'Proyektor Epson EB-X',
-        code: 'INV-014',
-        date: '02 Nov 2026',
-        status: 'Dikembalikan',
-        tone: 'green',
-    },
-    {
-        initials: 'BP',
-        name: 'Budi Putra',
-        team: 'Tim kreatif',
-        item: 'Kamera Canon EOS',
-        code: 'INV-028',
-        date: '01 Nov 2026',
-        status: 'Dipinjam',
-        tone: 'amber',
-    },
-];
+    props.summary.total_users === null
+        ? {
+              label: 'Jenis barang',
+              value: props.summary.item_types ?? 0,
+              unit: 'jenis dengan unit tercatat',
+              icon: 'layers',
+              tone: 'blue',
+          }
+        : {
+              label: 'Total pengguna',
+              value: props.summary.total_users,
+              unit: 'akun dalam cakupan Anda',
+              icon: 'users',
+              tone: 'blue',
+          },
+]);
+
+function loanStatus(loan: Loan) {
+    if (loan.returned_count === loan.unit_count) return 'Dikembalikan';
+    if (loan.returned_count > 0) return 'Sebagian kembali';
+    return 'Dipinjam';
+}
+
+function initials(name: string) {
+    return name
+        .trim()
+        .split(/\s+/)
+        .slice(0, 2)
+        .map((word) => word[0])
+        .join('')
+        .toUpperCase();
+}
+
 const shortcuts = [
     {
         key: 'barang',
@@ -103,10 +139,10 @@ const shortcuts = [
         text: 'Atur ruang penempatan setiap aset.',
     },
     {
-        key: 'peminjaman',
-        icon: 'arrows',
-        label: 'Kelola peminjaman',
-        text: 'Pantau perjalanan setiap aset.',
+        key: 'unit',
+        icon: 'box',
+        label: 'Lihat unit aset',
+        text: 'Periksa kondisi dan penempatan unit.',
     },
     {
         key: 'laporan',
@@ -145,16 +181,14 @@ const shortcuts = [
         <template v-if="active === 'dashboard'">
             <section class="overview-banner">
                 <div>
-                    <span class="banner-eyebrow"
-                        >SATU WORKSPACE, SEMUA TERHUBUNG</span
-                    >
+                    <span class="banner-eyebrow">{{ scopeLabel }}</span>
                     <h2>
                         Inventaris yang rapi.<br />Langkah kerja yang pasti.
                     </h2>
                     <p>Kelola aset, peminjaman, dan tim dalam satu ruang.</p>
                     <button
                         class="btn banner-button"
-                        @click="router.visit('/items')"
+                        @click="router.visit('/item-units')"
                     >
                         Jelajahi inventaris <AppIcon name="arrow" :size="16" />
                     </button>
@@ -177,13 +211,9 @@ const shortcuts = [
                 </div>
             </section>
             <div class="section-caption">
-                <span>Ringkasan inventaris</span
-                ><span class="demo-badge">Data contoh</span>
+                <span>Ringkasan inventaris</span>
             </div>
-            <section
-                class="metrics-grid"
-                aria-label="Ringkasan inventaris contoh"
-            >
+            <section class="metrics-grid" aria-label="Ringkasan inventaris">
                 <article
                     v-for="metric in metrics"
                     :key="metric.label"
@@ -195,8 +225,20 @@ const shortcuts = [
                             ><AppIcon :name="metric.icon" :size="18"
                         /></span>
                     </div>
-                    <strong>{{ metric.value }}</strong
+                    <strong>{{ number.format(metric.value) }}</strong
                     ><small>{{ metric.unit }}</small>
+                </article>
+                <article class="metric-card purchase-value">
+                    <div class="metric-top">
+                        <span>Total nilai barang</span>
+                        <span class="metric-icon green">
+                            <AppIcon name="chart" :size="18" />
+                        </span>
+                    </div>
+                    <strong>{{
+                        rupiah.format(props.summary.total_purchase_value)
+                    }}</strong>
+                    <small>Harga beli seluruh unit tercatat</small>
                 </article>
             </section>
             <section class="loans-panel">
@@ -205,9 +247,6 @@ const shortcuts = [
                         <h2>Peminjaman terbaru</h2>
                         <p>Aktivitas barang dalam workspace Anda.</p>
                     </div>
-                    <button class="text-button" @click="active = 'peminjaman'">
-                        Lihat semua <AppIcon name="arrow" :size="15" />
-                    </button>
                 </div>
                 <div class="table-responsive">
                     <table class="loans-table mb-0 table align-middle">
@@ -220,28 +259,61 @@ const shortcuts = [
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="loan in loans" :key="loan.code">
+                            <tr v-if="loans.length === 0">
+                                <td colspan="4">
+                                    Belum ada peminjaman tercatat.
+                                </td>
+                            </tr>
+                            <tr v-for="loan in loans" :key="loan.id">
                                 <td>
                                     <div class="borrower">
                                         <span class="borrower-avatar">{{
-                                            loan.initials
+                                            initials(loan.borrower_name)
                                         }}</span>
                                         <div>
-                                            <strong>{{ loan.name }}</strong
-                                            ><small>{{ loan.team }}</small>
+                                            <strong>{{
+                                                loan.borrower_name
+                                            }}</strong
+                                            ><small
+                                                v-if="loan.borrower_department"
+                                                >{{
+                                                    loan.borrower_department
+                                                }}</small
+                                            >
                                         </div>
                                     </div>
                                 </td>
                                 <td>
-                                    <strong>{{ loan.item }}</strong
-                                    ><small>{{ loan.code }}</small>
+                                    <strong>{{
+                                        loan.unit_names.join(', ')
+                                    }}</strong>
+                                    <small
+                                        >{{ loan.code }} ·
+                                        {{ number.format(loan.unit_count) }}
+                                        unit</small
+                                    >
                                 </td>
-                                <td class="loan-date">{{ loan.date }}</td>
+                                <td class="loan-date">
+                                    {{
+                                        loanDate.format(
+                                            new Date(
+                                                loan.borrowed_at +
+                                                    'T00:00:00+08:00',
+                                            ),
+                                        )
+                                    }}
+                                </td>
                                 <td>
                                     <span
                                         class="status-badge"
-                                        :class="loan.tone"
-                                        ><span></span>{{ loan.status }}</span
+                                        :class="
+                                            loan.returned_count ===
+                                            loan.unit_count
+                                                ? 'green'
+                                                : 'amber'
+                                        "
+                                        ><span></span
+                                        >{{ loanStatus(loan) }}</span
                                     >
                                 </td>
                             </tr>
@@ -259,9 +331,9 @@ const shortcuts = [
                             ? router.visit('/items')
                             : shortcut.key === 'lokasi'
                               ? router.visit('/rooms')
-                              : shortcut.key === 'laporan'
-                                ? router.visit('/reports')
-                                : (active = shortcut.key)
+                              : shortcut.key === 'unit'
+                                ? router.visit('/item-units')
+                                : router.visit('/reports')
                     "
                 >
                     <span class="shortcut-icon"
@@ -494,6 +566,10 @@ h1 {
     padding: 18px;
     box-shadow: 0 3px 8px #1b332302;
 }
+.purchase-value {
+    grid-column: 1 / -1;
+    overflow-wrap: anywhere;
+}
 .metric-top {
     display: flex;
     justify-content: space-between;
@@ -562,17 +638,6 @@ h1 {
     font-size: 10px;
     color: #98a091;
     margin: 0;
-}
-.text-button {
-    display: inline-flex;
-    gap: 9px;
-    align-items: center;
-    color: #6a805c;
-    border: 0;
-    background: none;
-    font-size: 10px;
-    cursor: pointer;
-    white-space: nowrap;
 }
 .loans-table {
     width: 100%;

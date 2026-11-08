@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { Head, Link, router, usePage } from '@inertiajs/vue3';
 import AdminLayout from '../../layouts/AdminLayout.vue';
 import type { Auth } from '../../types/auth';
@@ -103,6 +103,7 @@ const printUrl = computed(
             print: '1',
         }).toString(),
 );
+const printRequest = ref<{ id: number; url: string } | null>(null);
 const conditions: Record<string, string> = {
     good: 'Baik',
     minor_damage: 'Rusak ringan',
@@ -144,8 +145,28 @@ function money(value: string | null) {
     return value === null ? '—' : currency.format(Number(value));
 }
 function printReport() {
-    window.print();
+    if (props.printing) {
+        window.print();
+        return;
+    }
+
+    printRequest.value = {
+        id: (printRequest.value?.id ?? 0) + 1,
+        url: printUrl.value,
+    };
 }
+
+onMounted(async () => {
+    if (
+        !props.printing ||
+        window.frameElement?.id !== 'inventory-print-frame'
+    ) {
+        return;
+    }
+
+    await document.fonts.ready;
+    window.print();
+});
 </script>
 <template>
     <Head title="Laporan barang dan unit aset" />
@@ -161,21 +182,24 @@ function printReport() {
                     </p>
                 </div>
                 <div class="actions no-print">
-                    <template v-if="printing"
-                        ><Link href="/reports">Kembali ke laporan</Link
-                        ><button class="primary" @click="printReport">
-                            Cetak / Simpan PDF
-                        </button></template
-                    ><a
-                        v-else
-                        :href="printUrl"
-                        target="_blank"
-                        rel="noopener"
-                        class="primary"
-                        >Versi cetak semua hasil</a
-                    >
+                    <Link v-if="printing" href="/reports">
+                        Kembali ke laporan
+                    </Link>
+                    <button type="button" class="primary" @click="printReport">
+                        Cetak / Simpan PDF
+                    </button>
                 </div>
             </header>
+            <iframe
+                v-if="printRequest"
+                id="inventory-print-frame"
+                :key="printRequest.id"
+                :src="printRequest.url"
+                class="print-frame no-print"
+                title="Laporan untuk dicetak"
+                aria-hidden="true"
+                tabindex="-1"
+            />
             <form
                 v-if="!printing"
                 class="filters no-print"
@@ -367,26 +391,41 @@ function printReport() {
                 class="pagination no-print"
                 aria-label="Halaman laporan"
             >
-                <template v-for="(link, index) in pagination.links" :key="index"
-                    ><Link
+                <template
+                    v-for="(link, index) in pagination.links"
+                    :key="index"
+                >
+                    <Link
                         v-if="link.url"
                         :href="link.url"
                         :class="{ selected: link.active }"
                         ><span v-html="link.label" /></Link
-                    ><span v-else class="disabled" v-html="link.label"
-                /></template>
+                    ><span v-else class="disabled" v-html="link.label" />
+                </template>
             </nav>
         </div>
     </AdminLayout>
 </template>
 <style scoped>
+.print-frame {
+    position: fixed;
+    inset: 0 auto auto 0;
+    width: 100%;
+    height: 1px;
+    border: 0;
+    opacity: 0;
+    pointer-events: none;
+}
+
 .unit-description {
     white-space: pre-wrap;
     overflow-wrap: anywhere;
 }
+
 .report {
     color: #203e33;
 }
+
 .heading,
 .actions,
 .item-heading {
@@ -395,30 +434,36 @@ function printReport() {
     align-items: center;
     justify-content: space-between;
 }
+
 .heading {
     margin-bottom: 24px;
     flex-wrap: wrap;
 }
+
 .heading small {
     color: #7a8c7a;
     font-size: 10px;
     letter-spacing: 1.8px;
 }
+
 h1 {
     font-size: 28px;
     margin: 8px 0;
 }
+
 p {
     color: #6a7c6b;
     font-size: 12px;
     line-height: 1.6;
     margin: 5px 0;
 }
+
 .actions {
     justify-content: flex-start;
     flex-wrap: wrap;
     gap: 8px;
 }
+
 button,
 .actions a,
 input,
@@ -431,16 +476,19 @@ select {
     background: white;
     color: #294638;
 }
+
 button,
 .actions a {
     cursor: pointer;
     text-decoration: none;
 }
+
 .primary {
     background: #254a37 !important;
     color: white !important;
     border-color: #254a37 !important;
 }
+
 .filters {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -450,6 +498,7 @@ button,
     border: 1px solid #e3e9dd;
     border-radius: 12px;
 }
+
 .filters label {
     display: flex;
     flex-direction: column;
@@ -457,12 +506,15 @@ button,
     font-size: 12px;
     min-width: 0;
 }
+
 .filters .actions {
     align-self: end;
 }
+
 .report-meta {
     margin: 20px 0;
 }
+
 .item-group {
     margin-bottom: 24px;
     background: white;
@@ -470,14 +522,17 @@ button,
     border-radius: 12px;
     overflow: hidden;
 }
+
 .item-heading {
     padding: 20px;
     background: #f0f4eb;
 }
+
 h2 {
     font-size: 17px;
     margin: 0 0 5px;
 }
+
 .badge {
     padding: 7px 12px;
     background: #dce9cf;
@@ -485,45 +540,54 @@ h2 {
     white-space: nowrap;
     font-size: 12px;
 }
+
 .table-wrap {
     overflow-x: auto;
 }
+
 table {
     width: 100%;
     border-collapse: collapse;
     text-align: left;
     font-size: 12px;
 }
+
 th {
     color: #6f806e;
     background: #f8faf5;
     font-weight: 500;
 }
+
 th,
 td {
     padding: 15px 20px;
     border-bottom: 1px solid #edf0e9;
     vertical-align: top;
 }
+
 td {
     min-width: 145px;
     overflow-wrap: anywhere;
 }
+
 td strong,
 td span {
     display: block;
 }
+
 td span {
     margin-top: 5px;
     color: #74816e;
     line-height: 1.6;
 }
+
 .pagination {
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
     justify-content: flex-end;
 }
+
 .pagination a,
 .pagination > span {
     padding: 8px 12px;
@@ -533,12 +597,15 @@ td span {
     text-decoration: none;
     color: #294638;
 }
+
 .pagination .selected {
     background: #dce9cf;
 }
+
 .disabled {
     opacity: 0.5;
 }
+
 .empty {
     text-align: center;
     padding: 40px 20px;
@@ -546,66 +613,83 @@ td span {
     border: 1px solid #e3e9dd;
     border-radius: 12px;
 }
+
 @media (max-width: 1000px) {
     .filters {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }
+
 @media (max-width: 500px) {
     .filters {
         grid-template-columns: 1fr;
     }
+
     h1 {
         font-size: 23px;
     }
+
     .item-heading {
         align-items: flex-start;
     }
 }
+
 @media print {
     @page {
         size: A4 landscape;
         margin: 12mm;
     }
+
     :global(.admin-sidebar),
     :global(.admin-topbar),
     :global(.admin-footer),
     .no-print {
         display: none !important;
     }
+
     :global(.admin-main) {
         margin: 0 !important;
     }
+
     :global(.admin-content) {
         padding: 0 !important;
     }
+
     :global(.admin-shell) {
         background: white !important;
     }
+
     .heading {
         margin-bottom: 12px;
     }
+
     .item-group {
         overflow: visible;
         border-radius: 0;
     }
+
     .item-heading {
         break-after: avoid;
     }
+
     .table-wrap {
         overflow: visible;
     }
+
     thead {
         display: table-header-group;
     }
+
     tr {
         break-inside: avoid;
     }
+
     th,
     td {
         padding: 8px;
         font-size: 10px;
     }
+
     td {
         min-width: 0;
     }

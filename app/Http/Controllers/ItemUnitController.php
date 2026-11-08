@@ -7,9 +7,11 @@ use App\Models\Department;
 use App\Models\Institution;
 use App\Models\Item;
 use App\Models\ItemUnit;
+use App\Models\ItemUnitPhoto;
 use App\Models\Room;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
@@ -26,14 +28,17 @@ class ItemUnitController extends Controller
         $search = $request->string('search')->trim()->toString();
 
         return Inertia::render('ItemUnits/Index', [
-            'units' => ItemUnit::query()->with(['item:id,name', 'institution:id,name', 'department:id,name', 'room:id,name'])
+            'units' => ItemUnit::query()->with(['item:id,name', 'institution:id,name', 'department:id,name', 'room:id,name', 'photos'])
                 ->when($search !== '', fn ($query) => $query->where(fn ($query) => $query->where('code', 'like', '%'.$search.'%')
                     ->orWhere('serial_number', 'like', '%'.$search.'%')->orWhereHas('item', fn ($item) => $item->where('name', 'like', '%'.$search.'%'))))
                 ->when($request->filled('item_id'), fn ($query) => $query->where('item_id', $request->input('item_id')))
                 ->orderBy('code')->paginate(10)->withQueryString()->through(fn (ItemUnit $unit) => [
                     ...$unit->toArray(),
                     'disposed_at' => $unit->getAttribute('disposed_at')?->format('Y-m-d'),
-                    'photo_url' => $unit->getAttribute('photo_path') ? route('item-units.photo', $unit) : null,
+                    'photos' => $unit->photos->map(fn (ItemUnitPhoto $photo) => [
+                        'id' => $photo->id,
+                        'url' => route('item-units.photo', [$unit, $photo->id]),
+                    ]),
                 ]),
             'items' => Item::query()->orderBy('name')->get(['id', 'name', 'institution_id']),
             'institutions' => Institution::query()->orderBy('name')->get(['id', 'name']),
@@ -61,41 +66,47 @@ class ItemUnitController extends Controller
     public function destroy(ItemUnit $itemUnit): RedirectResponse
     {
         Gate::authorize('delete', $itemUnit);
-        $path = $itemUnit->getAttribute('photo_path');
-        DB::transaction(function () use ($itemUnit): void {
+        $paths = DB::transaction(function () use ($itemUnit): array {
             $unit = ItemUnit::query()->lockForUpdate()->whereKey($itemUnit->getKey())->firstOrFail();
             if (DB::table('loan_items')->where('item_unit_id', $unit->getKey())->exists()
                 || DB::table('item_transfer_items')->where('item_unit_id', $unit->getKey())->exists()) {
                 throw ValidationException::withMessages(['unit' => 'Unit memiliki riwayat transaksi. Nonaktifkan unit sebagai gantinya.']);
             }
+            $paths = $unit->photos()->pluck('path')->all();
             $unit->delete();
+
+            return $paths;
         });
-        if ($path) {
-            Storage::disk('local')->delete($path);
-        }
+        Storage::disk('local')->delete($paths);
 
         return back()->with('success', 'Unit aset berhasil dihapus.');
     }
 
-    public function photo(ItemUnit $itemUnit): StreamedResponse
+    public function photo(ItemUnit $itemUnit, ?int $photo = null): StreamedResponse
     {
         Gate::authorize('view', $itemUnit);
-        $path = $itemUnit->getAttribute('photo_path');
-        abort_unless($path && Storage::disk('local')->exists($path), 404);
+        $record = $photo === null ? $itemUnit->photos()->firstOrFail() : $itemUnit->photos()->findOrFail($photo);
+        abort_unless(Storage::disk('local')->exists($record->path), 404);
 
-        return Storage::disk('local')->response($path, null, ['Cache-Control' => 'private, no-store']);
+        return Storage::disk('local')->response($record->path, null, ['Cache-Control' => 'private, no-store']);
     }
 
     private function save(SaveItemUnitRequest $request, ItemUnit $unit): void
     {
-        $data = $request->safe()->except(['photo', 'remove_photo']);
-        $oldPath = $unit->getAttribute('photo_path');
-        $newPath = $request->hasFile('photo') ? $request->file('photo')->store('unit-photos', 'local') : null;
-        if ($newPath || $request->boolean('remove_photo')) {
-            $data['photo_path'] = $newPath;
-        }
+        $data = $request->safe()->except(['photos', 'remove_photo_ids']);
+        $removeIds = $request->validated('remove_photo_ids', []);
+        $newPaths = [];
         try {
-            DB::transaction(function () use ($unit, $data): void {
+            /** @var list<UploadedFile> $uploads */
+            $uploads = $request->validated('photos', []);
+            foreach ($uploads as $upload) {
+                $path = $upload->store('unit-photos', 'local');
+                if ($path === false) {
+                    throw ValidationException::withMessages(['photos' => 'Foto gagal disimpan.']);
+                }
+                $newPaths[] = $path;
+            }
+            $oldPaths = DB::transaction(function () use ($unit, $data, $newPaths, $removeIds): array {
                 if ($unit->exists) {
                     $unit = ItemUnit::query()->lockForUpdate()->whereKey($unit->getKey())->firstOrFail();
                     if ($unit->loanItems()->whereNull('returned_at')->exists()) {
@@ -103,15 +114,19 @@ class ItemUnitController extends Controller
                     }
                 }
                 $unit->forceFill($data)->save();
+                $removed = $unit->photos()->getQuery()->reorder()->whereKey($removeIds);
+                $oldPaths = $removed->pluck('path')->all();
+                $removed->delete();
+                foreach ($newPaths as $path) {
+                    $unit->photos()->create(['path' => $path]);
+                }
+
+                return $oldPaths;
             });
         } catch (\Throwable $error) {
-            if ($newPath) {
-                Storage::disk('local')->delete($newPath);
-            }
+            Storage::disk('local')->delete($newPaths);
             throw $error;
         }
-        if ($oldPath && ($newPath || $request->boolean('remove_photo'))) {
-            Storage::disk('local')->delete($oldPath);
-        }
+        Storage::disk('local')->delete($oldPaths);
     }
 }
