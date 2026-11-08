@@ -149,6 +149,7 @@ function remove() {
                     v-model="search"
                     placeholder="Kode atau nama barang"
                 /><select
+                    v-if="page.props.auth.user.role === 'superadmin'"
                     v-model="institutionFilter"
                     aria-label="Filter instansi"
                 >
@@ -255,14 +256,11 @@ function remove() {
                 </header>
                 <form @submit.prevent="save">
                     <div class="fields">
-                        <label
+                        <label v-if="page.props.auth.user.role === 'superadmin'"
                             >Instansi<select
                                 v-model="form.institution_id"
                                 required
-                                :disabled="
-                                    !!editing ||
-                                    page.props.auth.user.role !== 'superadmin'
-                                "
+                                :disabled="!!editing"
                             >
                                 <option :value="null">Pilih instansi</option>
                                 <option

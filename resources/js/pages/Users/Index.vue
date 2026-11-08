@@ -298,13 +298,14 @@ function filter() {
                                 form.errors.role
                             }}</span></label
                         >
-                        <label v-if="form.role !== 'superadmin'"
+                        <label
+                            v-if="
+                                page.props.auth.user.role === 'superadmin' &&
+                                form.role !== 'superadmin'
+                            "
                             >Instansi *<select
                                 v-model="form.institution_id"
                                 required
-                                :disabled="
-                                    page.props.auth.user.role === 'admin'
-                                "
                             >
                                 <option :value="null" disabled>
                                     Pilih instansi

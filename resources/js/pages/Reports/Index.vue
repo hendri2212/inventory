@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
-import { Head, Link, router } from '@inertiajs/vue3';
+import { Head, Link, router, usePage } from '@inertiajs/vue3';
 import AdminLayout from '../../layouts/AdminLayout.vue';
+import type { Auth } from '../../types/auth';
 type Option = { id: number; name: string; institution_id?: number };
 type Filters = {
     search?: string;
@@ -53,6 +54,7 @@ const props = defineProps<{
     printing: boolean;
     generated_at: string;
 }>();
+const page = usePage<{ auth: Auth }>();
 const filters = ref({
     search: props.filters.search ?? '',
     institution_id: String(props.filters.institution_id ?? ''),
@@ -185,7 +187,7 @@ function printReport() {
                         placeholder="Kode atau nama katalog"
                         maxlength="150"
                 /></label>
-                <label
+                <label v-if="page.props.auth.user.role === 'superadmin'"
                     >Instansi<select v-model="filters.institution_id">
                         <option value="">Semua instansi</option>
                         <option

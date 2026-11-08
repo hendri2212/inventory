@@ -122,6 +122,7 @@ function filter() {
                     v-model="search"
                     placeholder="Kode atau nama ruang"
                 /><select
+                    v-if="page.props.auth.user.role === 'superadmin'"
                     v-model="institutionFilter"
                     aria-label="Filter instansi"
                 >
@@ -245,14 +246,13 @@ function filter() {
                 </h2>
                 <form @submit.prevent="save">
                     <div class="fields">
-                        <label class="wide"
+                        <label
+                            v-if="page.props.auth.user.role === 'superadmin'"
+                            class="wide"
                             >Instansi *<select
                                 v-model="form.institution_id"
                                 required
-                                :disabled="
-                                    !!editing ||
-                                    page.props.auth.user.role === 'admin'
-                                "
+                                :disabled="!!editing"
                             >
                                 <option :value="null" disabled>
                                     Pilih instansi

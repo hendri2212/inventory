@@ -284,14 +284,11 @@ function filter() {
                         lainnya. Foto dan data pemusnahan tidak disalin.
                     </p>
                     <div class="fields">
-                        <label
+                        <label v-if="page.props.auth.user.role === 'superadmin'"
                             >Instansi<select
                                 v-model="form.institution_id"
                                 required
-                                :disabled="
-                                    !!editing ||
-                                    page.props.auth.user.role !== 'superadmin'
-                                "
+                                :disabled="!!editing"
                             >
                                 <option :value="null">Pilih instansi</option>
                                 <option
