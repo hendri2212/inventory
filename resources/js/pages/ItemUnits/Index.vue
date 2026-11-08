@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
 import { Head, Link, router, useForm, usePage } from '@inertiajs/vue3';
+import AppIcon from '../../components/AppIcon.vue';
 import AdminLayout from '../../layouts/AdminLayout.vue';
 import type { Auth } from '../../types/auth';
 type Option = { id: number; name: string; institution_id?: number };
@@ -287,25 +288,60 @@ function filter() {
                                 }}
                             </td>
                             <td>
+                                <button
+                                    type="button"
+                                    class="unit-actions-trigger"
+                                    :aria-label="`Aksi unit ${unit.code}`"
+                                    :popovertarget="`unit-actions-${unit.id}`"
+                                >
+                                    <AppIcon name="more-vertical" :size="18" />
+                                </button>
                                 <div
-                                    class="action-group"
+                                    :id="`unit-actions-${unit.id}`"
+                                    class="unit-actions"
+                                    popover
                                     role="group"
                                     :aria-label="`Aksi unit ${unit.code}`"
                                 >
-                                    <button @click="detail = unit">
+                                    <button
+                                        type="button"
+                                        :popovertarget="`unit-actions-${unit.id}`"
+                                        popovertargetaction="hide"
+                                        :aria-label="`Detail ${unit.code}`"
+                                        @click="detail = unit"
+                                    >
+                                        <AppIcon name="eye" :size="15" />
                                         Detail</button
-                                    ><button @click="show(unit)">Edit</button
                                     ><button
+                                        type="button"
+                                        :popovertarget="`unit-actions-${unit.id}`"
+                                        popovertargetaction="hide"
+                                        :aria-label="`Edit ${unit.code}`"
+                                        @click="show(unit)"
+                                    >
+                                        <AppIcon name="pencil" :size="15" />
+                                        Edit</button
+                                    ><button
+                                        type="button"
+                                        :popovertarget="`unit-actions-${unit.id}`"
+                                        popovertargetaction="hide"
                                         :aria-label="`Duplikat ${unit.code}`"
                                         @click="show(unit, true)"
                                     >
+                                        <AppIcon name="copy" :size="15" />
                                         Duplikat</button
                                     ><button
+                                        type="button"
+                                        :popovertarget="`unit-actions-${unit.id}`"
+                                        popovertargetaction="hide"
+                                        class="danger"
+                                        :aria-label="`Hapus ${unit.code}`"
                                         @click="
                                             deleting = unit;
                                             deletion.clearErrors();
                                         "
                                     >
+                                        <AppIcon name="trash" :size="15" />
                                         Hapus
                                     </button>
                                 </div>
@@ -686,30 +722,46 @@ select {
     align-items: center;
     gap: 12px;
 }
-.action-group {
-    display: inline-flex;
-    white-space: nowrap;
-}
-.action-group > button {
-    border-radius: 0;
-}
-.action-group > button + button {
-    margin-inline-start: -1px;
-}
-.action-group > button:first-child {
-    border-start-start-radius: 7px;
-    border-end-start-radius: 7px;
-}
-.action-group > button:last-child {
-    border-start-end-radius: 7px;
-    border-end-end-radius: 7px;
-}
-.action-group > button:focus-visible {
-    outline-offset: -2px;
-}
 .heading {
     justify-content: space-between;
     margin-bottom: 26px;
+}
+.unit-actions-trigger {
+    display: inline-grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+}
+.unit-actions-trigger:hover {
+    background: #eef4e9;
+}
+.unit-actions {
+    position-area: block-end span-inline-start;
+    position-try-fallbacks: flip-block, flip-inline;
+    justify-self: end;
+    margin: 4px 0;
+    min-width: 148px;
+    padding: 4px;
+    border: 1px solid #dce4d6;
+    border-radius: 8px;
+    background: white;
+    box-shadow: 0 8px 24px #203e3326;
+}
+.unit-actions > button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 9px 10px;
+    border: 0;
+    text-align: start;
+}
+.unit-actions > button:hover {
+    background: #eef4e9;
+}
+.unit-actions > button.danger:hover {
+    background: #fdf0f0;
 }
 h1 {
     font-size: 30px;

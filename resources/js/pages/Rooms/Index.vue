@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { Head, Link, router, useForm, usePage } from '@inertiajs/vue3';
+import AppIcon from '../../components/AppIcon.vue';
 import AdminLayout from '../../layouts/AdminLayout.vue';
 import type { Auth } from '../../types/auth';
 type Room = {
@@ -167,15 +168,21 @@ function filter() {
                                 >
                             </td>
                             <td>
-                                <div class="actions">
+                                <div
+                                    v-if="can_create"
+                                    class="table-action-group"
+                                    role="group"
+                                    :aria-label="`Aksi ${room.name}`"
+                                >
                                     <button
+                                        type="button"
                                         :aria-label="`Edit ${room.name}`"
-                                        v-if="can_create"
                                         @click="show(room)"
                                     >
+                                        <AppIcon name="pencil" :size="15" />
                                         Edit</button
                                     ><button
-                                        v-if="can_create"
+                                        type="button"
                                         class="danger"
                                         :aria-label="`Hapus ${room.name}`"
                                         @click="
@@ -183,6 +190,7 @@ function filter() {
                                             deleting = room;
                                         "
                                     >
+                                        <AppIcon name="trash" :size="15" />
                                         Hapus
                                     </button>
                                 </div>
@@ -366,7 +374,6 @@ select {
 .heading,
 .toolbar,
 .pagination,
-.actions,
 .modal-actions {
     display: flex;
     align-items: center;

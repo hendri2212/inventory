@@ -17,6 +17,11 @@ const paths: Record<string, string> = {
     clock: 'M12 8v4l3 2 M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0',
     check: 'm5 12 4 4L19 6',
     plus: 'M12 5v14 M5 12h14',
+    pencil: 'm14 6 4 4 M4 20l4.5-1 11-11a2.8 2.8 0 0 0-4-4l-11 11L4 20Z',
+    trash: 'M4 7h16 M10 11v6 M14 11v6 M6 7l1 13h10l1-13 M9 7V4h6v3',
+    eye: 'M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6-10-6-10-6Z M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z',
+    copy: 'M9 9h11v11H9z M15 6V4H4v11h2',
+    'more-vertical': 'M12 5h.01 M12 12h.01 M12 19h.01',
     chevron: 'm9 5 7 7-7 7',
 };
 </script>
@@ -33,6 +38,9 @@ const paths: Record<string, string> = {
         stroke-linejoin="round"
         aria-hidden="true"
     >
-        <path :d="paths[name] ?? paths.box" />
+        <path
+            :d="paths[name] ?? paths.box"
+            :stroke-width="name === 'more-vertical' ? 3 : undefined"
+        />
     </svg>
 </template>

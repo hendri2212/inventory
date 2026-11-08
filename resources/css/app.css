@@ -9,3 +9,37 @@
         'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
         'Noto Color Emoji';
 }
+
+.table-action-group {
+    display: inline-flex;
+    white-space: nowrap;
+}
+
+.table-action-group > button {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.table-action-group > button:not(:first-child) {
+    border-start-start-radius: 0;
+    border-end-start-radius: 0;
+    margin-inline-start: -1px;
+}
+
+.table-action-group > button:not(:last-child) {
+    border-start-end-radius: 0;
+    border-end-end-radius: 0;
+}
+
+.table-action-group > button:hover {
+    background: #eef4e9;
+}
+
+.table-action-group > button.danger:hover {
+    background: #fdf0f0;
+}
+
+.table-action-group > button:focus-visible {
+    outline-offset: -2px;
+}

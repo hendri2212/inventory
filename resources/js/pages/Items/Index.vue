@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
 import { Head, Link, router, useForm, usePage } from '@inertiajs/vue3';
+import AppIcon from '../../components/AppIcon.vue';
 import AdminLayout from '../../layouts/AdminLayout.vue';
 import type { Auth } from '../../types/auth';
 type Option = { id: number; name: string; institution_id?: number };
@@ -202,19 +203,31 @@ function remove() {
                                 >
                             </td>
                             <td>
-                                <div class="actions">
+                                <div
+                                    v-if="item.can_update || item.can_delete"
+                                    class="table-action-group"
+                                    role="group"
+                                    :aria-label="`Aksi ${item.name}`"
+                                >
                                     <button
+                                        type="button"
                                         v-if="item.can_update"
+                                        :aria-label="`Edit ${item.name}`"
                                         @click="show(item)"
                                     >
+                                        <AppIcon name="pencil" :size="15" />
                                         Edit</button
                                     ><button
+                                        type="button"
                                         v-if="item.can_delete"
+                                        class="danger"
+                                        :aria-label="`Hapus ${item.name}`"
                                         @click="
                                             deleting = item;
                                             deletion.clearErrors();
                                         "
                                     >
+                                        <AppIcon name="trash" :size="15" />
                                         Hapus
                                     </button>
                                 </div>
@@ -319,8 +332,8 @@ function remove() {
                         ><label
                             >Deskripsi umum barang<textarea
                                 v-model="form.description"
-                            /></label
-                        >
+                            />
+                        </label>
                     </div>
                     <p
                         v-for="(error, field) in form.errors"

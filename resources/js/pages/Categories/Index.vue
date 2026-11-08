@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { Head, Link, router, useForm, usePage } from '@inertiajs/vue3';
+import AppIcon from '../../components/AppIcon.vue';
 import AdminLayout from '../../layouts/AdminLayout.vue';
 import type { Auth } from '../../types/auth';
 type Category = {
@@ -155,13 +156,20 @@ function filter() {
                             </td>
 
                             <td>
-                                <div class="actions">
+                                <div
+                                    class="table-action-group"
+                                    role="group"
+                                    :aria-label="`Aksi ${category.name}`"
+                                >
                                     <button
+                                        type="button"
                                         :aria-label="`Edit ${category.name}`"
                                         @click="show(category)"
                                     >
+                                        <AppIcon name="pencil" :size="15" />
                                         Edit</button
                                     ><button
+                                        type="button"
                                         class="danger"
                                         :aria-label="`Hapus ${category.name}`"
                                         @click="
@@ -169,6 +177,7 @@ function filter() {
                                             deleting = category;
                                         "
                                     >
+                                        <AppIcon name="trash" :size="15" />
                                         Hapus
                                     </button>
                                 </div>
@@ -339,7 +348,6 @@ select {
 .heading,
 .toolbar,
 .pagination,
-.actions,
 .modal-actions {
     display: flex;
     align-items: center;
