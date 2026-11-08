@@ -33,7 +33,6 @@ class SaveItemRequest extends FormRequest
             'name' => ['required', 'string', 'max:150'],
             'description' => ['nullable', 'string', 'max:5000'],
             'unit' => ['required', 'string', 'max:30'],
-            'is_active' => ['required', 'boolean'],
         ];
     }
 }

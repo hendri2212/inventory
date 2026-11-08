@@ -26,7 +26,7 @@ class InventoryReportController extends Controller
             'department_id' => ['nullable', 'integer', 'min:1'],
             'room_id' => ['nullable', 'integer', 'min:1'],
             'condition' => ['nullable', Rule::in(['good', 'minor_damage', 'major_damage', 'unknown'])],
-            'status' => ['nullable', Rule::in(['active', 'inactive', 'disposed'])],
+            'status' => ['nullable', Rule::in(['active', 'disposed'])],
             'print' => ['sometimes', 'boolean'],
         ]);
         $search = trim($filters['search'] ?? '');
@@ -42,8 +42,7 @@ class InventoryReportController extends Controller
                 $query->where('condition', $filters['condition']);
             }
             match ($filters['status'] ?? null) {
-                'active' => $query->where('is_active', true)->whereNull('disposed_at'),
-                'inactive' => $query->where('is_active', false)->whereNull('disposed_at'),
+                'active' => $query->whereNull('disposed_at'),
                 'disposed' => $query->whereNotNull('disposed_at'),
                 default => null,
             };
@@ -92,7 +91,6 @@ class InventoryReportController extends Controller
                     'condition_notes' => $unit->getAttribute('condition_notes'),
                     'disposed_at' => $unit->getAttribute('disposed_at')?->format('Y-m-d'),
                     'disposal_notes' => $unit->getAttribute('disposal_notes'),
-                    'is_active' => $unit->getAttribute('is_active'),
                 ]),
             ]),
             'pagination' => $paginator ? ['total' => $paginator->total(), 'links' => $paginator->linkCollection()] : null,

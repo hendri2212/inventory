@@ -25,9 +25,6 @@ type Unit = {
     funding_source: string | null;
     condition: string | null;
     condition_notes: string | null;
-    disposed_at: string | null;
-    disposal_notes: string | null;
-    is_active: boolean;
 };
 type Item = {
     id: number;
@@ -127,8 +124,7 @@ const selectedOptions = computed(() =>
         props.filters.condition ? conditions[props.filters.condition] : null,
         (
             {
-                active: 'Aktif',
-                inactive: 'Nonaktif',
+                active: 'Belum dimusnahkan',
                 disposed: 'Dimusnahkan',
             } as Record<string, string>
         )[props.filters.status ?? ''],
@@ -272,10 +268,9 @@ onMounted(async () => {
                     </select></label
                 >
                 <label
-                    >Status administratif<select v-model="filters.status">
+                    >Status pemusnahan<select v-model="filters.status">
                         <option value="">Semua status</option>
-                        <option value="active">Aktif</option>
-                        <option value="inactive">Nonaktif</option>
+                        <option value="active">Belum dimusnahkan</option>
                         <option value="disposed">Dimusnahkan</option>
                     </select></label
                 >
@@ -290,10 +285,6 @@ onMounted(async () => {
                     Dibuat {{ generated_at }}
                 </p>
                 <p v-if="selectedOptions">Filter: {{ selectedOptions }}</p>
-                <p>
-                    Menampilkan barang dan unit sesuai filter. Status
-                    menunjukkan keadaan administratif unit.
-                </p>
                 <p v-if="pagination && pagination.total > items.length">
                     Halaman ini menampilkan {{ items.length }} jenis barang.
                     Versi cetak memuat seluruh hasil filter.
@@ -325,7 +316,6 @@ onMounted(async () => {
                                 <th>Bidang / ruangan</th>
                                 <th>Pembelian</th>
                                 <th>Kondisi</th>
-                                <th>Status / pemusnahan</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -364,21 +354,6 @@ onMounted(async () => {
                                     }}</strong
                                     ><span>{{
                                         unit.condition_notes || '—'
-                                    }}</span>
-                                </td>
-                                <td>
-                                    <strong>{{
-                                        unit.disposed_at
-                                            ? 'Dimusnahkan'
-                                            : unit.is_active
-                                              ? 'Aktif'
-                                              : 'Nonaktif'
-                                    }}</strong
-                                    ><span v-if="unit.disposed_at">{{
-                                        unit.disposed_at
-                                    }}</span
-                                    ><span v-if="unit.disposal_notes">{{
-                                        unit.disposal_notes
                                     }}</span>
                                 </td>
                             </tr>

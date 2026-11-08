@@ -70,7 +70,7 @@ class ItemUnitController extends Controller
             $unit = ItemUnit::query()->lockForUpdate()->whereKey($itemUnit->getKey())->firstOrFail();
             if (DB::table('loan_items')->where('item_unit_id', $unit->getKey())->exists()
                 || DB::table('item_transfer_items')->where('item_unit_id', $unit->getKey())->exists()) {
-                throw ValidationException::withMessages(['unit' => 'Unit memiliki riwayat transaksi. Nonaktifkan unit sebagai gantinya.']);
+                throw ValidationException::withMessages(['unit' => 'Unit memiliki riwayat transaksi dan tidak dapat dihapus.']);
             }
             $paths = $unit->photos()->pluck('path')->all();
             $unit->delete();

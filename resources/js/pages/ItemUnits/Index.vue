@@ -21,7 +21,6 @@ type Unit = {
     condition_notes: string | null;
     disposed_at: string | null;
     disposal_notes: string | null;
-    is_active: boolean;
     photos: UnitPhoto[];
     item: Option;
     institution: Option;
@@ -32,6 +31,8 @@ const props = defineProps<{
     units: {
         data: Unit[];
         total: number;
+        from: number | null;
+        to: number | null;
         links: { url: string | null; label: string; active: boolean }[];
     };
     items: Option[];
@@ -66,7 +67,6 @@ const form = useForm({
     condition_notes: '',
     disposed_at: '',
     disposal_notes: '',
-    is_active: true,
     photos: [] as File[],
     remove_photo_ids: [] as number[],
 });
@@ -175,7 +175,6 @@ function show(unit?: Unit, duplicate = false) {
             condition_notes: unit.condition_notes ?? '',
             disposed_at: duplicate ? '' : (unit.disposed_at ?? ''),
             disposal_notes: duplicate ? '' : (unit.disposal_notes ?? ''),
-            is_active: duplicate ? true : unit.is_active,
         });
     else
         Object.assign(form, {
@@ -252,7 +251,6 @@ function filter() {
                             <th>Bidang / ruang</th>
                             <th>Pembelian</th>
                             <th>Kondisi</th>
-                            <th>Status</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -289,15 +287,6 @@ function filter() {
                                 }}
                             </td>
                             <td>
-                                {{
-                                    unit.disposed_at
-                                        ? 'Dimusnahkan'
-                                        : unit.is_active
-                                          ? 'Aktif'
-                                          : 'Nonaktif'
-                                }}
-                            </td>
-                            <td>
                                 <div
                                     class="action-group"
                                     role="group"
@@ -323,21 +312,40 @@ function filter() {
                             </td>
                         </tr>
                         <tr v-if="!units.data.length">
-                            <td colspan="6">Belum ada unit aset.</td>
+                            <td colspan="5">Belum ada unit aset.</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            <nav class="pagination" aria-label="Halaman unit">
-                <template v-for="(link, index) in units.links" :key="index"
-                    ><Link
-                        v-if="link.url"
-                        :href="link.url"
-                        :class="{ active: link.active }"
-                        ><span v-html="link.label" /></Link
-                    ><span v-else v-html="link.label"
-                /></template>
-            </nav>
+            <div class="pagination">
+                <span
+                    >{{ units.from ?? 0 }}–{{ units.to ?? 0 }} dari
+                    {{ units.total }}</span
+                >
+                <nav aria-label="Pagination unit aset">
+                    <template v-for="(link, index) in units.links" :key="index"
+                        ><Link
+                            v-if="link.url"
+                            :href="link.url"
+                            :class="{ selected: link.active }"
+                            :aria-current="link.active ? 'page' : undefined"
+                            >{{
+                                index === 0
+                                    ? 'Sebelumnya'
+                                    : index === units.links.length - 1
+                                      ? 'Berikutnya'
+                                      : link.label
+                            }}</Link
+                        ><span v-else class="disabled">{{
+                            index === 0
+                                ? 'Sebelumnya'
+                                : index === units.links.length - 1
+                                  ? 'Berikutnya'
+                                  : link.label
+                        }}</span></template
+                    >
+                </nav>
+            </div>
         </section>
         <div v-if="open" class="overlay" @click.self="open = false">
             <section
@@ -523,10 +531,6 @@ function filter() {
                                 </span>
                             </label>
                         </div>
-                        <label
-                            ><input v-model="form.is_active" type="checkbox" />
-                            Aktif</label
-                        >
                     </div>
                     <p
                         v-for="(error, key) in form.errors"

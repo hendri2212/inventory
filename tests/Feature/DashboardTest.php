@@ -16,7 +16,7 @@ test('dashboard counts and loan details follow the signed-in account scope', fun
     $borrowed = DB::table('item_units')->insertGetId($payload);
     $returned = DB::table('item_units')->insertGetId([...$payload, 'code' => 'UNIT-002']);
     DB::table('item_units')->insert([
-        [...$payload, 'code' => 'INACTIVE', 'is_active' => false],
+        [...$payload, 'code' => 'AVAILABLE'],
         [...$payload, 'code' => 'DISPOSED', 'disposed_at' => now(), 'purchase_price' => null],
         [...$payload, 'code' => 'DAMAGED', 'condition' => 'major_damage'],
     ]);
@@ -69,9 +69,9 @@ test('dashboard counts and loan details follow the signed-in account scope', fun
         ->where('loans.0.unit_count', 2)
         ->where('loans.0.returned_count', 1));
 })->with([
-    'superadmin' => ['superadmin', 7, 3, 4, 3, 75500003.00],
-    'admin' => ['admin', 6, 2, 2, 2, 75000002.25],
-    'operator' => ['operator', 5, 1, null, 1, 50000002.00],
+    'superadmin' => ['superadmin', 7, 4, 4, 3, 75500003.00],
+    'admin' => ['admin', 6, 3, 2, 2, 75000002.25],
+    'operator' => ['operator', 5, 2, null, 1, 50000002.00],
 ]);
 
 test('dashboard returns an empty inventory for a newly assigned operator', function () {

@@ -38,7 +38,7 @@ Kode katalog, kode inventaris, kode ruang, dan nomor masing-masing jenis transak
 
 Contoh katalog `Laptop Lenovo ThinkPad` memiliki unit `LPT-001`, `LPT-002`, `LPT-003`. Setiap unit bisa memiliki bidang, ruang, nomor seri, harga/tahun pembelian, sumber dana, foto, kondisi dan tanggal pemusnahan berbeda.
 
-Tidak ada kolom `quantity`. Jumlah berasal dari relasi `items.units`; jumlah yang dilihat operator hanya unit bidangnya. Jumlah tercatat mencakup unit nonaktif/dimusnahkan dan berbeda dari jumlah tersedia untuk dipinjam.
+Tidak ada kolom `quantity`. Jumlah berasal dari relasi `items.units`; jumlah yang dilihat operator hanya unit bidangnya. Jumlah tercatat mencakup unit yang sudah dimusnahkan dan berbeda dari jumlah tersedia untuk dipinjam.
 
 Harga memakai `DECIMAL(15,2)`; nilai tidak diketahui disimpan `NULL`, berbeda dari harga nol. Sumber dana: `BOSP`, `BOSDA`, `Bantuan`. Kondisi: `good`, `minor_damage`, `major_damage`; `NULL` berarti belum diperiksa. Pemusnahan terpisah dari kondisi terakhir.
 
@@ -54,7 +54,7 @@ Tabel dan relasi transaksi sudah tersedia. Endpoint, UI dan service peminjaman/p
 - Saat menyerahkan unit, isi `active_item_unit_id = item_unit_id`. Indeks unik pada `active_item_unit_id` menjadi pengaman pinjaman bersamaan. Kolom ini tidak otomatis diisi database; service wajib mengelolanya dan memverifikasi nilainya.
 - Saat menerima pengembalian unit, isi `returned_at`, `condition_in`, `notes_in`, `returned_by`, lalu kosongkan `active_item_unit_id` dan perbarui kondisi unit secara atomik. Detail lain boleh tetap terbuka untuk pengembalian bertahap.
 - Status pinjaman diturunkan dari detail: masih ada `returned_at = NULL` berarti aktif; seluruh detail kembali berarti selesai. Keterlambatan dibandingkan dengan `due_at`.
-- Unit nonaktif, dimusnahkan, sedang dipinjam, atau berkondisi tidak layak tidak boleh dipinjam/dimutasi. Validasi tanggal, petugas dan status katalog/bidang/ruang juga diperlukan.
+- Unit yang dimusnahkan, sedang dipinjam, atau berkondisi tidak layak tidak boleh dipinjam/dimutasi. Validasi tanggal, petugas dan status instansi/bidang/ruang juga diperlukan.
 - Mutasi ruang mempertahankan bidang. Mutasi bidang mengganti bidang dan dapat mengganti ruang. Asal setiap unit harus cocok dengan header transaksi; pecah transaksi jika asal berbeda.
 - Mutasi memperbarui posisi unit dan menulis riwayat dalam transaksi database yang sama. Identitas asal/tujuan pada header harus dipertahankan setelah mutasi.
 - Mutasi antarbidang memerlukan otorisasi instansi serta verifikasi tujuan. Scope baca operator mencakup riwayat mutasi keluar/masuk bidangnya; penulisan model mutasi generik oleh operator sengaja ditolak sampai service khusus tersedia.

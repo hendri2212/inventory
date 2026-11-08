@@ -11,7 +11,7 @@ class Item extends Model
 {
     use BelongsToTenant;
 
-    protected $fillable = ['code', 'name', 'description', 'unit', 'is_active'];
+    protected $fillable = ['code', 'name', 'description', 'unit'];
 
     /** @return array<string, string> */
     protected function casts(): array
@@ -20,7 +20,6 @@ class Item extends Model
             'id' => 'integer',
             'institution_id' => 'integer',
             'category_id' => 'integer',
-            'is_active' => 'boolean',
         ];
     }
 

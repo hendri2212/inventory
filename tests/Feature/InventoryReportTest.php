@@ -9,7 +9,7 @@ function reportFixture(): array
     [$a, $b, $departments, $categories, $items, $rooms] = $fixture = unitFixture();
     $base = unitPayload($fixture);
     DB::table('item_units')->insert($base);
-    DB::table('item_units')->insert([...$base, 'code' => 'UNIT-002', 'department_id' => $departments[1], 'condition' => 'minor_damage', 'is_active' => false]);
+    DB::table('item_units')->insert([...$base, 'code' => 'UNIT-002', 'department_id' => $departments[1], 'condition' => 'minor_damage']);
     DB::table('item_units')->insert([...$base, 'code' => 'UNIT-003', 'condition' => null, 'disposed_at' => '2026-11-01 00:00:00', 'disposal_notes' => 'Berita acara 01']);
     DB::table('item_units')->insert([...$base, 'institution_id' => $b, 'item_id' => $items[2], 'department_id' => $departments[2], 'room_id' => $rooms[1], 'code' => 'PRIVATE']);
 
@@ -55,8 +55,8 @@ test('unit filters apply to both matching catalogs and their nested unit details
 })->with([
     ['condition=minor_damage', 'UNIT-002'],
     ['condition=unknown', 'UNIT-003'],
-    ['status=active', 'UNIT-001'],
-    ['status=inactive', 'UNIT-002'],
+    ['status=active&department_id=1', 'UNIT-001'],
+    ['status=active&department_id=2', 'UNIT-002'],
     ['status=disposed', 'UNIT-003'],
     ['department_id=2&room_id=1', 'UNIT-002'],
 ]);

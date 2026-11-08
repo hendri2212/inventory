@@ -12,7 +12,6 @@ type Item = {
     name: string;
     description: string | null;
     unit: string;
-    is_active: boolean;
     units_count: number;
     institution: Option;
     category: Option;
@@ -23,6 +22,8 @@ const props = defineProps<{
     items: {
         data: Item[];
         total: number;
+        from: number | null;
+        to: number | null;
         links: { url: string | null; label: string; active: boolean }[];
     };
     institutions: Option[];
@@ -67,7 +68,6 @@ const form = useForm({
     name: '',
     description: '',
     unit: 'unit',
-    is_active: true,
 });
 const categories = computed(() =>
     props.categories.filter((c) => c.institution_id === form.institution_id),
@@ -93,7 +93,6 @@ function show(item?: Item) {
                   name: item.name,
                   description: item.description ?? '',
                   unit: item.unit,
-                  is_active: item.is_active,
               }
             : { institution_id: page.props.auth.user.institution_id },
     );
@@ -180,7 +179,6 @@ function remove() {
                             <th>Barang</th>
                             <th>Instansi / kategori</th>
                             <th>Unit tercatat</th>
-                            <th>Status</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -203,7 +201,6 @@ function remove() {
                                     {{ item.unit }}</Link
                                 >
                             </td>
-                            <td>{{ item.is_active ? 'Aktif' : 'Nonaktif' }}</td>
                             <td>
                                 <div class="actions">
                                     <button
@@ -224,21 +221,40 @@ function remove() {
                             </td>
                         </tr>
                         <tr v-if="!items.data.length">
-                            <td colspan="5">Belum ada barang.</td>
+                            <td colspan="4">Belum ada barang.</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            <nav class="pagination" aria-label="Halaman barang">
-                <template v-for="(link, index) in items.links" :key="index"
-                    ><Link
-                        v-if="link.url"
-                        :href="link.url"
-                        :class="{ active: link.active }"
-                        ><span v-html="link.label" /></Link
-                    ><span v-else v-html="link.label"
-                /></template>
-            </nav>
+            <div class="pagination">
+                <span
+                    >{{ items.from ?? 0 }}–{{ items.to ?? 0 }} dari
+                    {{ items.total }}</span
+                >
+                <nav aria-label="Pagination barang">
+                    <template v-for="(link, index) in items.links" :key="index"
+                        ><Link
+                            v-if="link.url"
+                            :href="link.url"
+                            :class="{ selected: link.active }"
+                            :aria-current="link.active ? 'page' : undefined"
+                            >{{
+                                index === 0
+                                    ? 'Sebelumnya'
+                                    : index === items.links.length - 1
+                                      ? 'Berikutnya'
+                                      : link.label
+                            }}</Link
+                        ><span v-else class="disabled">{{
+                            index === 0
+                                ? 'Sebelumnya'
+                                : index === items.links.length - 1
+                                  ? 'Berikutnya'
+                                  : link.label
+                        }}</span></template
+                    >
+                </nav>
+            </div>
         </section>
         <div v-if="open" class="overlay" @click.self="open = false">
             <section
@@ -304,9 +320,6 @@ function remove() {
                             >Deskripsi umum barang<textarea
                                 v-model="form.description"
                             /></label
-                        ><label
-                            ><input v-model="form.is_active" type="checkbox" />
-                            Aktif</label
                         >
                     </div>
                     <p

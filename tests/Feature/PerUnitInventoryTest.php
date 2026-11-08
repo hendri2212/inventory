@@ -25,7 +25,7 @@ function unitPayload(array $fixture): array
 
     return ['institution_id' => $a, 'item_id' => $items[0], 'department_id' => $departments[0], 'room_id' => $rooms[0],
         'code' => 'UNIT-001', 'serial_number' => 'SN-1', 'purchase_year' => 2026, 'purchase_price' => '12500000.50',
-        'funding_source' => 'BOSP', 'condition' => 'good', 'is_active' => true];
+        'funding_source' => 'BOSP', 'condition' => 'good'];
 }
 
 test('catalog metadata is shared within institution and unit counts respect department visibility', function () {
@@ -44,7 +44,7 @@ test('catalog metadata is shared within institution and unit counts respect depa
 test('admins manage catalog without storing unit fields and cannot delete a catalog in use', function () {
     [$a, , , $categories] = $fixture = unitFixture();
     $this->actingAs(User::factory()->superadmin()->create());
-    $data = ['institution_id' => $a, 'category_id' => $categories[0], 'code' => 'NEW', 'name' => 'Laptop', 'unit' => 'unit', 'is_active' => true, 'quantity' => 100];
+    $data = ['institution_id' => $a, 'category_id' => $categories[0], 'code' => 'NEW', 'name' => 'Laptop', 'unit' => 'unit', 'quantity' => 100];
     $this->post('/items', $data)->assertSessionHasNoErrors();
     $item = DB::table('items')->where('code', 'NEW')->first();
     expect(property_exists($item, 'quantity'))->toBeFalse();

@@ -41,9 +41,8 @@ class DashboardController extends Controller
                 'total_units' => (clone $units)->count(),
                 'total_purchase_value' => (string) (clone $units)->sum('purchase_price'),
                 'loaned_units' => (clone $units)->whereHas('loanItems', $onLoan)->count(),
-                'available_units' => (clone $units)->where('is_active', true)->whereNull('disposed_at')
+                'available_units' => (clone $units)->whereNull('disposed_at')
                     ->where(fn ($query) => $query->whereNull('condition')->orWhere('condition', '!=', 'major_damage'))
-                    ->whereHas('item', fn ($item) => $item->where('is_active', true))
                     ->whereHas('department', fn ($department) => $department->where('is_active', true))
                     ->whereHas('institution', fn ($institution) => $institution->where('is_active', true))
                     ->whereDoesntHave('loanItems', $onLoan)->count(),

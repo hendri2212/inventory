@@ -44,7 +44,6 @@ class SaveItemUnitRequest extends FormRequest
             'condition_notes' => ['nullable', 'string', 'max:5000'],
             'disposed_at' => ['nullable', 'date_format:Y-m-d'],
             'disposal_notes' => ['nullable', 'string', 'max:5000'],
-            'is_active' => ['required', 'boolean'],
             'photos' => ['sometimes', 'array', 'max:10'],
             'photos.*' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
             'remove_photo_ids' => ['sometimes', 'array'],
