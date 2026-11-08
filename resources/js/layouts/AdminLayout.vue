@@ -8,6 +8,8 @@ defineProps<{ active: string; title: string }>();
 const emit = defineEmits<{ navigate: [key: string] }>();
 const page = usePage<{ auth: Auth }>();
 const mobileOpen = ref(false);
+const accountOpen = ref(false);
+const accountTrigger = ref<HTMLButtonElement | null>(null);
 const loggingOut = ref(false);
 const initials = computed(() =>
     page.props.auth.user.name
@@ -23,12 +25,12 @@ const groups = computed(() => [
         label: 'WORKSPACE',
         items: [
             { key: 'dashboard', label: 'Dashboard', icon: 'grid' },
-            { key: 'barang', label: 'Katalog barang', icon: 'box' },
+            { key: 'barang', label: 'Manajemen barang', icon: 'box' },
             { key: 'unit', label: 'Unit aset', icon: 'box' },
             ...(['superadmin', 'admin'].includes(page.props.auth.user.role)
                 ? [{ key: 'kategori', label: 'Kategori', icon: 'layers' }]
                 : []),
-            { key: 'lokasi', label: 'Lokasi & ruangan', icon: 'pin' },
+            { key: 'lokasi', label: 'Manajemen ruangan', icon: 'pin' },
         ],
     },
     {
@@ -59,6 +61,8 @@ function navigate(key: string) {
         router.visit('/item-units');
     } else if (key === 'lokasi') {
         router.visit('/rooms');
+    } else if (key === 'laporan') {
+        router.visit('/reports');
     } else if (key === 'kategori') {
         router.visit('/categories');
     } else if (key === 'instansi') {
@@ -86,10 +90,26 @@ function logout() {
         },
     );
 }
+function closeAccountOnFocusOut(event: FocusEvent) {
+    const account = event.currentTarget as HTMLElement;
+    if (!account.contains(event.relatedTarget as Node | null)) {
+        accountOpen.value = false;
+    }
+}
+function closeAccountOnEscape() {
+    if (accountOpen.value) {
+        accountOpen.value = false;
+        accountTrigger.value?.focus();
+    }
+}
 </script>
 
 <template>
-    <div class="admin-shell" @keydown.esc="mobileOpen = false">
+    <div
+        class="admin-shell"
+        @click="accountOpen = false"
+        @keydown.esc="mobileOpen = false"
+    >
         <button
             v-if="mobileOpen"
             class="sidebar-backdrop"
@@ -112,14 +132,6 @@ function logout() {
                 >
                     <AppIcon name="close" />
                 </button>
-            </div>
-            <div class="workspace-switch">
-                <span class="workspace-symbol">I</span>
-                <div>
-                    <strong>Inventory Workspace</strong
-                    ><small>Panel inventaris</small>
-                </div>
-                <span class="workspace-tag">PRO</span>
             </div>
             <nav class="sidebar-navigation">
                 <div
@@ -146,25 +158,6 @@ function logout() {
                     </button>
                 </div>
             </nav>
-            <div class="sidebar-bottom">
-                <div class="workspace-note">
-                    <span class="note-dot"></span
-                    ><span
-                        >Satu tempat.<br /><strong
-                            >Semua aset tertata.</strong
-                        ></span
-                    ><AppIcon name="box" :size="30" />
-                </div>
-                <button
-                    class="sidebar-link logout-button"
-                    :disabled="loggingOut"
-                    @click="logout"
-                >
-                    <AppIcon name="logout" /><span>{{
-                        loggingOut ? 'Keluar…' : 'Keluar dari akun'
-                    }}</span>
-                </button>
-            </div>
         </aside>
         <div class="admin-main">
             <header class="admin-topbar">
@@ -183,13 +176,48 @@ function logout() {
                         >{{ title }}</span
                     >
                 </div>
-                <div class="topbar-account">
-                    <span class="account-avatar">{{ initials }}</span>
-                    <div>
-                        <strong>{{ page.props.auth.user.name }}</strong
-                        ><small>{{ page.props.auth.user.role }}</small>
+                <div
+                    class="topbar-account"
+                    @click.stop
+                    @focusout="closeAccountOnFocusOut"
+                    @keydown.esc="closeAccountOnEscape"
+                >
+                    <button
+                        ref="accountTrigger"
+                        type="button"
+                        class="account-trigger"
+                        :aria-expanded="accountOpen"
+                        aria-controls="account-dropdown"
+                        @click="accountOpen = !accountOpen"
+                    >
+                        <span class="account-avatar" aria-hidden="true">{{
+                            initials
+                        }}</span>
+                        <span class="account-details">
+                            <strong>{{ page.props.auth.user.name }}</strong>
+                            <small>{{ page.props.auth.user.role }}</small>
+                        </span>
+                        <AppIcon
+                            class="account-chevron"
+                            name="chevron"
+                            :size="14"
+                        />
+                    </button>
+                    <div
+                        v-show="accountOpen"
+                        id="account-dropdown"
+                        class="account-dropdown"
+                    >
+                        <button
+                            type="button"
+                            class="logout-button"
+                            :disabled="loggingOut"
+                            @click="logout"
+                        >
+                            <AppIcon name="logout" :size="16" />
+                            {{ loggingOut ? 'Keluar…' : 'Keluar dari akun' }}
+                        </button>
                     </div>
-                    <span class="account-status" title="Sesi aktif"></span>
                 </div>
             </header>
             <main id="main-content" class="admin-content"><slot /></main>
@@ -239,49 +267,8 @@ function logout() {
 .brand-dot {
     color: #d5e9b5;
 }
-.workspace-switch {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin: 31px 0 28px;
-    padding: 13px 10px;
-    border: 1px solid #ffffff18;
-    border-radius: 10px;
-    background: #ffffff04;
-}
-.workspace-symbol {
-    width: 31px;
-    height: 34px;
-    display: grid;
-    place-items: center;
-    border: 1px solid #ffffff20;
-    background: #ffffff0b;
-    border-radius: 7px;
-    font-size: 15px;
-    color: #d5e9b5;
-}
-.workspace-switch strong {
-    display: block;
-    font-size: 11px;
-    font-weight: 500;
-}
-.workspace-switch small {
-    display: block;
-    color: #9db7ab;
-    font-size: 10px;
-    margin-top: 3px;
-}
-.workspace-tag {
-    margin-left: auto;
-    font-size: 8px;
-    letter-spacing: 0.6px;
-    border: 1px solid #cfe6ae40;
-    padding: 3px 5px;
-    color: #d5e9b5;
-    border-radius: 4px;
-}
 .sidebar-navigation {
-    flex: 1;
+    margin-top: 28px;
 }
 .nav-group {
     margin-bottom: 26px;
@@ -316,7 +303,9 @@ function logout() {
     background: #ffffff0a;
 }
 .sidebar-link:focus-visible,
-.icon-button:focus-visible {
+.icon-button:focus-visible,
+.account-trigger:focus-visible,
+.logout-button:focus-visible {
     outline: 2px solid #a8c695;
     outline-offset: 3px;
 }
@@ -332,46 +321,6 @@ function logout() {
     border-radius: 50%;
     background: #416449;
     margin-left: auto;
-}
-.sidebar-bottom {
-    margin-top: 20px;
-}
-.workspace-note {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 16px 13px;
-    background: #ffffff05;
-    border: 1px solid #ffffff12;
-    border-radius: 10px;
-    color: #9db9a9;
-    font-size: 10px;
-    line-height: 1.8;
-    margin-bottom: 15px;
-}
-.workspace-note strong {
-    font-weight: 500;
-    color: #d3dfd6;
-}
-.workspace-note svg {
-    margin-left: auto;
-    opacity: 0.45;
-}
-.note-dot,
-.account-status {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: #c4df9e;
-    flex-shrink: 0;
-}
-.logout-button {
-    border-top: 1px solid #ffffff13;
-    border-radius: 0;
-    padding-top: 20px;
-}
-.logout-button:disabled {
-    opacity: 0.5;
 }
 .admin-main {
     margin-left: 258px;
@@ -403,9 +352,23 @@ function logout() {
     font-weight: 500;
 }
 .topbar-account {
+    position: relative;
+    min-width: 0;
+}
+.account-trigger {
     display: flex;
     align-items: center;
     gap: 10px;
+    max-width: 100%;
+    padding: 4px 8px;
+    border-radius: 8px;
+    text-align: left;
+    cursor: pointer;
+}
+.account-trigger:hover,
+.account-trigger[aria-expanded='true'],
+.logout-button:hover:not(:disabled) {
+    background: #edf2e9;
 }
 .account-avatar {
     width: 35px;
@@ -417,21 +380,55 @@ function logout() {
     border-radius: 50%;
     font-size: 11px;
     font-weight: 600;
+    flex-shrink: 0;
 }
-.topbar-account strong {
+.account-details {
+    min-width: 0;
+}
+.account-details strong {
     font-size: 11px;
     display: block;
     font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
-.topbar-account small {
+.account-details small {
     font-size: 9px;
     color: #8b968c;
     display: block;
     margin-top: 3px;
 }
-.account-status {
-    background: #80a974;
-    margin-left: 8px;
+.account-chevron {
+    flex-shrink: 0;
+    transform: rotate(90deg);
+}
+.account-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    z-index: 30;
+    min-width: 168px;
+    padding: 5px;
+    border: 1px solid #e7ece4;
+    border-radius: 10px;
+    background: white;
+    box-shadow: 0 8px 24px #123d331a;
+}
+.logout-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 9px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    text-align: left;
+    cursor: pointer;
+}
+.logout-button:disabled {
+    opacity: 0.5;
+    cursor: wait;
 }
 .admin-content {
     padding: 36px 38px;
@@ -527,10 +524,6 @@ function logout() {
     }
 }
 @media (max-width: 440px) {
-    .topbar-account > div,
-    .account-status {
-        display: none;
-    }
     .admin-footer span:last-child {
         display: none;
     }

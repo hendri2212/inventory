@@ -33,6 +33,29 @@ const props = defineProps<{
 }>();
 const page = usePage<{ auth: Auth }>();
 const search = ref(props.filters.search ?? '');
+const institutionFilter = ref(props.filters.institution_id ?? '');
+const categoryFilter = ref(props.filters.category_id ?? '');
+const filterCategories = computed(() =>
+    props.categories.filter(
+        (category) =>
+            !institutionFilter.value ||
+            String(category.institution_id) === institutionFilter.value,
+    ),
+);
+watch(institutionFilter, () => {
+    categoryFilter.value = '';
+});
+function filter() {
+    router.get(
+        '/items',
+        {
+            search: search.value,
+            institution_id: institutionFilter.value,
+            category_id: categoryFilter.value,
+        },
+        { preserveState: true, replace: true },
+    );
+}
 const open = ref(false);
 const editing = ref<number | null>(null);
 const deleting = ref<Item | null>(null);
@@ -96,12 +119,12 @@ function remove() {
 }
 </script>
 <template>
-    <Head title="Katalog barang" />
-    <AdminLayout active="barang" title="Katalog barang">
+    <Head title="Manajemen barang" />
+    <AdminLayout active="barang" title="Manajemen barang">
         <div class="heading">
             <div>
                 <small>INVENTARIS</small>
-                <h1>Katalog barang</h1>
+                <h1>Manajemen barang</h1>
                 <p>
                     Data umum barang. Identitas dan kondisi dicatat pada setiap
                     unit aset.
@@ -119,18 +142,34 @@ function remove() {
             {{ deletion.errors.item }}
         </p>
         <section class="panel">
-            <form
-                class="toolbar"
-                @submit.prevent="
-                    router.get('/items', { search }, { preserveState: true })
-                "
-            >
+            <form class="toolbar" @submit.prevent="filter">
                 <label for="search">Cari barang</label
                 ><input
                     id="search"
                     v-model="search"
                     placeholder="Kode atau nama barang"
-                /><button>Cari</button
+                /><select
+                    v-model="institutionFilter"
+                    aria-label="Filter instansi"
+                >
+                    <option value="">Semua instansi</option>
+                    <option
+                        v-for="institution in institutions"
+                        :key="institution.id"
+                        :value="String(institution.id)"
+                    >
+                        {{ institution.name }}
+                    </option></select
+                ><select v-model="categoryFilter" aria-label="Filter kategori">
+                    <option value="">Semua kategori</option>
+                    <option
+                        v-for="category in filterCategories"
+                        :key="category.id"
+                        :value="String(category.id)"
+                    >
+                        {{ category.name }}
+                    </option></select
+                ><button>Cari</button
                 ><span>{{ items.total }} jenis barang</span>
             </form>
             <div class="table-wrap">
@@ -264,7 +303,7 @@ function remove() {
                                 required
                                 maxlength="30" /></label
                         ><label
-                            >Deskripsi<textarea
+                            >Deskripsi umum barang<textarea
                                 v-model="form.description"
                             /></label
                         ><label
@@ -381,7 +420,9 @@ p {
     font-size: 10px;
 }
 button,
+a.primary,
 input,
+select,
 textarea {
     font: inherit;
     font-size: 13px;
@@ -397,6 +438,11 @@ button {
 button:disabled {
     opacity: 0.5;
     cursor: wait;
+}
+.actions a {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
 }
 .primary {
     background: #254a37;

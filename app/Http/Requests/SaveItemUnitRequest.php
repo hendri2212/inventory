@@ -49,6 +49,7 @@ class SaveItemUnitRequest extends FormRequest
                 ...($unit instanceof ItemUnit ? [Rule::in([$unit->getAttribute('room_id')])] : [])],
             'code' => ['required', 'string', 'max:50', Rule::unique('item_units', 'code')->where('institution_id', $institution)->ignore($unit instanceof ItemUnit ? $unit : null)],
             'serial_number' => ['nullable', 'string', 'max:150'],
+            'description' => ['nullable', 'string', 'max:5000'],
             'purchase_year' => ['nullable', 'integer', 'min:1900', 'max:'.now()->year],
             'purchase_price' => ['nullable', 'numeric', 'min:0', 'max:9999999999999.99', 'decimal:0,2'],
             'funding_source' => ['nullable', Rule::in(['BOSP', 'BOSDA', 'Bantuan'])],

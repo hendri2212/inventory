@@ -72,3 +72,9 @@ php artisan migrate
 ```
 
 Urutan domain: instansi → bidang → kategori → katalog → akun → ruang → unit aset → pinjaman → detail pinjaman → mutasi → detail mutasi. Tidak ada migrasi otomatis dari stok jumlah lama menjadi unit individual. Database yang sudah pernah memakai migration lama memerlukan rencana pemetaan data sebelum memakai skema ini.
+
+## Spesifikasi unit
+
+`items.description` menyimpan keterangan umum katalog. `item_units.description` menyimpan spesifikasi/keterangan aset fisik individual (opsional, maksimum 5000 karakter pada form). Contoh katalog Laptop memiliki unit Core i5/RAM 8 GB dan unit Ryzen 7/RAM 16 GB. Deskripsi unit ikut disalin saat duplikat serta tampil pada detail dan laporan/cetak.
+
+Migration `2026_11_03_000007_add_description_to_item_units_table.php` menambah kolom nullable tanpa memetakan atau menimpa deskripsi katalog. Data unit lama tetap NULL hingga diisi.

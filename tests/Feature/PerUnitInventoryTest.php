@@ -158,3 +158,20 @@ test('transaction details reject units from other institutions', function (strin
         expect(fn () => DB::table('item_transfer_items')->insert(['institution_id' => $a, 'item_transfer_id' => $transfer, 'item_unit_id' => $otherUnit]))->toThrow(QueryException::class);
     }
 })->with(['loan', 'transfer']);
+
+test('units of one catalog keep independent specifications and validate their length', function () {
+    $fixture = unitFixture();
+    $this->actingAs(User::factory()->superadmin()->create());
+    $base = unitPayload($fixture);
+    $this->post('/item-units', [...$base, 'description' => "Core i5\nRAM 8 GB; SSD 512 GB"])->assertSessionHasNoErrors();
+    $this->post('/item-units', [...$base, 'code' => 'UNIT-002', 'description' => 'Ryzen 7; RAM 16 GB'])->assertSessionHasNoErrors();
+    $first = ItemUnit::where('code', 'UNIT-001')->firstOrFail();
+    $this->put('/item-units/'.$first->getKey(), [...$base, 'description' => 'Core i5; RAM 32 GB'])->assertSessionHasNoErrors();
+    expect($first->fresh()->getAttribute('description'))->toBe('Core i5; RAM 32 GB');
+    $this->assertDatabaseHas('item_units', ['code' => 'UNIT-002', 'description' => 'Ryzen 7; RAM 16 GB']);
+    $this->get('/item-units?search=UNIT-001')->assertInertia(fn (Assert $page) => $page->where('units.data.0.description', 'Core i5; RAM 32 GB'));
+    $this->get('/reports?print=1')->assertInertia(fn (Assert $page) => $page->where('items.0.units.0.description', 'Core i5; RAM 32 GB')->where('items.0.units.1.description', 'Ryzen 7; RAM 16 GB'));
+    $this->put('/item-units/'.$first->getKey(), [...$base, 'description' => str_repeat('a', 5001)])->assertSessionHasErrors('description');
+    $this->put('/item-units/'.$first->getKey(), [...$base, 'description' => null])->assertSessionHasNoErrors();
+    $this->assertDatabaseHas('item_units', ['id' => $first->getKey(), 'description' => null]);
+});

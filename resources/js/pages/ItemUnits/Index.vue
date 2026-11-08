@@ -12,6 +12,7 @@ type Unit = {
     room_id: number | null;
     code: string;
     serial_number: string | null;
+    description: string | null;
     purchase_year: number | null;
     purchase_price: string | null;
     funding_source: string | null;
@@ -43,6 +44,7 @@ const page = usePage<{ auth: Auth }>();
 const search = ref(props.filters.search ?? '');
 const itemFilter = ref(props.filters.item_id ?? '');
 const editing = ref<number | null>(null);
+const duplicateSource = ref<string | null>(null);
 const open = ref(false);
 const detail = ref<Unit | null>(null);
 const deleting = ref<Unit | null>(null);
@@ -54,6 +56,7 @@ const form = useForm({
     room_id: null as number | null,
     code: '',
     serial_number: '',
+    description: '',
     purchase_year: null as number | null,
     purchase_price: '' as string | number,
     funding_source: '',
@@ -90,26 +93,28 @@ const conditions: Record<string, string> = {
     minor_damage: 'Rusak ringan',
     major_damage: 'Rusak parah',
 };
-function show(unit?: Unit) {
+function show(unit?: Unit, duplicate = false) {
     form.reset();
     form.clearErrors();
-    editing.value = unit?.id ?? null;
+    editing.value = duplicate ? null : (unit?.id ?? null);
+    duplicateSource.value = duplicate && unit ? unit.code : null;
     if (unit)
         Object.assign(form, {
             institution_id: unit.institution_id,
             item_id: unit.item_id,
             department_id: unit.department_id,
             room_id: unit.room_id,
-            code: unit.code,
-            serial_number: unit.serial_number ?? '',
+            code: duplicate ? '' : unit.code,
+            serial_number: duplicate ? '' : (unit.serial_number ?? ''),
+            description: unit.description ?? '',
             purchase_year: unit.purchase_year,
             purchase_price: unit.purchase_price ?? '',
             funding_source: unit.funding_source ?? '',
             condition: unit.condition ?? '',
             condition_notes: unit.condition_notes ?? '',
-            disposed_at: unit.disposed_at ?? '',
-            disposal_notes: unit.disposal_notes ?? '',
-            is_active: unit.is_active,
+            disposed_at: duplicate ? '' : (unit.disposed_at ?? ''),
+            disposal_notes: duplicate ? '' : (unit.disposal_notes ?? ''),
+            is_active: duplicate ? true : unit.is_active,
         });
     else
         Object.assign(form, {
@@ -226,6 +231,11 @@ function filter() {
                                         Detail</button
                                     ><button @click="show(unit)">Edit</button
                                     ><button
+                                        :aria-label="`Duplikat ${unit.code}`"
+                                        @click="show(unit, true)"
+                                    >
+                                        Duplikat</button
+                                    ><button
                                         @click="
                                             deleting = unit;
                                             deletion.clearErrors();
@@ -268,6 +278,11 @@ function filter() {
                     <button aria-label="Tutup" @click="open = false">×</button>
                 </header>
                 <form @submit.prevent="save">
+                    <p v-if="duplicateSource" class="hint" role="status">
+                        Data disalin dari {{ duplicateSource }}. Isi kode
+                        inventaris dan nomor seri unit baru, lalu sesuaikan data
+                        lainnya. Foto dan data pemusnahan tidak disalin.
+                    </p>
                     <div class="fields">
                         <label
                             >Instansi<select
@@ -348,6 +363,15 @@ function filter() {
                                 v-model="form.serial_number"
                                 maxlength="150"
                         /></label>
+                        <label class="wide">
+                            Spesifikasi / keterangan unit
+                            <textarea
+                                v-model="form.description"
+                                rows="3"
+                                maxlength="5000"
+                                placeholder="Contoh: Lenovo ThinkPad T14, Core i5, RAM 8 GB, SSD 512 GB"
+                            />
+                        </label>
                         <label
                             >Tahun pembelian<input
                                 v-model="form.purchase_year"
@@ -454,6 +478,10 @@ function filter() {
                 <dl>
                     <dt>Nomor seri</dt>
                     <dd>{{ detail.serial_number || '—' }}</dd>
+                    <dt>Spesifikasi / keterangan unit</dt>
+                    <dd class="unit-description">
+                        {{ detail.description || '—' }}
+                    </dd>
                     <dt>Penempatan</dt>
                     <dd>
                         {{ detail.department.name }} /
@@ -507,6 +535,10 @@ function filter() {
     </AdminLayout>
 </template>
 <style scoped>
+.unit-description {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
 .item-name {
     display: flex;
     align-items: center;

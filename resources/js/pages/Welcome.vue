@@ -12,9 +12,9 @@ const requestedMenu = new URLSearchParams(page.url.split('?')[1] ?? '').get(
 const active = ref(requestedMenu ?? 'dashboard');
 const titles: Record<string, string> = {
     dashboard: 'Dashboard',
-    barang: 'Data barang',
+    barang: 'Manajemen barang',
     kategori: 'Kategori',
-    lokasi: 'Lokasi & ruangan',
+    lokasi: 'Manajemen ruangan',
     peminjaman: 'Peminjaman',
     pengguna: 'Pengguna',
     laporan: 'Laporan',
@@ -95,6 +95,12 @@ const shortcuts = [
         icon: 'box',
         label: 'Kelola barang',
         text: 'Aset tersusun, kerja lebih mudah.',
+    },
+    {
+        key: 'lokasi',
+        icon: 'pin',
+        label: 'Kelola ruangan',
+        text: 'Atur ruang penempatan setiap aset.',
     },
     {
         key: 'peminjaman',
@@ -251,7 +257,11 @@ const shortcuts = [
                     @click="
                         shortcut.key === 'barang'
                             ? router.visit('/items')
-                            : (active = shortcut.key)
+                            : shortcut.key === 'lokasi'
+                              ? router.visit('/rooms')
+                              : shortcut.key === 'laporan'
+                                ? router.visit('/reports')
+                                : (active = shortcut.key)
                     "
                 >
                     <span class="shortcut-icon"

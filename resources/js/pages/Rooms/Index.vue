@@ -93,12 +93,12 @@ function filter() {
 }
 </script>
 <template>
-    <Head title="Manajemen ruang" />
-    <AdminLayout active="lokasi" title="Ruang">
+    <Head title="Manajemen ruangan" />
+    <AdminLayout active="lokasi" title="Manajemen ruangan">
         <div class="heading">
             <div>
                 <small>MANAJEMEN</small>
-                <h1>Ruang</h1>
+                <h1>Manajemen ruangan</h1>
                 <p>Kelola ruang penempatan aset di setiap instansi.</p>
             </div>
             <button

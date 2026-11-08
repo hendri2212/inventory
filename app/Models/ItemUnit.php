@@ -11,7 +11,7 @@ class ItemUnit extends Model
 {
     use BelongsToTenant;
 
-    protected $fillable = ['code', 'serial_number', 'purchase_year', 'purchase_price', 'funding_source', 'photo_path', 'condition', 'condition_notes', 'disposed_at', 'disposal_notes', 'is_active'];
+    protected $fillable = ['code', 'serial_number', 'description', 'purchase_year', 'purchase_price', 'funding_source', 'photo_path', 'condition', 'condition_notes', 'disposed_at', 'disposal_notes', 'is_active'];
 
     /** @return array<string, string> */
     protected function casts(): array
