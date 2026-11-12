@@ -16,15 +16,13 @@ return new class extends Migration
             $table->foreignId('room_id')->nullable();
             $table->string('code', 50);
             $table->string('serial_number', 150)->nullable();
+            $table->text('description')->nullable();
             $table->unsignedSmallInteger('purchase_year')->nullable();
             $table->decimal('purchase_price', 15, 2)->nullable();
             $table->enum('funding_source', ['BOSP', 'BOSDA', 'Bantuan'])->nullable();
             $table->string('photo_path')->nullable();
             $table->enum('condition', ['good', 'minor_damage', 'major_damage'])->nullable();
             $table->text('condition_notes')->nullable();
-            $table->timestamp('disposed_at')->nullable();
-            $table->text('disposal_notes')->nullable();
-            $table->boolean('is_active')->default(true);
             $table->unique(['institution_id', 'code']);
             $table->unique(['institution_id', 'id']);
             $table->index(['institution_id', 'department_id']);

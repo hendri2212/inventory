@@ -5,7 +5,8 @@ ruangan, dan laporan. Dibangun dengan Laravel, Inertia, Vue, dan TypeScript.
 
 ## Prasyarat
 
-- PHP 8.3 dan Composer 2.
+- PHP 8.3 dan Composer 2. Ekstensi GD dengan dukungan WebP dan EXIF diperlukan untuk kompresi serta orientasi foto.
+- Foto unit: maksimal 20 MB / 24 megapiksel per foto; disimpan sebagai WebP kualitas 82 dengan sisi terpanjang maksimal 1.920 piksel. Sesuaikan `upload_max_filesize`, `post_max_size`, dan batas request web server untuk total ukuran unggahan (maksimal 10 foto).
 - Node.js 22.12 atau lebih baru dalam seri 22, beserta npm.
 - SQLite dengan ekstensi PHP `pdo_sqlite`, atau MySQL dengan `pdo_mysql`.
 

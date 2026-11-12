@@ -528,8 +528,7 @@ function filter() {
                                 @change="selectPhotos"
                             />
                             <small
-                                >Maks. 10 foto per unggahan, 5 MB per
-                                foto.</small
+                                >Maks. 10 foto per unggahan, 20 MB dan 24 megapiksel per foto. Foto dikompres otomatis saat disimpan.</small
                             >
                         </label>
                         <div v-if="existingPhotos.length" class="photo-gallery">

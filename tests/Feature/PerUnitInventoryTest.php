@@ -59,7 +59,7 @@ test('operators create edit inspect and delete individual units with private pho
     $operator = User::factory()->create(['role' => 'operator', 'institution_id' => $a, 'department_id' => $departments[0]]);
     $this->actingAs($operator);
     $data = unitPayload($fixture);
-    $image = base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jRZkAAAAASUVORK5CYII=');
+    $image = UploadedFile::fake()->image('fixture.png', 40, 30)->getContent();
     $this->post('/item-units', [...$data, 'photos' => [
         UploadedFile::fake()->createWithContent('front.png', $image),
         UploadedFile::fake()->createWithContent('back.png', $image),

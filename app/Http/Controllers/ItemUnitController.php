@@ -9,6 +9,7 @@ use App\Models\Item;
 use App\Models\ItemUnit;
 use App\Models\ItemUnitPhoto;
 use App\Models\Room;
+use App\Services\UnitPhotoStorage;
 use App\Support\InventoryCode;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -100,7 +101,7 @@ class ItemUnitController extends Controller
             /** @var list<UploadedFile> $uploads */
             $uploads = $request->validated('photos', []);
             foreach ($uploads as $upload) {
-                $path = $upload->store('unit-photos', 'local');
+                $path = app(UnitPhotoStorage::class)->store($upload);
                 if ($path === false) {
                     throw ValidationException::withMessages(['photos' => 'Foto gagal disimpan.']);
                 }

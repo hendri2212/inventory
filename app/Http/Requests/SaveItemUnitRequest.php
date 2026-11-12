@@ -42,7 +42,7 @@ class SaveItemUnitRequest extends FormRequest
             'condition' => ['nullable', Rule::in(['good', 'minor_damage', 'major_damage'])],
             'condition_notes' => ['nullable', 'string', 'max:5000'],
             'photos' => ['sometimes', 'array', 'max:10'],
-            'photos.*' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
+            'photos.*' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:20480'],
             'remove_photo_ids' => ['sometimes', 'array'],
             'remove_photo_ids.*' => ['required', 'integer', 'distinct',
                 Rule::exists('item_unit_photos', 'id')->where('item_unit_id', $unit instanceof ItemUnit ? $unit->getKey() : null)],

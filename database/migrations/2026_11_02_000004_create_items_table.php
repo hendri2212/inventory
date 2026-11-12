@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('name', 150);
             $table->text('description')->nullable();
             $table->string('unit', 30)->default('unit');
-            $table->boolean('is_active')->default(true);
             $table->unique(['institution_id', 'code']);
             $table->unique(['institution_id', 'id']);
             $table->foreign(['institution_id', 'category_id'])
