@@ -11,9 +11,9 @@ const submit = () =>
 <template>
     <Head title="Masuk" />
     <main class="login-shell">
-        <section class="login-story" aria-label="Inventory">
+        <section class="login-story" aria-label="Skawan Inventory">
             <a class="inventory-brand" href="/login"
-                ><span class="brand-mark">▦</span> inventory<span
+                ><span class="brand-mark">▦</span> Skawan Inventory<span
                     class="brand-dot"
                     >.</span
                 ></a
@@ -29,7 +29,7 @@ const submit = () =>
                     <div class="visual-top">
                         <span class="visual-icon">▦</span
                         ><span
-                            >Workspace inventory<small
+                            >Workspace Skawan Inventory<small
                                 >Semua tersusun dengan baik</small
                             ></span
                         ><span class="status-dot"></span>
@@ -58,7 +58,7 @@ const submit = () =>
             </div>
             <div class="story-footer">
                 DIRANCANG UNTUK KERJA YANG LEBIH BAIK
-                <span>© {{ new Date().getFullYear() }} Inventory</span>
+                <span>© {{ new Date().getFullYear() }} Skawan Inventory</span>
             </div>
         </section>
         <section class="login-panel">

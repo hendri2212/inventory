@@ -1,4 +1,4 @@
-# Inventory
+# Skawan Inventory
 
 Aplikasi inventaris per instansi untuk mengelola katalog barang, unit inventaris,
 ruangan, dan laporan. Dibangun dengan Laravel, Inertia, Vue, dan TypeScript.

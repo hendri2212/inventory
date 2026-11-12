@@ -127,7 +127,7 @@ function closeAccountOnEscape() {
         >
             <div class="sidebar-brand">
                 <span class="brand-icon"><AppIcon name="box" :size="23" /></span
-                ><span>inventory<span class="brand-dot">.</span></span
+                ><span>Skawan Inventory<span class="brand-dot">.</span></span
                 ><button
                     class="mobile-close icon-button"
                     aria-label="Tutup menu"
@@ -225,7 +225,7 @@ function closeAccountOnEscape() {
             </header>
             <main id="main-content" class="admin-content"><slot /></main>
             <footer class="admin-footer">
-                <span>© {{ new Date().getFullYear() }} Inventory</span
+                <span>© {{ new Date().getFullYear() }} Skawan Inventory</span
                 ><span>Dibuat untuk ruang kerja yang lebih teratur.</span>
             </footer>
         </div>

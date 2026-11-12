@@ -49,6 +49,12 @@ const existingPhotos = ref<UnitPhoto[]>([]);
 const duplicateSource = ref<string | null>(null);
 const open = ref(false);
 const detail = ref<Unit | null>(null);
+const enlargedPhoto = ref<{ url: string; alt: string } | null>(null);
+const photoDialog = ref<HTMLDialogElement | null>(null);
+function enlargePhoto(photo: UnitPhoto, index: number) {
+    enlargedPhoto.value = { url: photo.url, alt: `Foto unit aset ${index + 1}` };
+    photoDialog.value?.showModal();
+}
 const deleting = ref<Unit | null>(null);
 const deletion = useForm({ unit: '' });
 const form = useForm({
@@ -579,13 +585,20 @@ function filter() {
                     <button aria-label="Tutup" @click="detail = null">×</button>
                 </header>
                 <div v-if="detail.photos.length" class="photo-gallery">
-                    <img
+                    <button
                         v-for="(photo, index) in detail.photos"
                         :key="photo.id"
-                        :src="photo.url"
-                        :alt="'Foto unit aset ' + (index + 1)"
-                        class="photo-preview"
-                    />
+                        type="button"
+                        class="photo-button"
+                        :aria-label="`Perbesar foto unit aset ${index + 1}`"
+                        @click="enlargePhoto(photo, index)"
+                    >
+                        <img
+                            :src="photo.url"
+                            :alt="'Foto unit aset ' + (index + 1)"
+                            class="photo-preview"
+                        />
+                    </button>
                 </div>
                 <dl>
                     <dt>Nomor seri</dt>
@@ -619,6 +632,16 @@ function filter() {
                 </footer>
             </section>
         </div>
+        <dialog
+            ref="photoDialog"
+            class="photo-dialog"
+            aria-label="Foto unit aset"
+            @close="enlargedPhoto = null"
+            @click.self="photoDialog?.close()"
+        >
+            <button type="button" class="photo-close" aria-label="Tutup foto" autofocus @click="photoDialog?.close()">×</button>
+            <img v-if="enlargedPhoto" :src="enlargedPhoto.url" :alt="enlargedPhoto.alt" class="photo-enlarged" />
+        </dialog>
         <div v-if="deleting" class="overlay" @click.self="deleting = null">
             <section
                 class="modal-card"
@@ -662,11 +685,60 @@ function filter() {
     flex-wrap: wrap;
     gap: 10px;
 }
-.photo-preview {
-    max-width: 100%;
-    max-height: 220px;
-    object-fit: contain;
+.photo-button {
+    width: 140px;
+    height: 140px;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
     border-radius: 8px;
+    cursor: zoom-in;
+    background: #eef2eb;
+}
+.photo-preview {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.photo-dialog {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    margin: 0;
+    padding: 48px 20px 20px;
+    border: 0;
+    background: transparent;
+}
+.photo-dialog[open] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.photo-dialog::backdrop {
+    background: #000c;
+}
+.photo-enlarged {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+}
+.photo-close {
+    position: absolute;
+    top: 12px;
+    right: 20px;
+    color: white;
+    background: #222;
+    border: 0;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    font-size: 24px;
+    cursor: pointer;
 }
 dt {
     font-size: 12px;
