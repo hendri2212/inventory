@@ -10,7 +10,7 @@ function reportFixture(): array
     $base = unitPayload($fixture);
     DB::table('item_units')->insert($base);
     DB::table('item_units')->insert([...$base, 'code' => 'UNIT-002', 'department_id' => $departments[1], 'condition' => 'minor_damage']);
-    DB::table('item_units')->insert([...$base, 'code' => 'UNIT-003', 'condition' => null, 'disposed_at' => '2026-11-01 00:00:00', 'disposal_notes' => 'Berita acara 01']);
+    DB::table('item_units')->insert([...$base, 'code' => 'UNIT-003', 'condition' => null]);
     DB::table('item_units')->insert([...$base, 'institution_id' => $b, 'item_id' => $items[2], 'department_id' => $departments[2], 'room_id' => $rooms[1], 'code' => 'PRIVATE']);
 
     return $fixture;
@@ -32,8 +32,7 @@ test('report groups catalog with complete unit details and excludes empty catalo
         ->has('items', 2)->where('items.0.units_count', 3)->has('items.0.units', 3)
         ->where('items.0.units.0.serial_number', 'SN-1')->where('items.0.units.0.purchase_price', '12500000.50')
         ->where('items.0.units.0.department', 'Bidang 0')->where('items.0.units.0.room', 'Ruang 0')
-        ->where('items.0.units.0.funding_source', 'BOSP')->where('items.0.units.2.disposed_at', '2026-11-01')
-        ->where('items.0.units.2.disposal_notes', 'Berita acara 01')->missing('items.0.units.0.photo_path')
+        ->where('items.0.units.0.funding_source', 'BOSP')->missing('items.0.units.0.photo_path')
         ->where('pagination.total', 2)->where('printing', false));
 });
 
@@ -55,9 +54,6 @@ test('unit filters apply to both matching catalogs and their nested unit details
 })->with([
     ['condition=minor_damage', 'UNIT-002'],
     ['condition=unknown', 'UNIT-003'],
-    ['status=active&department_id=1', 'UNIT-001'],
-    ['status=active&department_id=2', 'UNIT-002'],
-    ['status=disposed', 'UNIT-003'],
     ['department_id=2&room_id=1', 'UNIT-002'],
 ]);
 
@@ -67,7 +63,7 @@ test('catalog search category and institution filters compose correctly', functi
     $this->get('/reports?search=Barang%200&institution_id='.$a.'&category_id='.$categories[0])
         ->assertInertia(fn (Assert $page) => $page->has('items', 1)->has('items.0.units', 3));
     $this->get('/reports?search=TidakAda')->assertInertia(fn (Assert $page) => $page->has('items', 0)->where('pagination.total', 0));
-    $this->get('/reports?condition=invalid&status=invalid&room_id=-1')->assertSessionHasErrors(['condition', 'status', 'room_id']);
+    $this->get('/reports?condition=invalid&room_id=-1')->assertSessionHasErrors(['condition', 'room_id']);
     $this->get('/?menu=laporan')->assertRedirect('/reports');
 });
 

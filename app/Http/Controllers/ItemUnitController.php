@@ -9,6 +9,7 @@ use App\Models\Item;
 use App\Models\ItemUnit;
 use App\Models\ItemUnitPhoto;
 use App\Models\Room;
+use App\Support\InventoryCode;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
@@ -34,7 +35,6 @@ class ItemUnitController extends Controller
                 ->when($request->filled('item_id'), fn ($query) => $query->where('item_id', $request->input('item_id')))
                 ->orderBy('code')->paginate(10)->withQueryString()->through(fn (ItemUnit $unit) => [
                     ...$unit->toArray(),
-                    'disposed_at' => $unit->getAttribute('disposed_at')?->format('Y-m-d'),
                     'photos' => $unit->photos->map(fn (ItemUnitPhoto $photo) => [
                         'id' => $photo->id,
                         'url' => route('item-units.photo', [$unit, $photo->id]),
@@ -112,6 +112,9 @@ class ItemUnitController extends Controller
                     if ($unit->loanItems()->whereNull('returned_at')->exists()) {
                         throw ValidationException::withMessages(['unit' => 'Unit sedang dipinjam. Selesaikan pengembalian sebelum mengubah data unit.']);
                     }
+                }
+                if (! $unit->exists) {
+                    $data['code'] = InventoryCode::next('item_units', $data['institution_id'], $data['department_id']);
                 }
                 $unit->forceFill($data)->save();
                 $removed = $unit->photos()->getQuery()->reorder()->whereKey($removeIds);

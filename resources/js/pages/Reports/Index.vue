@@ -11,7 +11,6 @@ type Filters = {
     department_id?: string;
     room_id?: string;
     condition?: string;
-    status?: string;
 };
 type Unit = {
     id: number;
@@ -59,7 +58,6 @@ const filters = ref({
     department_id: String(props.filters.department_id ?? ''),
     room_id: String(props.filters.room_id ?? ''),
     condition: props.filters.condition ?? '',
-    status: props.filters.status ?? '',
 });
 const categories = computed(() => options(props.categories));
 const departments = computed(() => options(props.departments));
@@ -122,12 +120,6 @@ const selectedOptions = computed(() =>
         props.rooms.find((i) => String(i.id) === String(props.filters.room_id))
             ?.name,
         props.filters.condition ? conditions[props.filters.condition] : null,
-        (
-            {
-                active: 'Belum dimusnahkan',
-                disposed: 'Dimusnahkan',
-            } as Record<string, string>
-        )[props.filters.status ?? ''],
     ]
         .filter(Boolean)
         .join(' · '),
@@ -265,13 +257,6 @@ onMounted(async () => {
                         >
                             {{ name }}
                         </option>
-                    </select></label
-                >
-                <label
-                    >Status pemusnahan<select v-model="filters.status">
-                        <option value="">Semua status</option>
-                        <option value="active">Belum dimusnahkan</option>
-                        <option value="disposed">Dimusnahkan</option>
                     </select></label
                 >
                 <div class="actions">

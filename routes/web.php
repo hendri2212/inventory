@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AssetLabelController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
@@ -46,6 +47,7 @@ Route::middleware('auth')->group(function () {
     Route::get('rooms', [RoomController::class, 'index'])->middleware(EnsureTenantAccess::class)->name('rooms.index');
     Route::resource('rooms', RoomController::class)->only(['store', 'update', 'destroy'])
         ->middleware('can:create,'.Room::class);
+    Route::get('asset-labels', [AssetLabelController::class, 'index'])->middleware(EnsureTenantAccess::class)->name('asset-labels.index');
     Route::get('reports', [InventoryReportController::class, 'index'])->middleware(EnsureTenantAccess::class)->name('reports.index');
     Route::post('/logout', [AuthController::class, 'destroy'])->name('logout');
 });

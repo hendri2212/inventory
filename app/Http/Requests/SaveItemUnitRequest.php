@@ -34,7 +34,6 @@ class SaveItemUnitRequest extends FormRequest
             'room_id' => ['nullable', 'integer', Rule::exists('rooms', 'id')->where('institution_id', $institution)
                 ->where(fn ($query) => $query->where('is_active', true)
                     ->orWhere('id', $unit instanceof ItemUnit ? $unit->getAttribute('room_id') : null))],
-            'code' => ['required', 'string', 'max:50', Rule::unique('item_units', 'code')->where('institution_id', $institution)->ignore($unit instanceof ItemUnit ? $unit : null)],
             'serial_number' => ['nullable', 'string', 'max:150'],
             'description' => ['nullable', 'string', 'max:5000'],
             'purchase_year' => ['nullable', 'integer', 'min:1900', 'max:'.now()->year],
@@ -42,8 +41,6 @@ class SaveItemUnitRequest extends FormRequest
             'funding_source' => ['nullable', Rule::in(['BOSP', 'BOSDA', 'Bantuan'])],
             'condition' => ['nullable', Rule::in(['good', 'minor_damage', 'major_damage'])],
             'condition_notes' => ['nullable', 'string', 'max:5000'],
-            'disposed_at' => ['nullable', 'date_format:Y-m-d'],
-            'disposal_notes' => ['nullable', 'string', 'max:5000'],
             'photos' => ['sometimes', 'array', 'max:10'],
             'photos.*' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
             'remove_photo_ids' => ['sometimes', 'array'],

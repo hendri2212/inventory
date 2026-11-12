@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { Head, Link, router, useForm, usePage } from '@inertiajs/vue3';
+import AppIcon from '../../components/AppIcon.vue';
 import AdminLayout from '../../layouts/AdminLayout.vue';
 import type { Auth } from '../../types/auth';
 type Department = {
@@ -152,8 +153,9 @@ function filter() {
                             :key="department.id"
                         >
                             <td>
-                                <strong>{{ department.name }}</strong
-                                ><small>{{ department.code }}</small>
+                                <strong>{{ department.name }}</strong><small>{{
+                                    department.code
+                                }}</small>
                             </td>
                             <td>{{ department.institution.name }}</td>
                             <td class="address">
@@ -171,13 +173,20 @@ function filter() {
                                 >
                             </td>
                             <td>
-                                <div class="actions">
+                                <div
+                                    class="table-action-group"
+                                    role="group"
+                                    :aria-label="`Aksi ${department.name}`"
+                                >
                                     <button
+                                        type="button"
                                         :aria-label="`Edit ${department.name}`"
                                         @click="show(department)"
                                     >
+                                        <AppIcon name="pencil" :size="15" />
                                         Edit</button
                                     ><button
+                                        type="button"
                                         class="danger"
                                         :aria-label="`Hapus ${department.name}`"
                                         @click="
@@ -185,6 +194,7 @@ function filter() {
                                             deleting = department;
                                         "
                                     >
+                                        <AppIcon name="trash" :size="15" />
                                         Hapus
                                     </button>
                                 </div>
@@ -375,7 +385,6 @@ select {
 .heading,
 .toolbar,
 .pagination,
-.actions,
 .modal-actions {
     display: flex;
     align-items: center;

@@ -6,8 +6,10 @@ use App\Http\Requests\SaveItemRequest;
 use App\Models\Category;
 use App\Models\Institution;
 use App\Models\Item;
+use App\Support\InventoryCode;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
@@ -42,7 +44,11 @@ class ItemController extends Controller
 
     public function store(SaveItemRequest $request): RedirectResponse
     {
-        (new Item)->forceFill($request->validated())->save();
+        DB::transaction(function () use ($request): void {
+            $data = $request->validated();
+            $data['code'] = InventoryCode::next('items', $data['institution_id']);
+            (new Item)->forceFill($data)->save();
+        });
 
         return to_route('items.index')->with('success', 'Barang berhasil ditambahkan.');
     }

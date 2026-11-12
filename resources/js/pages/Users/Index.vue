@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
 import { Head, Link, useForm, usePage, router } from '@inertiajs/vue3';
+import AppIcon from '../../components/AppIcon.vue';
 import AdminLayout from '../../layouts/AdminLayout.vue';
 import type { Auth } from '../../types/auth';
 type UserRow = {
@@ -187,27 +188,32 @@ function filter() {
                                 }}</small>
                             </td>
                             <td>
-                                <div class="actions">
+                                <div
+                                    v-if="user.can_update || user.can_delete"
+                                    class="table-action-group"
+                                    role="group"
+                                    :aria-label="`Aksi ${user.name}`"
+                                >
                                     <button
                                         v-if="user.can_update"
+                                        type="button"
                                         :aria-label="`Edit ${user.name}`"
                                         @click="show(user)"
                                     >
+                                        <AppIcon name="pencil" :size="15" />
                                         Edit</button
                                     ><button
                                         v-if="user.can_delete"
+                                        type="button"
                                         class="danger"
                                         :aria-label="`Hapus ${user.name}`"
                                         @click="deleting = user"
                                     >
-                                        Hapus</button
-                                    ><span
-                                        v-if="
-                                            !user.can_update && !user.can_delete
-                                        "
-                                        >—</span
-                                    >
+                                        <AppIcon name="trash" :size="15" />
+                                        Hapus
+                                    </button>
                                 </div>
+                                <span v-else>—</span>
                             </td>
                         </tr>
                         <tr v-if="!users.data.length">

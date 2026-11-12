@@ -26,7 +26,6 @@ class InventoryReportController extends Controller
             'department_id' => ['nullable', 'integer', 'min:1'],
             'room_id' => ['nullable', 'integer', 'min:1'],
             'condition' => ['nullable', Rule::in(['good', 'minor_damage', 'major_damage', 'unknown'])],
-            'status' => ['nullable', Rule::in(['active', 'disposed'])],
             'print' => ['sometimes', 'boolean'],
         ]);
         $search = trim($filters['search'] ?? '');
@@ -41,11 +40,6 @@ class InventoryReportController extends Controller
             } elseif (! empty($filters['condition'])) {
                 $query->where('condition', $filters['condition']);
             }
-            match ($filters['status'] ?? null) {
-                'active' => $query->whereNull('disposed_at'),
-                'disposed' => $query->whereNotNull('disposed_at'),
-                default => null,
-            };
         };
         $query = Item::query()->with(['institution:id,name', 'category:id,name'])
             ->when($search !== '', fn ($query) => $query->where(fn ($query) => $query
@@ -89,8 +83,6 @@ class InventoryReportController extends Controller
                     'funding_source' => $unit->getAttribute('funding_source'),
                     'condition' => $unit->getAttribute('condition'),
                     'condition_notes' => $unit->getAttribute('condition_notes'),
-                    'disposed_at' => $unit->getAttribute('disposed_at')?->format('Y-m-d'),
-                    'disposal_notes' => $unit->getAttribute('disposal_notes'),
                 ]),
             ]),
             'pagination' => $paginator ? ['total' => $paginator->total(), 'links' => $paginator->linkCollection()] : null,
@@ -98,7 +90,7 @@ class InventoryReportController extends Controller
             'categories' => Category::query()->orderBy('name')->get(['id', 'name', 'institution_id']),
             'departments' => Department::query()->orderBy('name')->get(['id', 'name', 'institution_id']),
             'rooms' => Room::query()->orderBy('name')->get(['id', 'name', 'institution_id']),
-            'filters' => $request->only(['search', 'institution_id', 'category_id', 'department_id', 'room_id', 'condition', 'status']),
+            'filters' => $request->only(['search', 'institution_id', 'category_id', 'department_id', 'room_id', 'condition']),
             'printing' => $printing,
             'generated_at' => now()->timezone('Asia/Makassar')->format('d/m/Y H:i').' WITA',
         ]);

@@ -29,7 +29,6 @@ class SaveItemRequest extends FormRequest
                 ...($actor instanceof User && $actor->role !== 'superadmin' ? [Rule::in([$actor->institution_id])] : []),
                 ...($item instanceof Item ? [Rule::in([$item->institution_id])] : [])],
             'category_id' => ['required', 'integer', Rule::exists('categories', 'id')->where('institution_id', $institution)],
-            'code' => ['required', 'string', 'max:50', Rule::unique('items', 'code')->where('institution_id', $institution)->ignore($item instanceof Item ? $item : null)],
             'name' => ['required', 'string', 'max:150'],
             'description' => ['nullable', 'string', 'max:5000'],
             'unit' => ['required', 'string', 'max:30'],

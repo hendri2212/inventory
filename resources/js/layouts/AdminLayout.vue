@@ -27,6 +27,7 @@ const groups = computed(() => [
             { key: 'dashboard', label: 'Dashboard', icon: 'grid' },
             { key: 'barang', label: 'Manajemen barang', icon: 'box' },
             { key: 'unit', label: 'Unit aset', icon: 'box' },
+            { key: 'label', label: 'Cetak label', icon: 'box' },
             ...(['superadmin', 'admin'].includes(page.props.auth.user.role)
                 ? [{ key: 'kategori', label: 'Kategori', icon: 'layers' }]
                 : []),
@@ -59,6 +60,8 @@ function navigate(key: string) {
         router.visit('/items');
     } else if (key === 'unit') {
         router.visit('/item-units');
+    } else if (key === 'label') {
+        router.visit('/asset-labels');
     } else if (key === 'lokasi') {
         router.visit('/rooms');
     } else if (key === 'laporan') {

@@ -20,8 +20,6 @@ type Unit = {
     funding_source: string | null;
     condition: string | null;
     condition_notes: string | null;
-    disposed_at: string | null;
-    disposal_notes: string | null;
     photos: UnitPhoto[];
     item: Option;
     institution: Option;
@@ -66,8 +64,6 @@ const form = useForm({
     funding_source: '',
     condition: '',
     condition_notes: '',
-    disposed_at: '',
-    disposal_notes: '',
     photos: [] as File[],
     remove_photo_ids: [] as number[],
 });
@@ -174,8 +170,6 @@ function show(unit?: Unit, duplicate = false) {
             funding_source: unit.funding_source ?? '',
             condition: unit.condition ?? '',
             condition_notes: unit.condition_notes ?? '',
-            disposed_at: duplicate ? '' : (unit.disposed_at ?? ''),
-            disposal_notes: duplicate ? '' : (unit.disposal_notes ?? ''),
         });
     else
         Object.assign(form, {
@@ -399,9 +393,7 @@ function filter() {
                 </header>
                 <form @submit.prevent="save">
                     <p v-if="duplicateSource" class="hint" role="status">
-                        Data disalin dari {{ duplicateSource }}. Isi kode
-                        inventaris dan nomor seri unit baru, lalu sesuaikan data
-                        lainnya. Foto dan data pemusnahan tidak disalin.
+                        Data disalin dari {{ duplicateSource }}. Isi nomor seri unit baru dan sesuaikan data lainnya. Kode inventaris dibuat otomatis. Foto tidak disalin.
                     </p>
                     <div class="fields">
                         <label
@@ -469,11 +461,6 @@ function filter() {
                             </select></label
                         >
                         <label
-                            >Kode inventaris<input
-                                v-model="form.code"
-                                required
-                                maxlength="50" /></label
-                        ><label
                             >Nomor seri<input
                                 v-model="form.serial_number"
                                 maxlength="150"
@@ -524,14 +511,6 @@ function filter() {
                         <label
                             >Catatan kondisi<textarea
                                 v-model="form.condition_notes"
-                            /></label
-                        ><label
-                            >Tanggal pemusnahan<input
-                                v-model="form.disposed_at"
-                                type="date" /></label
-                        ><label
-                            >Catatan pemusnahan<textarea
-                                v-model="form.disposal_notes"
                             />
                         </label>
                         <label>
@@ -633,11 +612,6 @@ function filter() {
                             'Belum diperiksa'
                         }}
                         · {{ detail.condition_notes || '—' }}
-                    </dd>
-                    <dt>Pemusnahan</dt>
-                    <dd>
-                        {{ detail.disposed_at || '—' }} ·
-                        {{ detail.disposal_notes || '—' }}
                     </dd>
                 </dl>
                 <footer class="modal-actions">

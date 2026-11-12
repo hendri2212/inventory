@@ -315,11 +315,6 @@ function remove() {
                                 </option>
                             </select></label
                         ><label
-                            >Kode katalog<input
-                                v-model="form.code"
-                                required
-                                maxlength="50" /></label
-                        ><label
                             >Nama barang<input
                                 v-model="form.name"
                                 required

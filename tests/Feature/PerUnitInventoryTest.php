@@ -42,11 +42,11 @@ test('catalog metadata is shared within institution and unit counts respect depa
 });
 
 test('admins manage catalog without storing unit fields and cannot delete a catalog in use', function () {
-    [$a, , , $categories] = $fixture = unitFixture();
+    [$a, , $departments, $categories] = $fixture = unitFixture();
     $this->actingAs(User::factory()->superadmin()->create());
-    $data = ['institution_id' => $a, 'category_id' => $categories[0], 'code' => 'NEW', 'name' => 'Laptop', 'unit' => 'unit', 'quantity' => 100];
+    $data = ['institution_id' => $a, 'category_id' => $categories[0], 'department_id' => $departments[0], 'code' => 'NEW', 'name' => 'Laptop', 'unit' => 'unit', 'quantity' => 100];
     $this->post('/items', $data)->assertSessionHasNoErrors();
-    $item = DB::table('items')->where('code', 'NEW')->first();
+    $item = DB::table('items')->where('code', 'A-001')->first();
     expect(property_exists($item, 'quantity'))->toBeFalse();
     $this->put('/items/'.$item->id, [...$data, 'name' => 'Laptop Baru'])->assertSessionHasNoErrors();
     DB::table('item_units')->insert([...unitPayload($fixture), 'item_id' => $item->id]);
@@ -75,7 +75,7 @@ test('operators create edit inspect and delete individual units with private pho
     $this->get('/item-units/'.$other.'/photo/'.$front->id)->assertNotFound();
     $this->put('/item-units/'.$other, [...$data, 'code' => 'UNIT-002', 'remove_photo_ids' => [$front->id]])
         ->assertSessionHasErrors('remove_photo_ids.0');
-    $this->get('/item-units?search=UNIT-001')->assertInertia(fn (Assert $page) => $page->component('ItemUnits/Index')
+    $this->get('/item-units?search=D0-001')->assertInertia(fn (Assert $page) => $page->component('ItemUnits/Index')
         ->has('units.data.0.photos', 2)->missing('units.data.0.photos.0.path')->where('units.data.0.purchase_price', '12500000.50'));
     $this->put('/item-units/'.$unit->getKey(), [...$data, 'condition' => 'minor_damage', 'remove_photo_ids' => [$front->id],
         'photos' => [UploadedFile::fake()->createWithContent('side.png', $image)]])->assertSessionHasNoErrors();
@@ -90,14 +90,16 @@ test('operators create edit inspect and delete individual units with private pho
     $this->assertDatabaseMissing('item_units', ['id' => $unit->getKey()]);
 });
 
-test('unit requests reject cross institution references forged departments duplicate codes and invalid attributes', function () {
+test('unit requests reject cross institution references forged departments and invalid attributes', function () {
     [$a, $b, $departments, , $items, $rooms] = $fixture = unitFixture();
     $this->actingAs(User::factory()->create(['role' => 'operator', 'institution_id' => $a, 'department_id' => $departments[0]]));
     $data = unitPayload($fixture);
     $this->post('/item-units', [...$data, 'institution_id' => $b])->assertSessionHasErrors('institution_id');
     $this->post('/item-units', [...$data, 'item_id' => $items[2], 'department_id' => $departments[1], 'room_id' => $rooms[1], 'purchase_price' => -1, 'condition' => 'invalid'])->assertSessionHasErrors(['item_id', 'department_id', 'room_id', 'purchase_price', 'condition']);
     $this->post('/item-units', $data)->assertSessionHasNoErrors();
-    $this->post('/item-units', $data)->assertSessionHasErrors('code');
+    $this->post('/item-units', $data)->assertSessionHasNoErrors();
+    $this->assertDatabaseHas('item_units', ['institution_id' => $a, 'code' => 'D0-001']);
+    $this->assertDatabaseHas('item_units', ['institution_id' => $a, 'code' => 'D0-002']);
     $id = DB::table('item_units')->value('id');
     $this->put('/item-units/'.$id, [
         ...$data, 'item_id' => $items[2], 'department_id' => $departments[1], 'room_id' => $rooms[1],
@@ -199,13 +201,33 @@ test('units of one catalog keep independent specifications and validate their le
     $base = unitPayload($fixture);
     $this->post('/item-units', [...$base, 'description' => "Core i5\nRAM 8 GB; SSD 512 GB"])->assertSessionHasNoErrors();
     $this->post('/item-units', [...$base, 'code' => 'UNIT-002', 'description' => 'Ryzen 7; RAM 16 GB'])->assertSessionHasNoErrors();
-    $first = ItemUnit::where('code', 'UNIT-001')->firstOrFail();
+    $first = ItemUnit::where('code', 'D0-001')->firstOrFail();
     $this->put('/item-units/'.$first->getKey(), [...$base, 'description' => 'Core i5; RAM 32 GB'])->assertSessionHasNoErrors();
     expect($first->fresh()->getAttribute('description'))->toBe('Core i5; RAM 32 GB');
-    $this->assertDatabaseHas('item_units', ['code' => 'UNIT-002', 'description' => 'Ryzen 7; RAM 16 GB']);
-    $this->get('/item-units?search=UNIT-001')->assertInertia(fn (Assert $page) => $page->where('units.data.0.description', 'Core i5; RAM 32 GB'));
+    $this->assertDatabaseHas('item_units', ['code' => 'D0-002', 'description' => 'Ryzen 7; RAM 16 GB']);
+    $this->get('/item-units?search=D0-001')->assertInertia(fn (Assert $page) => $page->where('units.data.0.description', 'Core i5; RAM 32 GB'));
     $this->get('/reports?print=1')->assertInertia(fn (Assert $page) => $page->where('items.0.units.0.description', 'Core i5; RAM 32 GB')->where('items.0.units.1.description', 'Ryzen 7; RAM 16 GB'));
     $this->put('/item-units/'.$first->getKey(), [...$base, 'description' => str_repeat('a', 5001)])->assertSessionHasErrors('description');
     $this->put('/item-units/'.$first->getKey(), [...$base, 'description' => null])->assertSessionHasNoErrors();
     $this->assertDatabaseHas('item_units', ['id' => $first->getKey(), 'description' => null]);
+});
+
+test('catalog codes use institution and unit codes use department and remain unchanged on edit', function () {
+    [$a, $b, $departments, $categories, $items] = $fixture = unitFixture();
+    $this->actingAs(User::factory()->superadmin()->create());
+    $catalog = ['institution_id' => $a, 'category_id' => $categories[0], 'department_id' => $departments[0], 'name' => 'Monitor', 'unit' => 'unit', 'code' => 'FORGED'];
+    $this->post('/items', $catalog)->assertSessionHasNoErrors();
+    $this->post('/items', $catalog)->assertSessionHasNoErrors();
+    $this->post('/items', [...$catalog, 'department_id' => $departments[1]])->assertSessionHasNoErrors();
+    $this->assertDatabaseHas('items', ['institution_id' => $a, 'code' => 'A-001']);
+    $this->assertDatabaseHas('items', ['institution_id' => $a, 'code' => 'A-002']);
+    $this->assertDatabaseHas('items', ['institution_id' => $a, 'code' => 'A-003']);
+    $id = DB::table('items')->where('institution_id', $a)->where('code', 'A-001')->value('id');
+    $this->put('/items/'.$id, [...$catalog, 'code' => 'CHANGED'])->assertSessionHasNoErrors();
+    $this->assertDatabaseHas('items', ['id' => $id, 'code' => 'A-001']);
+    $unit = unitPayload($fixture);
+    $this->post('/item-units', $unit)->assertSessionHasNoErrors();
+    $id = DB::table('item_units')->where('code', 'D0-001')->value('id');
+    $this->put('/item-units/'.$id, [...$unit, 'code' => 'CHANGED', 'department_id' => $departments[1]])->assertSessionHasNoErrors();
+    $this->assertDatabaseHas('item_units', ['id' => $id, 'code' => 'D0-001', 'department_id' => $departments[1]]);
 });

@@ -11,7 +11,7 @@ class ItemUnit extends Model
 {
     use BelongsToTenant;
 
-    protected $fillable = ['code', 'serial_number', 'description', 'purchase_year', 'purchase_price', 'funding_source', 'condition', 'condition_notes', 'disposed_at', 'disposal_notes'];
+    protected $fillable = ['code', 'serial_number', 'description', 'purchase_year', 'purchase_price', 'funding_source', 'condition', 'condition_notes'];
 
     /** @return array<string, string> */
     protected function casts(): array
@@ -24,7 +24,6 @@ class ItemUnit extends Model
             'room_id' => 'integer',
             'purchase_year' => 'integer',
             'purchase_price' => 'decimal:2',
-            'disposed_at' => 'immutable_datetime',
         ];
     }
 

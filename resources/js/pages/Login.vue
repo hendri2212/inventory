@@ -69,7 +69,7 @@ const submit = () =>
                     Masuk untuk melanjutkan ke ruang kerja Anda.
                 </p>
                 <form class="login-form" @submit.prevent="submit">
-                    <div class="mb-4">
+                    <div class="login-field">
                         <label for="email" class="form-label"
                             >Alamat email</label
                         >
@@ -97,7 +97,7 @@ const submit = () =>
                             {{ form.errors.email }}
                         </div>
                     </div>
-                    <div class="mb-4">
+                    <div class="login-field">
                         <label for="password" class="form-label"
                             >Kata sandi</label
                         >
@@ -370,6 +370,9 @@ const submit = () =>
 }
 .login-form {
     margin-top: 36px;
+}
+.login-field {
+    margin-bottom: 24px;
 }
 .form-label {
     color: #294537;
