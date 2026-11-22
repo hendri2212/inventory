@@ -1,0 +1,213 @@
+.loan-page {
+    max-width: 1200px;
+    margin: auto;
+    color: #243b32;
+}
+.loan-page h1 {
+    font-size: 26px;
+    font-weight: 700;
+    margin: 12px 0;
+}
+.loan-page h2 {
+    font-size: 20px;
+    font-weight: 650;
+    margin: 12px 0;
+}
+.loan-page h3 {
+    font-weight: 650;
+    margin: 16px 0 10px;
+}
+.loan-page p {
+    font-size: 14px;
+    margin: 10px 0;
+    color: #627569;
+}
+.loan-heading,
+.loan-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin: 15px 0;
+}
+.loan-heading {
+    justify-content: space-between;
+}
+.loan-page button,
+.loan-page input:not([type='checkbox']),
+.loan-page select,
+.loan-page textarea {
+    font: inherit;
+    font-size: 14px;
+    border: 1px solid #cddbd1;
+    padding: 10px;
+    border-radius: 7px;
+    background: white;
+}
+.loan-page button {
+    cursor: pointer;
+}
+.loan-page button.primary {
+    background: #28664f;
+    color: white;
+    border-color: #28664f;
+}
+.loan-page button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+.loan-page a {
+    color: #23684c;
+    text-decoration: underline;
+}
+.loan-page .error {
+    color: #b42318;
+}
+.loan-page .success {
+    background: #eaf7ed;
+    padding: 12px;
+    color: #23684c;
+}
+.loan-panel {
+    background: white;
+    border: 1px solid #dde6df;
+    padding: 20px;
+    border-radius: 12px;
+    margin: 16px 0;
+}
+.loan-table {
+    overflow: auto;
+}
+.loan-page table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    text-align: left;
+}
+.loan-page th,
+.loan-page td {
+    padding: 12px;
+    border-bottom: 1px solid #e2e9e3;
+    vertical-align: top;
+}
+.loan-page small {
+    display: block;
+    color: #627569;
+    margin-top: 5px;
+}
+.loan-fields {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+.loan-fields label {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    font-size: 14px;
+}
+.loan-fields input,
+.loan-fields select,
+.loan-fields textarea {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+.loan-page dt {
+    font-size: 12px;
+    color: #627569;
+}
+.loan-page dd {
+    margin: 4px 0;
+    overflow-wrap: anywhere;
+}
+.loan-overlay {
+    position: fixed;
+    inset: 0;
+    background: #09251b80;
+    z-index: 60;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+.loan-modal {
+    background: white;
+    padding: 24px;
+    border-radius: 14px;
+    width: 100%;
+    max-width: 850px;
+    max-height: 90svh;
+    overflow: auto;
+}
+.loan-options {
+    max-height: 240px;
+    overflow: auto;
+    margin: 12px 0;
+}
+.loan-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    font-size: 14px;
+}
+.loan-notes {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+.loan-signatures {
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+    margin: 40px 0 15px;
+    font-size: 14px;
+}
+@media (max-width: 600px) {
+    .loan-fields {
+        grid-template-columns: 1fr;
+    }
+    .loan-overlay {
+        padding: 8px;
+    }
+    .loan-modal {
+        padding: 16px;
+    }
+}
+@media print {
+    @page {
+        size: A4 portrait;
+        margin: 12mm;
+    }
+    .admin-sidebar,
+    .admin-topbar,
+    .admin-footer,
+    .no-print {
+        display: none !important;
+    }
+    .admin-shell,
+    .admin-main,
+    .admin-content {
+        display: block !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: white !important;
+    }
+    .loan-panel {
+        border: 0;
+        padding: 0;
+    }
+    .loan-page table {
+        font-size: 11px;
+    }
+    .loan-page tr,
+    .loan-signatures {
+        break-inside: avoid;
+    }
+    .loan-page thead {
+        display: table-header-group;
+    }
+    .loan-fields {
+        grid-template-columns: 1fr 1fr;
+    }
+}

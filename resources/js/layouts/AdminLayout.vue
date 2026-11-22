@@ -38,6 +38,7 @@ const groups = computed(() => [
         label: 'MANAJEMEN',
         items: [
             { key: 'peminjaman', label: 'Peminjaman', icon: 'arrows' },
+            { key: 'mutasi', label: 'Mutasi unit barang', icon: 'arrows' },
             ...(page.props.auth.user.role === 'superadmin'
                 ? [{ key: 'instansi', label: 'Instansi', icon: 'layers' }]
                 : []),
@@ -60,6 +61,10 @@ function navigate(key: string) {
         router.visit('/items');
     } else if (key === 'unit') {
         router.visit('/item-units');
+    } else if (key === 'mutasi') {
+        router.visit('/item-transfers');
+    } else if (key === 'peminjaman') {
+        router.visit('/loans');
     } else if (key === 'label') {
         router.visit('/asset-labels');
     } else if (key === 'lokasi') {

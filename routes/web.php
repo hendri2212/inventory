@@ -8,7 +8,9 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\InstitutionController;
 use App\Http\Controllers\InventoryReportController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\ItemTransferController;
 use App\Http\Controllers\ItemUnitController;
+use App\Http\Controllers\LoanController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\EnsureTenantAccess;
@@ -37,6 +39,9 @@ Route::middleware('auth')->group(function () {
     Route::resource('categories', CategoryController::class)
         ->only(['index', 'store', 'update', 'destroy'])
         ->middleware('can:create,'.Category::class);
+    Route::resource('item-transfers', ItemTransferController::class)->parameters(['item-transfers' => 'itemTransfer'])->only(['index', 'store', 'show'])->middleware(EnsureTenantAccess::class);
+    Route::resource('loans', LoanController::class)->only(['index', 'store', 'show'])->middleware(EnsureTenantAccess::class);
+    Route::post('loans/{loan}/returns', [LoanController::class, 'returnItems'])->middleware(EnsureTenantAccess::class)->name('loans.returns');
     Route::resource('items', ItemController::class)
         ->only(['index', 'store', 'update', 'destroy'])
         ->middleware(EnsureTenantAccess::class);

@@ -15,6 +15,8 @@ class DashboardController extends Controller
     public function __invoke(Request $request): Response|RedirectResponse
     {
         return match ($request->query('menu')) {
+            'mutasi' => to_route('item-transfers.index'),
+            'peminjaman' => to_route('loans.index'),
             'barang' => to_route('items.index'),
             'unit' => to_route('item-units.index'),
             'lokasi' => to_route('rooms.index'),

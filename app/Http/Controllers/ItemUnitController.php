@@ -102,9 +102,6 @@ class ItemUnitController extends Controller
             $uploads = $request->validated('photos', []);
             foreach ($uploads as $upload) {
                 $path = app(UnitPhotoStorage::class)->store($upload);
-                if ($path === false) {
-                    throw ValidationException::withMessages(['photos' => 'Foto gagal disimpan.']);
-                }
                 $newPaths[] = $path;
             }
             $oldPaths = DB::transaction(function () use ($unit, $data, $newPaths, $removeIds): array {

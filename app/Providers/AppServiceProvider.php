@@ -16,6 +16,7 @@ use App\Models\User;
 use App\Policies\DepartmentPolicy;
 use App\Policies\InstitutionPolicy;
 use App\Policies\InventoryPolicy;
+use App\Policies\ItemTransferPolicy;
 use App\Policies\UserPolicy;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
@@ -43,6 +44,7 @@ class AppServiceProvider extends ServiceProvider
         foreach ([Institution::class, Department::class, Category::class, Item::class, ItemUnit::class, Room::class, Loan::class, LoanItem::class, ItemTransfer::class, ItemTransferItem::class] as $model) {
             Gate::policy($model, InventoryPolicy::class);
         }
+        Gate::policy(ItemTransfer::class, ItemTransferPolicy::class);
         Gate::policy(User::class, UserPolicy::class);
         Gate::policy(Institution::class, InstitutionPolicy::class);
         Gate::policy(Department::class, DepartmentPolicy::class);
